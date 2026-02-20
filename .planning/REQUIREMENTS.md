@@ -98,35 +98,36 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SIMP-01 | — | Pending |
-| SIMP-02 | — | Pending |
-| SIMP-03 | — | Pending |
-| SIMP-04 | — | Pending |
-| DISP-01 | — | Pending |
-| DISP-02 | — | Pending |
-| DISP-03 | — | Pending |
-| PERS-01 | — | Pending |
-| PERS-02 | — | Pending |
-| PERS-03 | — | Pending |
-| PERS-04 | — | Pending |
-| BACK-01 | — | Pending |
-| BACK-02 | — | Pending |
-| BACK-03 | — | Pending |
-| BACK-04 | — | Pending |
-| ERRH-01 | — | Pending |
-| ERRH-02 | — | Pending |
-| ERRH-03 | — | Pending |
-| ERRH-04 | — | Pending |
-| EXTF-01 | — | Pending |
-| EXTF-02 | — | Pending |
-| EXTF-03 | — | Pending |
-| EXTF-04 | — | Pending |
+| SIMP-01 | Phase 1 | Pending |
+| SIMP-02 | Phase 2 | Pending |
+| SIMP-03 | Phase 3 | Pending |
+| SIMP-04 | Phase 3 | Pending |
+| DISP-01 | Phase 3 | Pending |
+| DISP-02 | Phase 3 | Pending |
+| DISP-03 | Phase 1 | Pending |
+| PERS-01 | Phase 3 | Pending |
+| PERS-02 | Phase 3 | Pending |
+| PERS-03 | Phase 3 | Pending |
+| PERS-04 | Phase 3 | Pending |
+| BACK-01 | Phase 2 | Pending |
+| BACK-02 | Phase 2 | Pending |
+| BACK-03 | Phase 2 | Pending |
+| BACK-04 | Phase 2 | Pending |
+| ERRH-01 | Phase 2 | Pending |
+| ERRH-02 | Phase 2 | Pending |
+| ERRH-03 | Phase 2 | Pending |
+| ERRH-04 | Phase 2 | Pending |
+| EXTF-01 | Phase 1 | Pending |
+| EXTF-02 | Phase 1 | Pending |
+| EXTF-03 | Phase 1 | Pending |
+| EXTF-04 | Phase 1 | Pending |
 
 **Coverage:**
 - v1 requirements: 23 total
-- Mapped to phases: 0
-- Unmapped: 23 ⚠️
+- Mapped to phases: 23 ✓
+- Unmapped: 0
 
 ---
+
 *Requirements defined: 2026-02-20*
-*Last updated: 2026-02-20 after initial definition*
+*Last updated: 2026-02-20 after roadmap creation*
