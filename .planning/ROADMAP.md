@@ -38,7 +38,12 @@
 4. Extension loads without CSP errors; manifest.json properly lists backend domain in connect-src
 5. Extension meets Chrome Web Store submission requirements (no dangerous permissions, proper privacy policy stub)
 
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — WXT scaffold + Manifest V3 with CSP and host_permissions
+- [ ] 01-02-PLAN.md — Service worker with chrome.storage state persistence and message types
+- [ ] 01-03-PLAN.md — Content script text selection + FloatingButton with Popover API
 
 ---
 
@@ -101,11 +106,11 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Text Selection | 0/? | Not started | — |
+| 1. Foundation & Text Selection | 0/3 | Planned | — |
 | 2. Backend Integration & AI Simplification | 0/? | Not started | — |
 | 3. Personalization & UX Polish | 0/? | Not started | — |
 
 ---
 
 *Roadmap created: 2026-02-20*
-*Next step: `/gsd:plan-phase 1`*
+*Phase 1 planned: 2026-02-22 — 3 plans, 2 waves*
