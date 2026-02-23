@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 01-foundation-text-selection
 source: 01-01-SUMMARY.md, 01-02-SUMMARY.md, 01-03-SUMMARY.md
 started: 2026-02-23T15:00:00Z
@@ -56,7 +56,13 @@ skipped: 3
   reason: "User reported: Button not showing"
   severity: major
   test: 3
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "Race condition — showPopover() called before React renders the popover DOM element. FloatingButton returns null when selectedText is empty, and showPopover() fires from message response before chrome.storage.onChanged propagates to React."
+  artifacts:
+    - path: "src/entrypoints/content.ts"
+      issue: "showPopover() called in message response callback before DOM element exists (line 74)"
+    - path: "src/components/FloatingButton.tsx"
+      issue: "Conditional render returns null when selectedText is falsy (lines 26-28), so popover element never in DOM when showPopover runs"
+  missing:
+    - "Decouple popover element existence from selectedText state — always render element, control visibility via CSS/popover state"
+    - "Or remove Popover API and let React control visibility directly from storage state"
+  debug_session: ".planning/debug/button-not-showing.md"
