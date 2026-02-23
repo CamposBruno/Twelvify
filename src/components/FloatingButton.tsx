@@ -1,19 +1,8 @@
 // src/components/FloatingButton.tsx
-// Floating simplify button using native Popover API
-// Popover API renders in top layer — zero z-index management needed
-// Chrome 114+ (cross-browser Baseline stable as of April 2025)
+// Floating simplify button — always rendered, visibility driven by selectedText in storage
+// CSS visibility approach: no Popover API, no race conditions with React render cycle
 
 import { useStorageValue } from '../storage/useStorage';
-
-// Extend React's HTML attribute types to include the Popover API attributes
-// (React 18 types don't include popover attributes; they are standard HTML spec as of 2024)
-declare module 'react' {
-  interface HTMLAttributes<T> {
-    popover?: 'auto' | 'manual' | '' | undefined;
-    popoverTarget?: string | undefined;
-    popoverTargetAction?: 'hide' | 'show' | 'toggle' | undefined;
-  }
-}
 
 interface FloatingButtonProps {
   onSimplify: () => void;
@@ -23,24 +12,23 @@ export function FloatingButton({ onSimplify }: FloatingButtonProps) {
   const [isLoading] = useStorageValue<boolean>('isLoading', false);
   const [selectedText] = useStorageValue<string>('selectedText', '');
 
-  if (!selectedText) {
-    return null;
-  }
+  // Always render — visibility controlled via CSS, not conditional null return.
+  // Conditional null caused a race: DOM element didn't exist when content.ts
+  // tried to call showPopover(), so the button never appeared.
+  const isVisible = Boolean(selectedText);
 
   return (
-    // Popover renders in the top layer above all page content
-    // No z-index needed — Popover API handles layering natively
+    // Always-present container — opacity/pointerEvents toggle makes it visible/hidden
     <div
       id="twelvify-floating-btn"
-      popover="manual"
       style={{
         position: 'fixed',
         bottom: '24px',
         right: '24px',
-        border: 'none',
-        padding: '0',
-        background: 'transparent',
-        margin: '0',
+        opacity: isVisible ? 1 : 0,
+        pointerEvents: isVisible ? 'auto' : 'none',
+        transition: 'opacity 0.15s ease',
+        zIndex: 2147483647,
       }}
     >
       <button
