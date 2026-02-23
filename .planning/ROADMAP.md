@@ -38,7 +38,7 @@
 4. Extension loads without CSP errors; manifest.json properly lists backend domain in connect-src
 5. Extension meets Chrome Web Store submission requirements (no dangerous permissions, proper privacy policy stub)
 
-**Plans:** 3/3 plans complete
+**Plans:** 4/4 plans complete
 
 Plans:
 - [ ] 01-01-PLAN.md — WXT scaffold + Manifest V3 with CSP and host_permissions
@@ -106,7 +106,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Text Selection | 3/3 | Complete    | 2026-02-23 |
+| 1. Foundation & Text Selection | 4/4 | Complete   | 2026-02-23 |
 | 2. Backend Integration & AI Simplification | 0/? | Not started | — |
 | 3. Personalization & UX Polish | 0/? | Not started | — |
 

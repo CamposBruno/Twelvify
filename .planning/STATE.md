@@ -8,8 +8,8 @@ See: .planning/PROJECT.md
 
 **Milestone:** v1.0 milestone
 **Current phase:** 01-foundation-text-selection
-**Current Plan:** Not started
-**Status:** Milestone complete
+**Current Plan:** 04 complete (awaiting human-verify checkpoint)
+**Status:** In progress
 
 ## Decisions
 
@@ -24,6 +24,9 @@ See: .planning/PROJECT.md
 - [Phase 01-03]: Popover API (popover="manual") renders in browser top layer — zero z-index management needed
 - [Phase 01-03]: Both selectionchange and mouseup events needed for keyboard and mouse drag selection coverage
 - [Phase 01-03]: react-dom/client (not react/client) is the correct React 18 createRoot import path
+- [Phase 01-04]: Always-render pattern — FloatingButton never returns null; CSS opacity/pointerEvents toggle eliminates showPopover race condition
+- [Phase 01-04]: Storage-driven visibility — FloatingButton reads selectedText via useStorageValue; content script only dispatches messages
+- [Phase 01-04]: z-index 2147483647 used instead of Popover API top-layer for button stacking
 
 ## Session Log
 
@@ -31,3 +34,4 @@ See: .planning/PROJECT.md
 - 2026-02-23: Completed 01-01 (WXT scaffold + Manifest V3 config). Tasks: 2, commits: e834ad0, 4dc9b5f
 - 2026-02-23: Completed 01-02 (Service worker + chrome.storage state management). Tasks: 2, commits: 108e26b, 689493b
 - 2026-02-23: Completed 01-03 (Content script + FloatingButton with Popover API). Tasks: 2, commits: f5665cd, b156473
+- 2026-02-23: Completed 01-04 auto-tasks (Gap closure — FloatingButton race condition fix). Tasks: 2, commits: 39d037e, de3f6d1. Awaiting human-verify checkpoint.
