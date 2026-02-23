@@ -27,23 +27,8 @@ export default defineContentScript({
       );
     }
 
-    // Initial render (will show nothing until text is selected)
+    // Initial render — FloatingButton always renders, hidden until text is selected
     renderButton();
-
-    // Show popover after render
-    function showPopover() {
-      const popoverEl = document.getElementById('twelvify-floating-btn');
-      if (popoverEl && 'showPopover' in popoverEl) {
-        (popoverEl as HTMLElement & { showPopover(): void }).showPopover();
-      }
-    }
-
-    function hidePopover() {
-      const popoverEl = document.getElementById('twelvify-floating-btn');
-      if (popoverEl && 'hidePopover' in popoverEl) {
-        (popoverEl as HTMLElement & { hidePopover(): void }).hidePopover();
-      }
-    }
 
     // --- Text selection detection ---
     // Use selectionchange event (fires on any selection change)
@@ -58,6 +43,7 @@ export default defineContentScript({
 
         if (selectedText && selectedText.length > 3) {
           // Send to background service worker for persistence
+          // FloatingButton reads selectedText from storage directly — no showPopover() needed
           const message: ExtensionMessage = {
             type: 'TEXT_SELECTED',
             text: selectedText,
@@ -68,17 +54,13 @@ export default defineContentScript({
             if (chrome.runtime.lastError) {
               // Service worker may have just restarted — not an error, retry once
               chrome.runtime.sendMessage(message);
-              return;
             }
-            if (response?.status === 'received') {
-              showPopover();
-            }
+            // No showPopover() needed — FloatingButton reads from storage directly
           });
         } else {
-          // Clear selection state and hide button
+          // Clear selection state — FloatingButton hides itself when selectedText is empty
           const clearMessage: ExtensionMessage = { type: 'CLEAR_SELECTION' };
           chrome.runtime.sendMessage(clearMessage);
-          hidePopover();
         }
       }, 50); // 50ms debounce — prevents flooding on drag selections
     }
@@ -108,7 +90,7 @@ export default defineContentScript({
     document.addEventListener('selectionchange', handleSelectionChange);
     document.addEventListener('mouseup', handleSelectionChange);
 
-    // Hide button when user clicks outside
+    // Hide button when user clicks outside — send CLEAR_SELECTION so storage updates
     document.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
       if (!target.closest('#twelvify-root')) {
@@ -116,7 +98,7 @@ export default defineContentScript({
         if (!selection || selection.toString().trim().length <= 3) {
           const clearMessage: ExtensionMessage = { type: 'CLEAR_SELECTION' };
           chrome.runtime.sendMessage(clearMessage);
-          hidePopover();
+          // No hidePopover() needed — FloatingButton hides itself when selectedText clears
         }
       }
     });
