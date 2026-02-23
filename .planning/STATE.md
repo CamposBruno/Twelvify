@@ -8,8 +8,8 @@ See: .planning/PROJECT.md
 
 **Milestone:** v1.0 milestone
 **Current phase:** 01-foundation-text-selection
-**Current Plan:** 3 / 3 (in phase)
-**Status:** Phase Complete
+**Current Plan:** Not started
+**Status:** Milestone complete
 
 ## Decisions
 
