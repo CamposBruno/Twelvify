@@ -9,7 +9,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Text Simplification
 
-- [ ] **SIMP-01**: User can highlight text on any webpage and see a floating action icon appear
+- [x] **SIMP-01**: User can highlight text on any webpage and see a floating action icon appear
 - [ ] **SIMP-02**: User can click the floating icon to trigger AI-powered text simplification
 - [ ] **SIMP-03**: User can use a keyboard shortcut (e.g., Ctrl+Shift+S) to simplify selected text
 - [ ] **SIMP-04**: User can revert rewritten text back to the original with one click
@@ -18,7 +18,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **DISP-01**: Simplified text replaces the original text in-page by default
 - [ ] **DISP-02**: User can configure display to show simplified text in a floating popup instead
-- [ ] **DISP-03**: User sees a loading indicator while the AI processes their text
+- [x] **DISP-03**: User sees a loading indicator while the AI processes their text
 
 ### Personalization
 
@@ -45,7 +45,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **EXTF-01**: Chrome Extension uses Manifest V3 with proper CSP configuration
 - [x] **EXTF-02**: Service worker manages state via chrome.storage (not global variables)
-- [ ] **EXTF-03**: Content script properly handles text selection across diverse page structures
+- [x] **EXTF-03**: Content script properly handles text selection across diverse page structures
 - [x] **EXTF-04**: Extension follows Chrome Web Store policies and is submittable
 
 ## v2 Requirements
@@ -98,13 +98,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SIMP-01 | Phase 1 | Pending |
+| SIMP-01 | Phase 1 | Complete |
 | SIMP-02 | Phase 2 | Pending |
 | SIMP-03 | Phase 3 | Pending |
 | SIMP-04 | Phase 3 | Pending |
 | DISP-01 | Phase 3 | Pending |
 | DISP-02 | Phase 3 | Pending |
-| DISP-03 | Phase 1 | Pending |
+| DISP-03 | Phase 1 | Complete |
 | PERS-01 | Phase 3 | Pending |
 | PERS-02 | Phase 3 | Pending |
 | PERS-03 | Phase 3 | Pending |
@@ -119,7 +119,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ERRH-04 | Phase 2 | Pending |
 | EXTF-01 | Phase 1 | Complete |
 | EXTF-02 | Phase 1 | Complete |
-| EXTF-03 | Phase 1 | Pending |
+| EXTF-03 | Phase 1 | Complete |
 | EXTF-04 | Phase 1 | Complete |
 
 **Coverage:**
