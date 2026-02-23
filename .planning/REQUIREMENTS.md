@@ -43,10 +43,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Extension Foundation
 
-- [ ] **EXTF-01**: Chrome Extension uses Manifest V3 with proper CSP configuration
+- [x] **EXTF-01**: Chrome Extension uses Manifest V3 with proper CSP configuration
 - [ ] **EXTF-02**: Service worker manages state via chrome.storage (not global variables)
 - [ ] **EXTF-03**: Content script properly handles text selection across diverse page structures
-- [ ] **EXTF-04**: Extension follows Chrome Web Store policies and is submittable
+- [x] **EXTF-04**: Extension follows Chrome Web Store policies and is submittable
 
 ## v2 Requirements
 
@@ -117,10 +117,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ERRH-02 | Phase 2 | Pending |
 | ERRH-03 | Phase 2 | Pending |
 | ERRH-04 | Phase 2 | Pending |
-| EXTF-01 | Phase 1 | Pending |
+| EXTF-01 | Phase 1 | Complete |
 | EXTF-02 | Phase 1 | Pending |
 | EXTF-03 | Phase 1 | Pending |
-| EXTF-04 | Phase 1 | Pending |
+| EXTF-04 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 23 total
