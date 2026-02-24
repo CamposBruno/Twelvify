@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   h1, h2, h3 {
     @apply font-display tracking-tight uppercase;
     transform: rotate(-1deg);
