@@ -41,7 +41,6 @@ export default defineContentScript({
           onSimplify: handleSimplify,
           onUndo: handleUndo,
           hasUndo: !undoStack.isEmpty(),
-          hasSimplifiedBefore: undoStack.selectionContainsSimplified(),
         })
       );
     }
@@ -440,13 +439,10 @@ export default defineContentScript({
 
                 setTimeout(() => {
                   span.style.background = 'transparent';
+                  // Keep span in DOM (with data-twelvify-simplified attribute)
+                  // so re-selecting this text triggers the downgrade label
                   setTimeout(() => {
-                    // Unwrap span — restore plain text node in DOM
-                    const parent = span.parentNode;
-                    if (parent) {
-                      while (span.firstChild) parent.insertBefore(span.firstChild, span);
-                      parent.removeChild(span);
-                    }
+                    span.style.cssText = '';
                   }, 1600);
                 }, 100);
               }
