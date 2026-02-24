@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Milestone:** v1.1 Landing Page
 **Current phase:** 5 of 7 (Phase 5: Static Sections)
-**Current Plan:** 05-04 complete (Plan 4 of 4) — Phase 5 complete
-**Status:** In progress
+**Current Plan:** Not started
+**Status:** Milestone complete
 
 Progress: [█████░░░░░] 50% (v1.1)
 
