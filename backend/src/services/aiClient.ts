@@ -16,8 +16,8 @@ interface SimplifyOptions {
 }
 
 const TONE_INSTRUCTIONS: Record<string, string> = {
-  baby: 'Rewrite for a toddler. Use the simplest words possible, very short sentences. Explain everything like the reader has never heard of any of these concepts. Use analogies to everyday objects a small child would know.',
-  '5': 'Rewrite for a 5-year-old. Use simple everyday words, short sentences, and fun comparisons. Avoid any technical terms — explain concepts through things a kindergartner would understand.',
+  baby: 'Change the text to sound like a cute baby is talking (only noises). Use simple words (mama, papa), lots of emojis, and make it playful and fun.',
+  '5': 'Rewrite for a 5-year-old. write giberish and use emojis. Use very simple words and concepts, and keep sentences extremely short. Make it playful and fun.',
   '12': 'Rewrite for a 12-year-old. Use clear, straightforward language a middle schooler would understand. Replace jargon with plain language (e.g. "myocardial infarction" → "heart attack"). Keep it conversational.',
   '18': 'Rewrite for an 18-year-old / young adult. Simplify dense or academic language but keep moderate complexity. Technical terms are fine if they are common knowledge — only replace truly obscure jargon.',
   big_boy: 'Light rewrite for an educated adult. Keep most terminology intact but improve clarity and readability. Untangle convoluted sentences, remove unnecessary filler, but preserve technical precision.',
