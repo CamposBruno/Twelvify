@@ -32,6 +32,9 @@ Progress: [██████░░░░] 60% (v1.1)
 - Nav uses hidden md:flex for section links — mobile shows logo + CTA only
 - CSS placeholder div used for Features illustration — Phase 7 will add real image
 - Footer links use href="#" placeholder — to be wired in later phases
+- Playground rate limit 60 req/min (1 req/sec) vs 100 req/hr for /api/simplify — stricter for public demo protection
+- playgroundRateLimiter defined locally in playground.ts (not shared middleware/) — self-contained isolation pattern
+- Playground fixed options: tone 12, depth medium, profession empty — sensible defaults for hardcoded demo
 - Playground.tsx uses useCallback for handleClick; toast rendered inside .zine-box with overflow-hidden for natural slide-in effect
 - Mid-stream SSE errors preserve typed text and disable button (partial success state)
 
@@ -46,6 +49,7 @@ Progress: [██████░░░░] 60% (v1.1)
 - 2026-02-24: Completed 05-02-PLAN.md — Hero section with CSS browser mockup and HowItWorks with 3 rotating zine-box cards
 - 2026-02-24: Completed 05-03-PLAN.md — Features, CTA, and Footer components with rotating icon boxes and paper-tear CTA
 - 2026-02-24: Completed 05-04-PLAN.md — Integration: all sections wired into App.tsx, smooth scroll enabled, 13/13 Playwright tests passed
+- 2026-02-24: Completed 06-01-PLAN.md — POST /api/playground SSE endpoint with hardcoded sample text and 60 req/min per-IP rate limiter
 - 2026-02-24: Completed 06-02-PLAN.md — Playground React component with SSE typing animation, one-shot lock, and toast error handling
 
 ## Accumulated Context

@@ -57,8 +57,8 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 
 ### Backend
 
-- [ ] **API-01**: Dedicated `/api/playground` endpoint with stricter rate limiting (1 req/sec per client)
-- [ ] **API-02**: Playground endpoint uses same AI simplification but with hardcoded sample text (no arbitrary input)
+- [x] **API-01**: Dedicated `/api/playground` endpoint with stricter rate limiting (1 req/sec per client)
+- [x] **API-02**: Playground endpoint uses same AI simplification but with hardcoded sample text (no arbitrary input)
 
 ### Deploy
 
@@ -118,8 +118,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INTX-01 | Phase 6 | Complete |
 | INTX-04 | Phase 6 | Complete |
 | INTX-05 | Phase 6 | Complete |
-| API-01 | Phase 6 | Pending |
-| API-02 | Phase 6 | Pending |
+| API-01 | Phase 6 | Complete |
+| API-02 | Phase 6 | Complete |
 | ANALYTICS-01 | Phase 7 | Pending |
 | PERF-01 | Phase 7 | Pending |
 | DEPLOY-01 | Phase 7 | Pending |
