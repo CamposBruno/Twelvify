@@ -11,10 +11,10 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Milestone:** v1.1 Landing Page
 **Current phase:** 4 of 7 (Phase 4: Foundation)
-**Current Plan:** None
-**Status:** Ready to plan
+**Current Plan:** 1 of 4 complete (Plan 04-01 done)
+**Status:** In progress
 
-Progress: [░░░░░░░░░░] 0% (v1.1)
+Progress: [█░░░░░░░░░] 10% (v1.1)
 
 ## Decisions
 
@@ -22,12 +22,16 @@ Progress: [░░░░░░░░░░] 0% (v1.1)
 - Playground is one-shot demo only: button disabled after first successful call
 - Backend `/api/playground` accepts no arbitrary input — hardcoded sample text only
 - PERF-02 (font loading) placed in Phase 4 (Foundation) — it is a setup-level concern
+- Vite project scaffolded manually (npm create vite cancelled on existing landing/ dir)
+- .zine-box and .paper-tear defined in @layer base, not as utilities
+- Google Fonts loaded via index.html link tag for pre-hydration availability
 
 ## Session Log
 
 - 2026-02-24: v1.0 MVP milestone completed and archived
 - 2026-02-24: Milestone v1.1 Landing Page started
 - 2026-02-24: v1.1 roadmap created — 4 phases (4-7), 27/27 requirements mapped
+- 2026-02-24: Completed 04-01-PLAN.md — Vite+React+TS+Tailwind scaffold with zine/punk design system
 
 ## Accumulated Context
 

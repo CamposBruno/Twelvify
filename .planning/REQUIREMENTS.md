@@ -9,7 +9,7 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 
 ### Setup
 
-- [ ] **SETUP-01**: React app bootstrapped with Tailwind CSS, custom theme (fonts, colors, borders matching design)
+- [x] **SETUP-01**: React app bootstrapped with Tailwind CSS, custom theme (fonts, colors, borders matching design)
 - [ ] **SETUP-02**: Google Fonts loaded (Permanent Marker, Special Elite, Inter) and Material Symbols Icons
 
 ### Layout
@@ -36,9 +36,9 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 
 ### Design
 
-- [ ] **DSGN-01**: Zine/punk aesthetic: sharp borders, box shadows, rotation transforms, paper-tear clip-path
+- [x] **DSGN-01**: Zine/punk aesthetic: sharp borders, box shadows, rotation transforms, paper-tear clip-path
 
-- [ ] **DSGN-03**: Custom Tailwind config (primary #f56060, background-light/dark, font families, border-radius 0px)
+- [x] **DSGN-03**: Custom Tailwind config (primary #f56060, background-light/dark, font families, border-radius 0px)
 
 ### SEO
 
@@ -96,11 +96,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SETUP-01 | Phase 4 | Pending |
+| SETUP-01 | Phase 4 | Complete |
 | SETUP-02 | Phase 4 | Pending |
-| DSGN-01 | Phase 4 | Pending |
+| DSGN-01 | Phase 4 | Complete |
 
-| DSGN-03 | Phase 4 | Pending |
+| DSGN-03 | Phase 4 | Complete |
 | PERF-02 | Phase 4 | Pending |
 | LAYOUT-01 | Phase 5 | Pending |
 | LAYOUT-02 | Phase 5 | Pending |
