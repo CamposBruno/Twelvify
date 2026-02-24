@@ -96,4 +96,19 @@ export class UndoStack {
     entry.textNode.textContent = entry.originalText;
     return true;
   }
+
+  /**
+   * Check if the current DOM selection overlaps with any simplified text node
+   * in the stack. Used to decide whether to show the level-down label
+   * (re-simplify) vs the default "Simplify" label.
+   */
+  selectionContainsSimplified(): boolean {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0 || sel.toString().trim().length <= 3) return false;
+    const range = sel.getRangeAt(0);
+    for (const entry of this.stack) {
+      if (range.intersectsNode(entry.textNode)) return true;
+    }
+    return false;
+  }
 }
