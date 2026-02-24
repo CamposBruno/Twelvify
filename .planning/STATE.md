@@ -27,6 +27,8 @@ See: .planning/PROJECT.md
 - [Phase 01-04]: Always-render pattern — FloatingButton never returns null; CSS opacity/pointerEvents toggle eliminates showPopover race condition
 - [Phase 01-04]: Storage-driven visibility — FloatingButton reads selectedText via useStorageValue; content script only dispatches messages
 - [Phase 01-04]: z-index 2147483647 used instead of Popover API top-layer for button stacking
+- [Phase 03-personalization-ux-polish]: getButtonLabel returns ONE-LEVEL-LOWER label — button invites simplification to next level down
+- [Phase 03-personalization-ux-polish]: UndoStack holds direct Text node reference — avoids Range serialization, valid for full page lifetime
 
 ## Session Log
 
