@@ -29,6 +29,8 @@ See: .planning/PROJECT.md
 - [Phase 01-04]: z-index 2147483647 used instead of Popover API top-layer for button stacking
 - [Phase 03-personalization-ux-polish]: getButtonLabel returns ONE-LEVEL-LOWER label — button invites simplification to next level down
 - [Phase 03-personalization-ux-polish]: UndoStack holds direct Text node reference — avoids Range serialization, valid for full page lifetime
+- [Phase 03]: OnboardingPrompt renders all 3 variants (tone/depth/profession) from single component via prompt.id dispatch
+- [Phase 03]: Draft state for text inputs in SettingsPanel — save to chrome.storage.sync on blur or Enter, not on each keystroke
 
 ## Session Log
 
