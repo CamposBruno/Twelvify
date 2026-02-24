@@ -14,14 +14,26 @@ interface FloatingButtonProps {
   hasSimplifiedBefore?: boolean; // True after at least one simplification — shows level-down label
 }
 
-/**
- * Returns the ONE-LEVEL-LOWER age label for the button.
- * The button invites the user to simplify to the level BELOW their current setting.
- *
- * Wrapping order (from highest to lowest, then wraps around):
- *   big_boy → 18 → 12 → 5 → baby → big_boy (wrap-around)
- */
+/** Returns the label matching the user's current tone level. */
 function getButtonLabel(tone: ToneLevel): string {
+  switch (tone) {
+    case 'baby':
+      return "Explain like I'm a Baby";
+    case 5:
+      return "Explain like I'm 5";
+    case 12:
+      return 'Twelvify';
+    case 18:
+      return "Explain like I'm 18";
+    case 'big_boy':
+      return "Explain like I'm a Big Boy";
+    default:
+      return 'Twelvify';
+  }
+}
+
+/** Returns the ONE-LEVEL-LOWER label for re-simplifying already-simplified text. */
+function getDowngradeLabel(tone: ToneLevel): string {
   switch (tone) {
     case 'big_boy':
       return "Explain like I'm 18";
@@ -34,8 +46,7 @@ function getButtonLabel(tone: ToneLevel): string {
     case 'baby':
       return "Explain like I'm a Big Boy";
     default:
-      // TypeScript exhaustiveness guard — ToneLevel covers all 5 cases above
-      return "Simplify";
+      return "Explain like I'm 5";
   }
 }
 
@@ -77,8 +88,8 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo, hasSimplifiedBefor
   const showUndo = Boolean(hasUndo) && !isLoading;
   const isVisible = hasSelection || showUndo;
 
-  // Simplify button label: "Simplify" initially, age-level-down label after first simplification
-  const simplifyLabel = hasSimplifiedBefore ? getButtonLabel(tone) : 'Simplify';
+  // Label: current tone level normally, one-level-down when re-selecting simplified text
+  const simplifyLabel = hasSimplifiedBefore ? getDowngradeLabel(tone) : getButtonLabel(tone);
 
   const simplifyBgColor = isLoading
     ? '#6366f1'
