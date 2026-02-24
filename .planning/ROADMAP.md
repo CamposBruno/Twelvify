@@ -71,7 +71,13 @@ Plans:
 4. Extension shows friendly error messages for: offline, rate limit exceeded, timeout, text too long
 5. Backend logs no text content; logs only track usage metadata (hashed user IDs, feature use, input length bins)
 
-**Plans:** TBD
+**Plans:** 4 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Express backend proxy: SSE streaming, rate limiting, privacy logging, OpenAI integration
+- [ ] 02-02-PLAN.md — Extension integration: handleSimplify() with SSE, client-side rate limit, in-place DOM streaming replacement
+- [ ] 02-03-PLAN.md — Error handling UI: yellow button + shake animation + sarcastic tooltip component
+- [ ] 02-04-PLAN.md — Human verify: end-to-end streaming simplification and all error scenarios
 
 ---
 
