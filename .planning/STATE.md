@@ -7,9 +7,9 @@ See: .planning/PROJECT.md
 ## Position
 
 **Milestone:** v1.0 milestone
-**Current phase:** 02-backend-integration-ai-simplification
-**Current Plan:** Not started
-**Status:** Milestone complete
+**Current phase:** 03-personalization-ux-polish
+**Current Plan:** 03-02 (next)
+**Status:** In progress
 
 ## Decisions
 
@@ -53,3 +53,9 @@ See: .planning/PROJECT.md
 - 2026-02-23: Completed 02-04 (Human UAT — Phase 2 end-to-end verification). Tasks: 1 checkpoint, commits: 9b62e6c (fix). Human-verified: streaming works, all 4 error scenarios pass, no user text in logs, quality acceptable. Phase 02 complete.
 - [Phase 02-04]: CORS ALLOWED_ORIGIN must be * for content scripts — content scripts send page origin (not extension origin), static extension-origin allowlist cannot work
 - [Phase 02-04]: Backend URL uses localhost:3001 for local dev — must update content.ts URL and host_permissions in wxt.config.ts before Render deployment / Web Store submission
+- 2026-02-24: Completed 03-01 (Settings storage foundation — UserSettings, ToneLevel, DEFAULT_SETTINGS, useStorageSyncValue, initSyncDefaults). Tasks: 2, commits: acbf780, 2f02816.
+- [Phase 03-01]: ToneLevel uses literal numbers (5, 12, 18) and string literals (baby, big_boy) — union type prevents invalid tone values
+- [Phase 03-01]: chrome.storage.sync chosen for UserSettings — syncs across profiles and survives browser restarts
+- [Phase 03-01]: onChanged listener guards areaName === 'sync' to prevent local storage changes from triggering sync hook re-renders
+- [Phase 03-01]: initSyncDefaults only writes absent keys — safe to call on every install/update without clobbering prefs
+- [Phase 03-01]: keyboardShortcut stored in sync for display only — actual binding managed by chrome.commands in manifest

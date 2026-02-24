@@ -22,10 +22,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Personalization
 
-- [ ] **PERS-01**: Extension works immediately with sensible defaults (no upfront setup required)
+- [x] **PERS-01**: Extension works immediately with sensible defaults (no upfront setup required)
 - [ ] **PERS-02**: Extension progressively asks user about preferences over first few uses
 - [ ] **PERS-03**: User can set profession/interests so analogies feel relatable (e.g., finance explained via sports)
-- [ ] **PERS-04**: User preferences persist across browser sessions via chrome.storage.sync
+- [x] **PERS-04**: User preferences persist across browser sessions via chrome.storage.sync
 
 ### Backend & Infrastructure
 
@@ -105,10 +105,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DISP-01 | Phase 3 | Pending |
 | DISP-02 | Phase 3 | Pending |
 | DISP-03 | Phase 1 | Complete |
-| PERS-01 | Phase 3 | Pending |
+| PERS-01 | Phase 3 | Complete |
 | PERS-02 | Phase 3 | Pending |
 | PERS-03 | Phase 3 | Pending |
-| PERS-04 | Phase 3 | Pending |
+| PERS-04 | Phase 3 | Complete |
 | BACK-01 | Phase 2 | Complete |
 | BACK-02 | Phase 2 | Complete |
 | BACK-03 | Phase 2 | Complete |
