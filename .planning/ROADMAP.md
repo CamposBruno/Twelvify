@@ -71,7 +71,7 @@ Plans:
 4. Extension shows friendly error messages for: offline, rate limit exceeded, timeout, text too long
 5. Backend logs no text content; logs only track usage metadata (hashed user IDs, feature use, input length bins)
 
-**Plans:** 1/4 plans executed
+**Plans:** 2/4 plans executed
 
 Plans:
 - [ ] 02-01-PLAN.md — Express backend proxy: SSE streaming, rate limiting, privacy logging, OpenAI integration
@@ -113,7 +113,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Text Selection | 4/4 | Complete   | 2026-02-23 |
-| 2. Backend Integration & AI Simplification | 1/4 | In Progress|  |
+| 2. Backend Integration & AI Simplification | 2/4 | In Progress|  |
 | 3. Personalization & UX Polish | 0/? | Not started | — |
 
 ---

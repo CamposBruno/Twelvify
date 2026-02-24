@@ -8,7 +8,7 @@ See: .planning/PROJECT.md
 
 **Milestone:** v1.0 milestone
 **Current phase:** 02-backend-integration-ai-simplification
-**Current Plan:** 02-01 complete (02-02 next)
+**Current Plan:** 02-02 complete (02-03 next)
 **Status:** In progress
 
 ## Decisions
@@ -36,8 +36,13 @@ See: .planning/PROJECT.md
 - 2026-02-23: Completed 01-03 (Content script + FloatingButton with Popover API). Tasks: 2, commits: f5665cd, b156473
 - 2026-02-23: Completed 01-04 (Gap closure — FloatingButton race condition fix + React import). Tasks: 3, commits: 39d037e, de3f6d1, aaefa2f. Human-verified: all UAT tests pass.
 - 2026-02-24: Completed 02-01 (Express backend proxy — SSE streaming, rate limiting, privacy logging). Tasks: 2, commits: b3ce09b, 680abf4. Requires real OPENAI_API_KEY in backend/.env.local for end-to-end testing.
+- 2026-02-24: Completed 02-02 (Backend integration — SSE streaming simplification wired end-to-end, DOM in-place replacement, client-side rate limit). Tasks: 2, commits: 6e60aeb, 7decb91.
 - [Phase 01-04]: Explicit React import needed in content script .tsx — Vite auto JSX transform fails on async re-renders
 - [Phase 02-01]: gpt-4o-mini selected for cost efficiency; upgrade path to gpt-4-turbo documented in aiClient.ts
 - [Phase 02-01]: express-rate-limit v7 uses AugmentedRequest type — cast required in handler to access req.rateLimit
 - [Phase 02-01]: SHA-256(IP:UserAgent).slice(0,16) fingerprint for anonymous rate limiting without user accounts
 - [Phase 02-01]: Trust proxy enabled (app.set('trust proxy', 1)) for correct IP behind Vercel/Render/nginx
+- [Phase 02-02]: fetch+ReadableStream used for SSE instead of EventSource — EventSource doesn't support POST with body
+- [Phase 02-02]: DOM Range captured before async fetch to preserve selection if user clicks away during streaming
+- [Phase 02-02]: Client-side rate limit window (50 req/hr) tracked in chrome.storage via simplifyCountThisHour/hourWindowStart
+- [Phase 02-02]: wxt.config.ts host_permissions updated to twelvify-backend.onrender.com — must update before Web Store submission
