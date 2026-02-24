@@ -28,6 +28,14 @@ When a user highlights confusing text and clicks the icon, they get back a clear
 
 ### Active
 
+- [ ] Landing page: implement existing Figma/HTML design as React app
+- [ ] Landing page: deploy to Netlify/Vercel with custom domain support
+- [ ] Landing page: responsive design matching zine/punk aesthetic from design
+- [ ] Landing page: interactive playground demo section
+- [ ] Landing page: Chrome Web Store install CTA links
+
+### Deferred (from v1.0)
+
 - [ ] Click-to-define difficult words with inline tooltip (WORD-01, WORD-02)
 - [ ] Chrome side panel display mode (DISP-04)
 - [ ] Dark mode matching system preference (DISP-05)
@@ -47,6 +55,17 @@ When a user highlights confusing text and clicks the icon, they get back a clear
 - Browser support beyond Chrome — Chrome-first; Firefox only if demand exists
 - Real-time on-hover simplification — massive API cost spike
 - Always-on background simplification — privacy nightmare + cost explosion
+
+## Current Milestone: v1.1 Landing Page
+
+**Goal:** Implement the existing Figma/HTML landing page design as a React app and deploy to Netlify/Vercel to drive Chrome Web Store installs.
+
+**Target features:**
+- React implementation of zine/punk aesthetic landing page design
+- Responsive layout: nav, hero, how-it-works, playground, features, CTA, footer
+- Interactive playground demo section
+- Dark mode support
+- Deploy to Netlify/Vercel
 
 ## Context
 
@@ -85,4 +104,4 @@ Personalization: 5 tone levels (baby → big_boy), 3 depth levels, profession-ba
 | WXT framework | Convention-based Chrome extension dev with HMR | ✓ Good — fast dev cycle, proper MV3 output |
 
 ---
-*Last updated: 2026-02-24 after v1.0 milestone*
+*Last updated: 2026-02-24 after v1.1 milestone started*
