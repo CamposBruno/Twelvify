@@ -2,6 +2,7 @@
 // Floating simplify button — always rendered, visibility driven by selectedText in storage
 // CSS visibility approach: no Popover API, no race conditions with React render cycle
 
+import React from 'react';
 import { useStorageValue } from '../storage/useStorage';
 
 interface FloatingButtonProps {

@@ -55,7 +55,6 @@ export default defineContentScript({
               // Service worker may have just restarted — not an error, retry once
               chrome.runtime.sendMessage(message);
             }
-            // No showPopover() needed — FloatingButton reads from storage directly
           });
         } else {
           // Clear selection state — FloatingButton hides itself when selectedText is empty
