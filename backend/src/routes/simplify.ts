@@ -22,7 +22,7 @@ simplifyRouter.post('/api/simplify', rateLimiter, async (req: Request, res: Resp
     return;
   }
 
-  const { text } = parsed.data;
+  const { text, tone, depth, profession } = parsed.data;
   const fingerprint = hashFingerprint(req.ip ?? '0.0.0.0', req.get('user-agent') ?? '');
   const startTime = Date.now();
 
@@ -42,7 +42,7 @@ simplifyRouter.post('/api/simplify', rateLimiter, async (req: Request, res: Resp
   try {
     // 4. Stream from OpenAI token by token
     let tokenCount = 0;
-    for await (const chunk of streamSimplification(text)) {
+    for await (const chunk of streamSimplification(text, { tone, depth, profession })) {
       res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
       tokenCount += chunk.split(/\s+/).length;  // Approximate word count
     }
