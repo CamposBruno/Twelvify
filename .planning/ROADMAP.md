@@ -104,7 +104,15 @@ Plans:
 4. User can toggle between replace-in-page mode (default) and floating popup mode via settings UI
 5. User can revert any simplified text to original with one-click "Undo" button; revert action is immediate (no API call needed)
 
-**Plans:** TBD
+**Plans:** 6 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Settings storage foundation (UserSettings + useStorageSyncValue)
+- [ ] 03-02-PLAN.md — FloatingButton evolution: age-level cycling label + undo mode + UndoStack utility
+- [ ] 03-03-PLAN.md — Keyboard shortcut: chrome.commands Ctrl+Shift+1 registration + background routing
+- [ ] 03-04-PLAN.md — Content script upgrade: personalization params, undo stack, hotkey handler, display mode routing, onboarding wiring
+- [ ] 03-05-PLAN.md — UI components + settings panel: OnboardingPrompt, FloatingPopup, SettingsPanel, popup App
+- [ ] 03-06-PLAN.md — Human verify: end-to-end UAT of all Phase 3 features
 
 ---
 
