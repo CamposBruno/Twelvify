@@ -49,34 +49,12 @@ function getDowngradeLabel(tone: ToneLevel): string {
   }
 }
 
-/**
- * Check if the current browser selection overlaps with any element marked
- * as simplified by Twelvify (has data-twelvify-simplified attribute).
- * Evaluated on every render so it stays fresh with storage-triggered re-renders.
- */
-function isSelectionOverSimplified(): boolean {
-  const sel = window.getSelection();
-  if (!sel || sel.rangeCount === 0 || sel.toString().trim().length <= 3) return false;
-  const range = sel.getRangeAt(0);
-  // Walk up from both ends of the selection to find a simplified span ancestor
-  const container = range.commonAncestorContainer;
-  const root = container instanceof Element ? container : container.parentElement;
-  if (!root) return false;
-  // Check if any data-twelvify-simplified span intersects with the selection range
-  const candidates = root.closest('[data-twelvify-simplified]')
-    ? [root.closest('[data-twelvify-simplified]')!]
-    : Array.from(root.querySelectorAll('[data-twelvify-simplified]'));
-  for (const el of candidates) {
-    if (range.intersectsNode(el)) return true;
-  }
-  return false;
-}
-
 export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonProps) {
   const [isLoading] = useStorageValue<boolean>('isLoading', false);
   const [selectedText] = useStorageValue<string>('selectedText', '');
   const [errorState, setErrorState] = useStorageValue<ExtensionState['errorState']>('errorState', null);
   const [tone] = useStorageSyncValue<ToneLevel>('tone', 12);
+  const [isSelectingSimplified] = useStorageValue<boolean>('isSelectingSimplified', false);
 
   // Auto-dismiss error after 5 seconds — clears errorState from storage
   const dismissTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -111,7 +89,7 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonPr
   const isVisible = hasSelection || showUndo;
 
   // Label: current tone level normally, one-level-down when re-selecting simplified text
-  const simplifyLabel = isSelectionOverSimplified() ? getDowngradeLabel(tone) : getButtonLabel(tone);
+  const simplifyLabel = isSelectingSimplified ? getDowngradeLabel(tone) : getButtonLabel(tone);
 
   const simplifyBgColor = isLoading
     ? '#6366f1'

@@ -120,6 +120,24 @@ export default defineContentScript({
       }
     });
 
+    // Check if current browser selection overlaps simplified text
+    function checkSelectionOverSimplified(): boolean {
+      const sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0 || sel.toString().trim().length <= 3) return false;
+      const range = sel.getRangeAt(0);
+      const container = range.commonAncestorContainer;
+      const root = container instanceof Element ? container : container.parentElement;
+      if (!root) return false;
+      // Check ancestor chain first (selection inside a simplified span)
+      if (root.closest('[data-twelvify-simplified]')) return true;
+      // Check descendants (selection spans across a simplified span)
+      const children = root.querySelectorAll('[data-twelvify-simplified]');
+      for (const el of children) {
+        if (range.intersectsNode(el)) return true;
+      }
+      return false;
+    }
+
     // --- Text selection detection ---
     // Use selectionchange event (fires on any selection change)
     // Also listen for mouseup to catch rapid selections
@@ -130,12 +148,14 @@ export default defineContentScript({
 
       selectionDebounce = setTimeout(() => {
         const selectedText = getSelectedText();
-        // Re-render button so hasSimplifiedBefore reflects current selection
-        renderButton();
+
+        // Check if selection overlaps with previously simplified text
+        const isSelectingSimplified = checkSelectionOverSimplified();
 
         if (selectedText && selectedText.length > 3) {
-          // Send to background service worker for persistence
-          // FloatingButton reads selectedText from storage directly — no showPopover() needed
+          // Write isSelectingSimplified alongside selectedText so both arrive together
+          chrome.storage.local.set({ isSelectingSimplified });
+
           const message: ExtensionMessage = {
             type: 'TEXT_SELECTED',
             text: selectedText,
@@ -144,12 +164,12 @@ export default defineContentScript({
 
           chrome.runtime.sendMessage(message, (response) => {
             if (chrome.runtime.lastError) {
-              // Service worker may have just restarted — not an error, retry once
               chrome.runtime.sendMessage(message);
             }
           });
         } else {
           // Clear selection state — FloatingButton hides itself when selectedText is empty
+          chrome.storage.local.set({ isSelectingSimplified: false });
           const clearMessage: ExtensionMessage = { type: 'CLEAR_SELECTION' };
           chrome.runtime.sendMessage(clearMessage);
         }
