@@ -8,10 +8,20 @@ export interface ExtensionState {
   selectedAt: number | null;
   /** Whether the AI is currently processing a simplification request */
   isLoading: boolean;
-  /** Number of simplifications performed (for rate limiting in Phase 2) */
+  /** Number of simplifications performed (lifetime total) */
   simplifyCount: number;
-  /** ISO timestamp of last simplification (for rate limiting in Phase 2) */
+  /** ISO timestamp of last simplification */
   lastSimplifiedAt: number | null;
+  /** Current error state — null when no error. Drives error tooltip in FloatingButton */
+  errorState: {
+    code: 'offline' | 'rate_limit' | 'timeout' | 'text_too_long' | 'ai_error' | 'unknown';
+    message: string;
+    resetAt?: string;
+  } | null;
+  /** Client-side soft rate limit: requests in current hour window */
+  simplifyCountThisHour: number;
+  /** ISO timestamp when current hour window started */
+  hourWindowStart: string | null;
 }
 
 export const DEFAULT_STATE: ExtensionState = {
@@ -20,4 +30,7 @@ export const DEFAULT_STATE: ExtensionState = {
   isLoading: false,
   simplifyCount: 0,
   lastSimplifiedAt: null,
+  errorState: null,
+  simplifyCountThisHour: 0,
+  hourWindowStart: null,
 };
