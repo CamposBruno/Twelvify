@@ -23,7 +23,7 @@
 **Milestone Goal:** Implement the existing HTML/Tailwind landing page design as a React app and deploy to Netlify/Vercel to drive Chrome Web Store installs.
 
 - [x] **Phase 4: Foundation** - React app with design system, fonts, and Tailwind config **[2 plans]** (completed 2026-02-24)
-- [ ] **Phase 5: Static Sections** - All page sections (nav, hero, how-it-works, features, CTA, footer), responsive layout, and SEO
+- [ ] **Phase 5: Static Sections** - All page sections (nav, hero, how-it-works, features, CTA, footer), responsive layout, and SEO **[4 plans]**
 - [ ] **Phase 6: Playground & Interactivity** - Live AI demo section, backend endpoint, and all interactive behaviors
 - [ ] **Phase 7: Launch** - Analytics, performance optimization, and production deployment
 
@@ -54,7 +54,13 @@ Plans:
   3. "Add to Chrome" and install CTAs link to the Chrome Web Store extension URL
   4. Hover effects on cards and buttons match the design (rotation resets, shadow transitions, color transitions)
   5. Page title, description, canonical, Open Graph, and Twitter Card meta tags are set; heading hierarchy is semantically correct
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — App shell + Nav component + Chrome Store URL constant + SEO meta tags
+- [ ] 05-02-PLAN.md — Hero section + How-it-works section components
+- [ ] 05-03-PLAN.md — Features + CTA + Footer section components
+- [ ] 05-04-PLAN.md — Wire all sections into App.tsx + smooth scroll + visual verification
 
 ### Phase 6: Playground & Interactivity
 **Goal**: The live playground demo works end-to-end — a visitor can click "Fix This Mess" and see the hardcoded sample text simplified via AI in real time
