@@ -9,8 +9,9 @@ import { ErrorTooltip } from './ErrorTooltip';
 
 interface FloatingButtonProps {
   onSimplify: () => void;
-  onUndo?: () => void;    // Called when undo button clicked
-  hasUndo?: boolean;      // True when undo stack has entries — shows undo mode
+  onUndo?: () => void;           // Called when undo button clicked
+  hasUndo?: boolean;             // True when undo stack has entries — shows undo button
+  hasSimplifiedBefore?: boolean; // True after at least one simplification — shows level-down label
 }
 
 /**
@@ -38,7 +39,7 @@ function getButtonLabel(tone: ToneLevel): string {
   }
 }
 
-export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonProps) {
+export function FloatingButton({ onSimplify, onUndo, hasUndo, hasSimplifiedBefore }: FloatingButtonProps) {
   const [isLoading] = useStorageValue<boolean>('isLoading', false);
   const [selectedText] = useStorageValue<string>('selectedText', '');
   const [errorState, setErrorState] = useStorageValue<ExtensionState['errorState']>('errorState', null);
@@ -49,7 +50,6 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonPr
 
   useEffect(() => {
     if (errorState) {
-      // Clear any existing timer before starting a new one
       if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
       dismissTimerRef.current = setTimeout(() => {
         setErrorState(null);
@@ -66,54 +66,36 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonPr
 
   useEffect(() => {
     if (errorState && !prevErrorRef.current) {
-      // New error appeared — trigger shake animation
       setIsShaking(true);
-      setTimeout(() => setIsShaking(false), 600); // Match shake animation duration
+      setTimeout(() => setIsShaking(false), 600);
     }
     prevErrorRef.current = errorState;
   }, [errorState]);
 
-  // Always render — visibility controlled via CSS, not conditional null return.
-  // Conditional null caused a race: DOM element didn't exist when content.ts
-  // tried to call showPopover(), so the button never appeared.
-  const isVisible = Boolean(selectedText);
+  // Visible when text is selected OR when undo stack has entries (so undo stays accessible)
+  const hasSelection = Boolean(selectedText);
+  const showUndo = Boolean(hasUndo) && !isLoading;
+  const isVisible = hasSelection || showUndo;
 
-  // --- Button state priority hierarchy ---
-  // 1. isLoading → spinner + "Simplifying..." (unchanged)
-  // 2. errorState → yellow button + ErrorTooltip (unchanged)
-  // 3. hasUndo → green undo button (new)
-  // 4. default → age-level label + indigo button (modified)
+  // Simplify button label: "Simplify" initially, age-level-down label after first simplification
+  const simplifyLabel = hasSimplifiedBefore ? getButtonLabel(tone) : 'Simplify';
 
-  const isUndoMode = Boolean(hasUndo) && !isLoading;
-
-  const buttonBgColor = isLoading
-    ? '#6366f1'   // Indigo during loading
+  const simplifyBgColor = isLoading
+    ? '#6366f1'
     : errorState
-      ? '#f59e0b' // Warning yellow on error
-      : isUndoMode
-        ? '#10b981' // Green for undo mode
-        : '#6366f1'; // Default indigo
-
-  const buttonAriaLabel = isLoading
-    ? 'Simplifying...'
-    : isUndoMode
-      ? 'Revert to original text'
-      : 'Simplify selected text';
-
-  const handleClick = isLoading
-    ? undefined
-    : isUndoMode
-      ? onUndo
-      : onSimplify;
+      ? '#f59e0b'
+      : '#6366f1';
 
   return (
-    // Always-present container — opacity/pointerEvents toggle makes it visible/hidden
     <div
       id="twelvify-floating-btn"
       style={{
         position: 'fixed',
         bottom: '24px',
         right: '24px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
         opacity: isVisible ? 1 : 0,
         pointerEvents: isVisible ? 'auto' : 'none',
         transition: 'opacity 0.15s ease',
@@ -126,67 +108,88 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonPr
           onDismiss={() => setErrorState(null)}
         />
       )}
-      <button
-        onClick={handleClick}
-        disabled={isLoading}
-        aria-label={buttonAriaLabel}
-        title={!isLoading && !isUndoMode ? `Simplify selected text (Ctrl+Shift+1)` : undefined}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '10px 16px',
-          backgroundColor: buttonBgColor,
-          color: '#ffffff',
-          border: 'none',
-          borderRadius: '8px',
-          fontSize: '14px',
-          fontWeight: '600',
-          cursor: isLoading ? 'not-allowed' : 'pointer',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-          fontFamily: 'system-ui, -apple-system, sans-serif',
-          opacity: isLoading ? 0.8 : 1,
-          animation: isShaking ? 'twelvify-shake 0.6s ease' : undefined,
-        }}
-      >
-        {isLoading ? (
-          <>
-            {/* Loading spinner — inline SVG, no external assets */}
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              style={{ animation: 'twelvify-spin 1s linear infinite' }}
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
-              <path d="M12 2a10 10 0 0 1 10 10" />
-            </svg>
-            Simplifying...
-          </>
-        ) : isUndoMode ? (
-          // Undo mode — green button, no spark icon, just text
-          <>&#x21A9; Undo</>
-        ) : (
-          <>
-            {/* Spark icon — inline SVG */}
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z" />
-            </svg>
-            {getButtonLabel(tone)}
-          </>
-        )}
-      </button>
-      {/* CSS keyframes for spinner and shake animations — injected once */}
+      {/* Undo button — separate, appears left of simplify when undo stack has entries */}
+      {showUndo && (
+        <button
+          onClick={onUndo}
+          aria-label="Revert to original text"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '10px 14px',
+            backgroundColor: '#10b981',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            fontFamily: 'system-ui, -apple-system, sans-serif',
+          }}
+        >
+          &#x21A9; Undo
+        </button>
+      )}
+      {/* Simplify button — always rendered, hidden via parent opacity when no selection */}
+      {hasSelection && (
+        <button
+          onClick={isLoading ? undefined : onSimplify}
+          disabled={isLoading}
+          aria-label="Simplify selected text"
+          title={!isLoading ? `Simplify selected text (Ctrl+Shift+1)` : undefined}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 16px',
+            backgroundColor: simplifyBgColor,
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: '600',
+            cursor: isLoading ? 'not-allowed' : 'pointer',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            fontFamily: 'system-ui, -apple-system, sans-serif',
+            opacity: isLoading ? 0.8 : 1,
+            animation: isShaking ? 'twelvify-shake 0.6s ease' : undefined,
+          }}
+        >
+          {isLoading ? (
+            <>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                style={{ animation: 'twelvify-spin 1s linear infinite' }}
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                <path d="M12 2a10 10 0 0 1 10 10" />
+              </svg>
+              Simplifying...
+            </>
+          ) : (
+            <>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z" />
+              </svg>
+              {simplifyLabel}
+            </>
+          )}
+        </button>
+      )}
       <style>{`
         @keyframes twelvify-spin {
           from { transform: rotate(0deg); }

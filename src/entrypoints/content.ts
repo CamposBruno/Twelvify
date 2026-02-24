@@ -22,6 +22,8 @@ const REQUEST_TIMEOUT_MS = 10000;  // 10 seconds
 
 // Module-level undo stack — one instance per content script (per page load)
 const undoStack = new UndoStack();
+// Track whether user has simplified at least once this session (for level-down label)
+let hasSimplifiedBefore = false;
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -41,6 +43,7 @@ export default defineContentScript({
           onSimplify: handleSimplify,
           onUndo: handleUndo,
           hasUndo: !undoStack.isEmpty(),
+          hasSimplifiedBefore,
         })
       );
     }
@@ -383,7 +386,8 @@ export default defineContentScript({
                   simplifiedText: accumulated,
                   textNode: textNode,
                 });
-                renderButton(); // Update hasUndo to true
+                hasSimplifiedBefore = true;
+                renderButton(); // Update hasUndo and hasSimplifiedBefore
 
                 // Simplification complete — update rate limit count, clear loading, trigger fade
                 chrome.storage.local.get(
