@@ -173,20 +173,20 @@ export default function Playground() {
               className={`flex items-center gap-3 border-2 px-4 py-1 rotate-[-2deg] ${
                 phase === 'done'
                   ? 'line-through text-slate-300 border-slate-200'
-                  : 'text-slate-400 border-slate-200'
+                  : 'text-primary border-primary font-black'
               }`}
             >
-              <div className="size-3 bg-slate-300" /> COMPLEX ORIGINAL
+              <div className={`size-3 ${phase === 'done' ? 'bg-slate-300' : 'bg-primary'}`} /> COMPLEX ORIGINAL
             </div>
             <span className="material-symbols-outlined text-slate-300 scale-150">trending_flat</span>
             <div
               className={`flex items-center gap-3 border-2 px-4 py-1 rotate-[2deg] ${
                 phase === 'done'
                   ? 'text-primary border-primary font-black'
-                  : 'text-primary border-primary'
+                  : 'text-slate-400 border-slate-200'
               }`}
             >
-              <div className="size-3 bg-primary" /> SIMPLIFIED VERSION
+              <div className={`size-3 ${phase === 'done' ? 'bg-primary' : 'bg-slate-300'}`} /> SIMPLIFIED VERSION
             </div>
           </div>
         </div>
