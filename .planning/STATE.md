@@ -11,10 +11,10 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Milestone:** v1.1 Landing Page
 **Current phase:** 5 of 7 (Phase 5: Static Sections)
-**Current Plan:** 05-01 complete (Plan 1 of 3)
+**Current Plan:** 05-03 complete (Plan 3 of 4)
 **Status:** In progress
 
-Progress: [███░░░░░░░] 30% (v1.1)
+Progress: [████░░░░░░] 40% (v1.1)
 
 ## Decisions
 
@@ -30,6 +30,8 @@ Progress: [███░░░░░░░] 30% (v1.1)
 - App.tsx is temporary demo scaffold — Phase 5 will replace with real sections
 - CHROME_STORE_URL defined in constants.ts — placeholder, easy to swap when extension goes live
 - Nav uses hidden md:flex for section links — mobile shows logo + CTA only
+- CSS placeholder div used for Features illustration — Phase 7 will add real image
+- Footer links use href="#" placeholder — to be wired in later phases
 
 ## Session Log
 
@@ -39,6 +41,7 @@ Progress: [███░░░░░░░] 30% (v1.1)
 - 2026-02-24: Completed 04-01-PLAN.md — Vite+React+TS+Tailwind scaffold with zine/punk design system
 - 2026-02-24: Completed 04-02-PLAN.md — Google Fonts preconnect loading + design system demo, human-verified
 - 2026-02-24: Completed 05-01-PLAN.md — App shell, Nav component, CHROME_STORE_URL constant, SEO meta tags
+- 2026-02-24: Completed 05-03-PLAN.md — Features, CTA, and Footer components with rotating icon boxes and paper-tear CTA
 
 ## Accumulated Context
 
