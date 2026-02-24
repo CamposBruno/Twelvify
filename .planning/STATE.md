@@ -8,7 +8,7 @@ See: .planning/PROJECT.md
 
 **Milestone:** v1.0 milestone
 **Current phase:** 01-foundation-text-selection
-**Current Plan:** 04 complete (awaiting human-verify checkpoint)
+**Current Plan:** 04 complete (human-verified)
 **Status:** In progress
 
 ## Decisions
@@ -34,4 +34,5 @@ See: .planning/PROJECT.md
 - 2026-02-23: Completed 01-01 (WXT scaffold + Manifest V3 config). Tasks: 2, commits: e834ad0, 4dc9b5f
 - 2026-02-23: Completed 01-02 (Service worker + chrome.storage state management). Tasks: 2, commits: 108e26b, 689493b
 - 2026-02-23: Completed 01-03 (Content script + FloatingButton with Popover API). Tasks: 2, commits: f5665cd, b156473
-- 2026-02-23: Completed 01-04 auto-tasks (Gap closure — FloatingButton race condition fix). Tasks: 2, commits: 39d037e, de3f6d1. Awaiting human-verify checkpoint.
+- 2026-02-23: Completed 01-04 (Gap closure — FloatingButton race condition fix + React import). Tasks: 3, commits: 39d037e, de3f6d1, aaefa2f. Human-verified: all UAT tests pass.
+- [Phase 01-04]: Explicit React import needed in content script .tsx — Vite auto JSX transform fails on async re-renders

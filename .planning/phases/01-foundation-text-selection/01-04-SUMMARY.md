@@ -35,6 +35,7 @@ key-decisions:
   - "CSS visibility (opacity/pointerEvents) instead of Popover API: eliminates imperative showPopover() call race condition"
   - "content.ts single responsibility: selection detection and sendMessage only — no visibility management"
   - "z-index 2147483647 (max) on container: ensures button appears above all third-party page content without Popover API top-layer"
+  - "Explicit React import required in content script .tsx files — Vite automatic JSX transform fails on React async scheduler re-renders (MessageChannel path)"
 
 patterns-established:
   - "Always-render pattern: components that respond to async storage state always render a DOM placeholder"
@@ -45,7 +46,7 @@ requirements-completed:
   - EXTF-03
 
 # Metrics
-duration: 2min
+duration: 45min
 completed: 2026-02-23
 ---
 
@@ -55,10 +56,8 @@ completed: 2026-02-23
 
 ## Performance
 
-- **Duration:** ~2 min
-- **Started:** 2026-02-23T23:54:22Z
-- **Completed:** 2026-02-23T23:55:54Z
-- **Tasks:** 2 auto-tasks complete, 1 checkpoint:human-verify pending
+- **Duration:** ~45 min (including human-verify debugging)
+- **Tasks:** 3 (2 auto + 1 human-verify)
 - **Files modified:** 2
 
 ## Accomplishments
@@ -73,7 +72,7 @@ Each task was committed atomically:
 
 1. **Task 1: Refactor FloatingButton to always render with CSS visibility** - `39d037e` (fix)
 2. **Task 2: Remove showPopover/hidePopover from content script** - `de3f6d1` (fix)
-3. **Task 3: Verify button appears on text selection** - PENDING (checkpoint:human-verify)
+3. **Task 3: Verify button appears on text selection** - `aaefa2f` (fix — React import + human-verified)
 
 ## Files Created/Modified
 - `src/components/FloatingButton.tsx` - Removed conditional null return and Popover API; always renders with CSS opacity/pointerEvents toggle
@@ -86,20 +85,32 @@ Each task was committed atomically:
 
 ## Deviations from Plan
 
-None - plan executed exactly as written.
+### Auto-fixed Issues
+
+**1. Missing React import causing async re-render crash**
+- **Found during:** Task 3 (human verification)
+- **Issue:** `ReferenceError: React is not defined` on storage-triggered re-renders. Initial render worked via Vite's esbuild transform, but React's async scheduler (MessageChannel) lost the React reference in content script context.
+- **Fix:** Added `import React from 'react'` to FloatingButton.tsx
+- **Files modified:** src/components/FloatingButton.tsx
+- **Verification:** Button appears on text selection, no console errors
+- **Committed in:** aaefa2f
+
+---
+
+**Total deviations:** 1 auto-fixed (1 blocking)
+**Impact on plan:** Essential for functionality. No scope creep.
 
 ## Issues Encountered
 
-None — both tasks completed without errors. Build exits cleanly (0 TypeScript errors). Compiled output confirmed: no `showPopover`/`hidePopover` in `.output/chrome-mv3/content-scripts/content.js`.
+- React async re-render crash required diagnostic logging to identify — initial render worked fine, only storage-change re-renders via MessageChannel scheduler failed with "React is not defined"
 
 ## User Setup Required
 
 None - no external service configuration required.
 
 ## Next Phase Readiness
-- Human verification (Task 3) still pending — user must reload extension in Chrome and confirm button appears on text selection
-- Once verified, Phase 1 UAT tests 3-6 should all pass
-- Phase 2 (AI simplification) can begin once UAT is confirmed
+- All 4 UAT tests pass: button appears on selection, disappears on deselect, shows spinner on click, works in textareas
+- Phase 1 foundation complete, ready for Phase 2 (AI simplification API integration)
 
 ---
 *Phase: 01-foundation-text-selection*
