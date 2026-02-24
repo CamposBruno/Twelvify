@@ -8,8 +8,8 @@ See: .planning/PROJECT.md
 
 **Milestone:** v1.0 milestone
 **Current phase:** 02-backend-integration-ai-simplification
-**Current Plan:** 02-04 complete (phase complete)
-**Status:** Phase 02 complete — ready for Phase 03
+**Current Plan:** Not started
+**Status:** Milestone complete
 
 ## Decisions
 
