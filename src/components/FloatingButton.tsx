@@ -5,6 +5,7 @@
 import React, { useEffect } from 'react';
 import { useStorageValue } from '../storage/useStorage';
 import type { ExtensionState } from '../storage/types';
+import { ErrorTooltip } from './ErrorTooltip';
 
 interface FloatingButtonProps {
   onSimplify: () => void;
@@ -13,15 +14,35 @@ interface FloatingButtonProps {
 export function FloatingButton({ onSimplify }: FloatingButtonProps) {
   const [isLoading] = useStorageValue<boolean>('isLoading', false);
   const [selectedText] = useStorageValue<string>('selectedText', '');
-  const [errorState] = useStorageValue<ExtensionState['errorState']>('errorState', null);
+  const [errorState, setErrorState] = useStorageValue<ExtensionState['errorState']>('errorState', null);
 
   // Auto-dismiss error after 5 seconds — clears errorState from storage
+  const dismissTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
-    if (!errorState) return;
-    const timerId = setTimeout(() => {
-      chrome.storage.local.set({ errorState: null });
-    }, 5000);
-    return () => clearTimeout(timerId);
+    if (errorState) {
+      // Clear any existing timer before starting a new one
+      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+      dismissTimerRef.current = setTimeout(() => {
+        setErrorState(null);
+      }, 5000);
+    }
+    return () => {
+      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+    };
+  }, [errorState]);
+
+  // Shake animation — triggers once when a new error appears
+  const [isShaking, setIsShaking] = React.useState(false);
+  const prevErrorRef = React.useRef<ExtensionState['errorState']>(null);
+
+  useEffect(() => {
+    if (errorState && !prevErrorRef.current) {
+      // New error appeared — trigger shake animation
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 600); // Match shake animation duration
+    }
+    prevErrorRef.current = errorState;
   }, [errorState]);
 
   // Always render — visibility controlled via CSS, not conditional null return.
@@ -43,6 +64,12 @@ export function FloatingButton({ onSimplify }: FloatingButtonProps) {
         zIndex: 2147483647,
       }}
     >
+      {errorState && (
+        <ErrorTooltip
+          message={errorState.message}
+          onDismiss={() => setErrorState(null)}
+        />
+      )}
       <button
         onClick={isLoading ? undefined : onSimplify}
         disabled={isLoading}
@@ -52,7 +79,11 @@ export function FloatingButton({ onSimplify }: FloatingButtonProps) {
           alignItems: 'center',
           gap: '8px',
           padding: '10px 16px',
-          backgroundColor: '#6366f1',
+          backgroundColor: isLoading
+            ? '#6366f1'   // Indigo during loading
+            : errorState
+              ? '#f59e0b' // Warning yellow on error
+              : '#6366f1', // Default indigo
           color: '#ffffff',
           border: 'none',
           borderRadius: '8px',
@@ -62,6 +93,7 @@ export function FloatingButton({ onSimplify }: FloatingButtonProps) {
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
           fontFamily: 'system-ui, -apple-system, sans-serif',
           opacity: isLoading ? 0.8 : 1,
+          animation: isShaking ? 'twelvify-shake 0.6s ease' : undefined,
         }}
       >
         {isLoading ? (
@@ -98,11 +130,20 @@ export function FloatingButton({ onSimplify }: FloatingButtonProps) {
           </>
         )}
       </button>
-      {/* CSS keyframe for spinner animation — injected once */}
+      {/* CSS keyframes for spinner and shake animations — injected once */}
       <style>{`
         @keyframes twelvify-spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
+        }
+        @keyframes twelvify-shake {
+          0%, 100% { transform: translateX(0); }
+          15% { transform: translateX(-5px) rotate(-1deg); }
+          30% { transform: translateX(5px) rotate(1deg); }
+          45% { transform: translateX(-4px); }
+          60% { transform: translateX(4px); }
+          75% { transform: translateX(-2px); }
+          90% { transform: translateX(2px); }
         }
       `}</style>
     </div>
