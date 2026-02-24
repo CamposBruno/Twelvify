@@ -100,7 +100,7 @@ Plans:
 | 3. Personalization & UX Polish | v1.0 | 6/6 | Complete | 2026-02-24 |
 | 4. Foundation | 2/2 | Complete    | 2026-02-24 | - |
 | 5. Static Sections | 4/4 | Complete    | 2026-02-24 | - |
-| 6. Playground & Interactivity | v1.1 | 0/? | Not started | - |
+| 6. Playground & Interactivity | 2/3 | In Progress|  | - |
 | 7. Launch | v1.1 | 0/? | Not started | - |
 
 ---

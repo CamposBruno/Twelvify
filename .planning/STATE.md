@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core value:** When a user highlights confusing text and clicks the icon, they get back a clear, personalized rewrite that makes sense to them — every time.
-**Current focus:** v1.1 Landing Page — Phase 5: Static Sections
+**Current focus:** v1.1 Landing Page — Phase 6: Playground Interactivity
 
 ## Position
 
 **Milestone:** v1.1 Landing Page
-**Current phase:** 5 of 7 (Phase 5: Static Sections)
-**Current Plan:** Not started
-**Status:** Milestone complete
+**Current phase:** 6 of 7 (Phase 6: Playground Interactivity)
+**Current Plan:** 06-03 (Plan 3 of 3)
+**Status:** In progress
 
-Progress: [█████░░░░░] 50% (v1.1)
+Progress: [██████░░░░] 60% (v1.1)
 
 ## Decisions
 
@@ -32,6 +32,8 @@ Progress: [█████░░░░░] 50% (v1.1)
 - Nav uses hidden md:flex for section links — mobile shows logo + CTA only
 - CSS placeholder div used for Features illustration — Phase 7 will add real image
 - Footer links use href="#" placeholder — to be wired in later phases
+- Playground.tsx uses useCallback for handleClick; toast rendered inside .zine-box with overflow-hidden for natural slide-in effect
+- Mid-stream SSE errors preserve typed text and disable button (partial success state)
 
 ## Session Log
 
@@ -44,6 +46,7 @@ Progress: [█████░░░░░] 50% (v1.1)
 - 2026-02-24: Completed 05-02-PLAN.md — Hero section with CSS browser mockup and HowItWorks with 3 rotating zine-box cards
 - 2026-02-24: Completed 05-03-PLAN.md — Features, CTA, and Footer components with rotating icon boxes and paper-tear CTA
 - 2026-02-24: Completed 05-04-PLAN.md — Integration: all sections wired into App.tsx, smooth scroll enabled, 13/13 Playwright tests passed
+- 2026-02-24: Completed 06-02-PLAN.md — Playground React component with SSE typing animation, one-shot lock, and toast error handling
 
 ## Accumulated Context
 

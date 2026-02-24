@@ -21,18 +21,18 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 
 - [x] **SECT-01**: Hero section with tagline, description, install/demo CTAs, social proof avatars, and browser mockup
 - [x] **SECT-02**: How-it-works section with 3-step cards (Highlight, Click Wand, Read Simplified)
-- [ ] **SECT-03**: Playground section with live AI demo — user clicks "Fix This Mess" and text is simplified via dedicated backend endpoint
+- [x] **SECT-03**: Playground section with live AI demo — user clicks "Fix This Mess" and text is simplified via dedicated backend endpoint
 - [x] **SECT-04**: Features section with 3 feature cards (In-page Replacement, Privacy by Design, Native Feel) and illustration
 - [x] **SECT-05**: CTA section with final install call-to-action and "Free to use — Forever" badge
 - [x] **SECT-06**: Footer with logo, tagline, product/resources/legal links, social links, copyright
 
 ### Interactive
 
-- [ ] **INTX-01**: Playground calls dedicated `/api/playground` endpoint to simplify sample text with streaming response
+- [x] **INTX-01**: Playground calls dedicated `/api/playground` endpoint to simplify sample text with streaming response
 - [x] **INTX-02**: Smooth scroll navigation for anchor links
 - [x] **INTX-03**: Hover effects matching design (rotation resets, shadow transitions, color transitions)
-- [ ] **INTX-04**: Playground button disabled after first successful simplification (one-shot demo)
-- [ ] **INTX-05**: Graceful rate-limit error handling — friendly message when playground limit exceeded
+- [x] **INTX-04**: Playground button disabled after first successful simplification (one-shot demo)
+- [x] **INTX-05**: Graceful rate-limit error handling — friendly message when playground limit exceeded
 
 ### Design
 
@@ -114,10 +114,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SEO-01 | Phase 5 | Complete |
 | SEO-02 | Phase 5 | Complete |
 | SEO-03 | Phase 5 | Complete |
-| SECT-03 | Phase 6 | Pending |
-| INTX-01 | Phase 6 | Pending |
-| INTX-04 | Phase 6 | Pending |
-| INTX-05 | Phase 6 | Pending |
+| SECT-03 | Phase 6 | Complete |
+| INTX-01 | Phase 6 | Complete |
+| INTX-04 | Phase 6 | Complete |
+| INTX-05 | Phase 6 | Complete |
 | API-01 | Phase 6 | Pending |
 | API-02 | Phase 6 | Pending |
 | ANALYTICS-01 | Phase 7 | Pending |
