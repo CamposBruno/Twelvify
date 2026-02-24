@@ -41,6 +41,7 @@ Progress: [████░░░░░░] 40% (v1.1)
 - 2026-02-24: Completed 04-01-PLAN.md — Vite+React+TS+Tailwind scaffold with zine/punk design system
 - 2026-02-24: Completed 04-02-PLAN.md — Google Fonts preconnect loading + design system demo, human-verified
 - 2026-02-24: Completed 05-01-PLAN.md — App shell, Nav component, CHROME_STORE_URL constant, SEO meta tags
+- 2026-02-24: Completed 05-02-PLAN.md — Hero section with CSS browser mockup and HowItWorks with 3 rotating zine-box cards
 - 2026-02-24: Completed 05-03-PLAN.md — Features, CTA, and Footer components with rotating icon boxes and paper-tear CTA
 
 ## Accumulated Context
