@@ -22,7 +22,7 @@
 
 **Milestone Goal:** Implement the existing HTML/Tailwind landing page design as a React app and deploy to Netlify/Vercel to drive Chrome Web Store installs.
 
-- [ ] **Phase 4: Foundation** - React app with design system, fonts, and Tailwind config
+- [ ] **Phase 4: Foundation** - React app with design system, fonts, and Tailwind config **[2 plans]**
 - [ ] **Phase 5: Static Sections** - All page sections (nav, hero, how-it-works, features, CTA, footer), responsive layout, and SEO
 - [ ] **Phase 6: Playground & Interactivity** - Live AI demo section, backend endpoint, and all interactive behaviors
 - [ ] **Phase 7: Launch** - Analytics, performance optimization, and production deployment
@@ -38,7 +38,11 @@
   2. Custom Tailwind config applies #f56060 primary color, 0px border-radius, and paper-texture / shadow variables
   3. Sharp borders, box shadows, and rotation transforms render correctly on sample elements
   4. Fonts load with preconnect and font-display swap — no layout shift on reload
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Bootstrap Vite React app + Tailwind config + zine/punk base styles
+- [ ] 04-02-PLAN.md — Font loading (preconnect + display=swap) + design system demo + visual verification
 
 ### Phase 5: Static Sections
 **Goal**: The full landing page is visible and navigable — every section renders with correct content, responsive layout, and accessible semantics
