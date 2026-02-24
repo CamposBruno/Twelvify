@@ -16,7 +16,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Display
 
-- [ ] **DISP-01**: Simplified text replaces the original text in-page by default
+- [x] **DISP-01**: Simplified text replaces the original text in-page by default
 - [x] **DISP-02**: User can configure display to show simplified text in a floating popup instead
 - [x] **DISP-03**: User sees a loading indicator while the AI processes their text
 
@@ -102,7 +102,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SIMP-02 | Phase 2 | Complete |
 | SIMP-03 | Phase 3 | Complete |
 | SIMP-04 | Phase 3 | Complete |
-| DISP-01 | Phase 3 | Pending |
+| DISP-01 | Phase 3 | Complete |
 | DISP-02 | Phase 3 | Complete |
 | DISP-03 | Phase 1 | Complete |
 | PERS-01 | Phase 3 | Complete |

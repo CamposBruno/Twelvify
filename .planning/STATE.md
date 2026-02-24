@@ -8,7 +8,7 @@ See: .planning/PROJECT.md
 
 **Milestone:** v1.0 milestone
 **Current phase:** 03-personalization-ux-polish
-**Current Plan:** 03-04 (next)
+**Current Plan:** 03-05 (next)
 **Status:** In progress
 
 ## Decisions
@@ -31,6 +31,10 @@ See: .planning/PROJECT.md
 - [Phase 03-personalization-ux-polish]: UndoStack holds direct Text node reference — avoids Range serialization, valid for full page lifetime
 - [Phase 03]: OnboardingPrompt renders all 3 variants (tone/depth/profession) from single component via prompt.id dispatch
 - [Phase 03]: Draft state for text inputs in SettingsPanel — save to chrome.storage.sync on blur or Enter, not on each keystroke
+- [Phase 03-04]: content.ts reads tone/depth/profession from chrome.storage.sync before each fetch; personalization applied per-request
+- [Phase 03-04]: undoStack.push called before chrome.storage.local.set — undo available immediately after SSE completes
+- [Phase 03-04]: popup display mode reverts textNode to selectedText before rendering FloatingPopup — clean DOM state without leaking simplified text in-place
+- [Phase 03-04]: simplifyCount in chrome.storage.sync tracks lifetime total for onboarding triggers (separate from chrome.storage.local hourly rate limit counter)
 
 ## Session Log
 
@@ -69,3 +73,8 @@ See: .planning/PROJECT.md
 - [Phase 03-03]: chrome.commands.onCommand registered at top level of defineBackground() for MV3 service worker restart safety
 - [Phase 03-03]: SIMPLIFY_HOTKEY switch case added to handleMessage to prevent Unknown message type errors if routed back
 - [Phase 03-03]: Silent lastError suppression in sendMessage callback handles chrome:// pages where content scripts cannot inject
+- 2026-02-24: Completed 03-04 (Content script Phase 3 integration — personalization, undo stack, hotkey, display mode, onboarding). Tasks: 2, commit: 7049dc4.
+- [Phase 03-04]: content.ts reads tone/depth/profession from chrome.storage.sync before each fetch; personalization applied per-request
+- [Phase 03-04]: undoStack.push called before chrome.storage.local.set — undo available immediately after SSE completes
+- [Phase 03-04]: popup display mode reverts textNode to selectedText before rendering FloatingPopup — clean DOM state without leaking simplified text in-place
+- [Phase 03-04]: simplifyCount in chrome.storage.sync tracks lifetime total for onboarding triggers (separate from chrome.storage.local hourly rate limit counter)
