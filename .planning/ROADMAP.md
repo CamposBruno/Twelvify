@@ -24,7 +24,7 @@
 
 - [x] **Phase 4: Foundation** - React app with design system, fonts, and Tailwind config **[2 plans]** (completed 2026-02-24)
 - [x] **Phase 5: Static Sections** - All page sections (nav, hero, how-it-works, features, CTA, footer), responsive layout, and SEO **[4 plans]** (completed 2026-02-24)
-- [ ] **Phase 6: Playground & Interactivity** - Live AI demo section, backend endpoint, and all interactive behaviors
+- [ ] **Phase 6: Playground & Interactivity** - Live AI demo section, backend endpoint, and all interactive behaviors **[3 plans]**
 - [ ] **Phase 7: Launch** - Analytics, performance optimization, and production deployment
 
 ## Phase Details
@@ -68,11 +68,16 @@ Plans:
 **Requirements**: SECT-03, INTX-01, INTX-04, INTX-05, API-01, API-02
 **Success Criteria** (what must be TRUE):
   1. Playground section renders with sample text and a "Fix This Mess" button
-  2. Clicking the button calls `/api/playground` and streams the simplified text into the page word-by-word
+  2. Clicking the button calls `/api/playground` and streams the simplified text into the page character-by-character with a typing animation
   3. The button becomes disabled after one successful simplification (one-shot demo, no repeat)
   4. When the playground rate limit is hit, a friendly error message appears instead of a broken state
-  5. Backend `/api/playground` endpoint enforces 1 req/sec per client and only processes the hardcoded sample — no arbitrary user input accepted
-**Plans**: TBD
+  5. Backend `/api/playground` endpoint enforces 60 req/min per client and only processes the hardcoded sample — no arbitrary user input accepted
+**Plans**: 3 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Backend /api/playground route with hardcoded sample text and 60 req/min rate limiter
+- [ ] 06-02-PLAN.md — Playground React component with typing animation, one-shot disable, and error toast
+- [ ] 06-03-PLAN.md — Wire Playground into App.tsx + end-to-end human verification
 
 ### Phase 7: Launch
 **Goal**: The landing page is live at a public URL, loads fast, and tracks visits and CTA clicks
