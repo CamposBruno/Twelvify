@@ -37,7 +37,7 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 ### Design
 
 - [ ] **DSGN-01**: Zine/punk aesthetic: sharp borders, box shadows, rotation transforms, paper-tear clip-path
-- [ ] **DSGN-02**: Dark mode support matching system preference
+
 - [ ] **DSGN-03**: Custom Tailwind config (primary #f56060, background-light/dark, font families, border-radius 0px)
 
 ### SEO
@@ -88,6 +88,7 @@ Explicitly excluded. Documented to prevent scope creep.
 | Internationalization | English-only for now |
 | CMS integration | Static content is fine for a landing page |
 | User accounts on landing page | No need — extension handles preferences locally |
+| Dark mode | Not needed for landing page; light-only simplifies implementation |
 
 ## Traceability
 
@@ -95,13 +96,41 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (populated by roadmapper) | | |
+| SETUP-01 | Phase 4 | Pending |
+| SETUP-02 | Phase 4 | Pending |
+| DSGN-01 | Phase 4 | Pending |
+
+| DSGN-03 | Phase 4 | Pending |
+| PERF-02 | Phase 4 | Pending |
+| LAYOUT-01 | Phase 5 | Pending |
+| LAYOUT-02 | Phase 5 | Pending |
+| SECT-01 | Phase 5 | Pending |
+| SECT-02 | Phase 5 | Pending |
+| SECT-04 | Phase 5 | Pending |
+| SECT-05 | Phase 5 | Pending |
+| SECT-06 | Phase 5 | Pending |
+| INTX-02 | Phase 5 | Pending |
+| INTX-03 | Phase 5 | Pending |
+| SEO-01 | Phase 5 | Pending |
+| SEO-02 | Phase 5 | Pending |
+| SEO-03 | Phase 5 | Pending |
+| SECT-03 | Phase 6 | Pending |
+| INTX-01 | Phase 6 | Pending |
+| INTX-04 | Phase 6 | Pending |
+| INTX-05 | Phase 6 | Pending |
+| API-01 | Phase 6 | Pending |
+| API-02 | Phase 6 | Pending |
+| ANALYTICS-01 | Phase 7 | Pending |
+| PERF-01 | Phase 7 | Pending |
+| DEPLOY-01 | Phase 7 | Pending |
+| DEPLOY-02 | Phase 7 | Pending |
+| DEPLOY-03 | Phase 7 | Pending |
 
 **Coverage:**
-- v1.1 requirements: 27 total
-- Mapped to phases: 0
-- Unmapped: 27
+- v1.1 requirements: 26 total
+- Mapped to phases: 26
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-24*
-*Last updated: 2026-02-24 after initial definition*
+*Last updated: 2026-02-24 — traceability populated by roadmapper*

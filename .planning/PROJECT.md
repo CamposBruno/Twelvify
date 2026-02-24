@@ -63,9 +63,8 @@ When a user highlights confusing text and clicks the icon, they get back a clear
 **Target features:**
 - React implementation of zine/punk aesthetic landing page design
 - Responsive layout: nav, hero, how-it-works, playground, features, CTA, footer
-- Interactive playground demo section
-- Dark mode support
-- Deploy to Netlify/Vercel
+- Interactive playground demo section with live AI backend
+- Deploy to Netlify/Vercel with custom domain
 
 ## Context
 
