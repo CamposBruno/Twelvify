@@ -5,7 +5,13 @@
 import { createRoot } from 'react-dom/client';
 import { createElement } from 'react';
 import { FloatingButton } from '../components/FloatingButton';
+import { FloatingPopup } from '../components/FloatingPopup';
+import { OnboardingPrompt } from '../components/OnboardingPrompt';
+import { UndoStack } from '../utils/undoStack';
+import { getNextOnboardingPrompt } from '../utils/onboarding';
 import type { ExtensionMessage } from '../messaging/messages';
+import type { ToneLevel } from '../storage/types';
+import { DEFAULT_SETTINGS } from '../storage/types';
 
 // TODO: Update to production URL before Chrome Web Store submission
 const BACKEND_URL = 'http://localhost:3001/api/simplify';
@@ -13,6 +19,9 @@ const SOFT_RATE_LIMIT = 50;       // requests per hour
 const HOUR_MS = 3600000;           // 1 hour in milliseconds
 const MAX_TEXT_LENGTH = 5000;      // characters
 const REQUEST_TIMEOUT_MS = 10000;  // 10 seconds
+
+// Module-level undo stack — one instance per content script (per page load)
+const undoStack = new UndoStack();
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -30,12 +39,86 @@ export default defineContentScript({
       root.render(
         createElement(FloatingButton, {
           onSimplify: handleSimplify,
+          onUndo: handleUndo,
+          hasUndo: !undoStack.isEmpty(),
         })
       );
     }
 
     // Initial render — FloatingButton always renders, hidden until text is selected
     renderButton();
+
+    function handleUndo() {
+      undoStack.revertLast();
+      renderButton(); // Re-render to update hasUndo state
+    }
+
+    function renderOnboardingPromptIfNeeded(belowSpan: HTMLElement): void {
+      chrome.storage.sync.get(
+        ['simplifyCount', 'dismissedOnboardingPrompts'],
+        (result) => {
+          const count = (result.simplifyCount as number) ?? 0;
+          const dismissed = (result.dismissedOnboardingPrompts as string[]) ?? [];
+          const prompt = getNextOnboardingPrompt(count, dismissed);
+          if (!prompt) return;
+
+          // Create a container div inserted after the simplified text span
+          const promptContainer = document.createElement('div');
+          promptContainer.id = 'twelvify-onboarding-prompt';
+          belowSpan.insertAdjacentElement('afterend', promptContainer);
+
+          const promptRoot = createRoot(promptContainer);
+
+          function dismiss() {
+            // Mark prompt as dismissed forever in chrome.storage.sync
+            const updated = [...dismissed, prompt!.id];
+            chrome.storage.sync.set({ dismissedOnboardingPrompts: updated });
+            promptRoot.unmount();
+            promptContainer.remove();
+          }
+
+          function handleSelect(value: string) {
+            // Save the selected preference to chrome.storage.sync
+            // Map prompt.id to storage key (tone/depth/profession)
+            chrome.storage.sync.set({ [prompt!.id]: value });
+            dismiss();
+          }
+
+          promptRoot.render(
+            createElement(OnboardingPrompt, {
+              prompt,
+              onDismiss: dismiss,
+              onSelect: handleSelect,
+            })
+          );
+        }
+      );
+    }
+
+    // ESC key listener — reverts most recent simplification when stack is non-empty
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !undoStack.isEmpty()) {
+        e.preventDefault();
+        handleUndo();
+      }
+    });
+
+    // Clear undo stack on page navigation
+    window.addEventListener('beforeunload', () => {
+      undoStack.clear();
+      renderButton();
+    });
+
+    // SIMPLIFY_HOTKEY message listener — triggers handleSimplify() only when text is selected
+    chrome.runtime.onMessage.addListener((message) => {
+      if (message.type === 'SIMPLIFY_HOTKEY') {
+        const sel = window.getSelection();
+        if (sel && sel.toString().trim().length > 3) {
+          handleSimplify();
+        }
+        // Silent no-op if no text selected (CONTEXT.md: "only works with text selected")
+      }
+    });
 
     // --- Text selection detection ---
     // Use selectionchange event (fires on any selection change)
@@ -131,6 +214,19 @@ export default defineContentScript({
       const { selectedText } = state;
       let { simplifyCountThisHour, hourWindowStart, simplifyCount } = state;
 
+      // Read user settings from chrome.storage.sync for personalization
+      const settings = await new Promise<{ tone: ToneLevel; depth: string; profession: string; displayMode: string }>((resolve) => {
+        chrome.storage.sync.get(
+          ['tone', 'depth', 'profession', 'displayMode'],
+          (result) => resolve({
+            tone: (result.tone as ToneLevel) ?? DEFAULT_SETTINGS.tone,
+            depth: (result.depth as string) ?? DEFAULT_SETTINGS.depth,
+            profession: (result.profession as string) ?? DEFAULT_SETTINGS.profession,
+            displayMode: (result.displayMode as string) ?? DEFAULT_SETTINGS.displayMode,
+          })
+        );
+      });
+
       // 1. Client-side soft rate limit check (50 req/hr)
       const now = Date.now();
       const windowStart = hourWindowStart ? new Date(hourWindowStart).getTime() : null;
@@ -206,7 +302,12 @@ export default defineContentScript({
         const response = await fetch(BACKEND_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: selectedText }),
+          body: JSON.stringify({
+            text: selectedText,
+            tone: settings.tone,
+            depth: settings.depth,
+            profession: settings.profession,
+          }),
           signal: controller.signal,
         });
         clearTimeout(timeoutId);
@@ -276,6 +377,14 @@ export default defineContentScript({
                 textNode.textContent = accumulated; // Update DOM in-place — word-by-word streaming
               }
               if (payload.done) {
+                // Push to undo stack BEFORE clearing selectedText in storage
+                undoStack.push({
+                  originalText: selectedText,
+                  simplifiedText: accumulated,
+                  textNode: textNode,
+                });
+                renderButton(); // Update hasUndo to true
+
                 // Simplification complete — update rate limit count, clear loading, trigger fade
                 chrome.storage.local.get(
                   ['simplifyCount', 'simplifyCountThisHour', 'hourWindowStart'],
@@ -298,6 +407,33 @@ export default defineContentScript({
                   'background: rgba(99, 102, 241, 0.2); border-radius: 3px; transition: background 1.5s ease;';
                 textNode.parentNode?.insertBefore(span, textNode);
                 span.appendChild(textNode);
+
+                // Increment sync simplifyCount and check for onboarding prompt
+                chrome.storage.sync.get(['simplifyCount'], (result) => {
+                  const newCount = ((result.simplifyCount as number) ?? 0) + 1;
+                  chrome.storage.sync.set({ simplifyCount: newCount });
+                  // Check if onboarding prompt should show
+                  renderOnboardingPromptIfNeeded(span); // span = the highlight span created after streaming
+                });
+
+                // Display mode routing — popup mode shows FloatingPopup instead of in-place text
+                if (settings.displayMode === 'popup') {
+                  // Revert the in-place DOM change (restore original, user sees popup instead)
+                  textNode.textContent = selectedText; // Restore original
+                  const popupContainer = document.createElement('div');
+                  popupContainer.id = 'twelvify-popup-root';
+                  document.body.appendChild(popupContainer);
+                  const popupRoot = createRoot(popupContainer);
+                  popupRoot.render(
+                    createElement(FloatingPopup, {
+                      simplifiedText: accumulated,
+                      onClose: () => {
+                        popupRoot.unmount();
+                        popupContainer.remove();
+                      },
+                    })
+                  );
+                }
 
                 setTimeout(() => {
                   span.style.background = 'transparent';
