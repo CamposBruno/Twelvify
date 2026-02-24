@@ -221,19 +221,21 @@ export default defineContentScript({
         simplifyCountThisHour: number;
         hourWindowStart: string | null;
         simplifyCount: number;
+        isSelectingSimplified: boolean;
       }>((resolve) => {
         chrome.storage.local.get(
-          ['selectedText', 'simplifyCountThisHour', 'hourWindowStart', 'simplifyCount'],
+          ['selectedText', 'simplifyCountThisHour', 'hourWindowStart', 'simplifyCount', 'isSelectingSimplified'],
           (result) => resolve(result as {
             selectedText: string;
             simplifyCountThisHour: number;
             hourWindowStart: string | null;
             simplifyCount: number;
+            isSelectingSimplified: boolean;
           })
         );
       });
 
-      const { selectedText } = state;
+      const { selectedText, isSelectingSimplified } = state;
       let { simplifyCountThisHour, hourWindowStart, simplifyCount } = state;
 
       // Read user settings from chrome.storage.sync for personalization
@@ -248,6 +250,14 @@ export default defineContentScript({
           })
         );
       });
+
+      // Downgrade tone one level when re-simplifying already-simplified text
+      if (isSelectingSimplified) {
+        const downgrade: Record<string, ToneLevel> = {
+          'big_boy': 18, '18': 12, '12': 5, '5': 'baby', 'baby': 'big_boy',
+        };
+        settings.tone = downgrade[String(settings.tone)] ?? settings.tone;
+      }
 
       // 1. Client-side soft rate limit check (50 req/hr)
       const now = Date.now();
