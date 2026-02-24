@@ -10,7 +10,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Text Simplification
 
 - [x] **SIMP-01**: User can highlight text on any webpage and see a floating action icon appear
-- [ ] **SIMP-02**: User can click the floating icon to trigger AI-powered text simplification
+- [x] **SIMP-02**: User can click the floating icon to trigger AI-powered text simplification
 - [ ] **SIMP-03**: User can use a keyboard shortcut (e.g., Ctrl+Shift+S) to simplify selected text
 - [ ] **SIMP-04**: User can revert rewritten text back to the original with one click
 
@@ -36,10 +36,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Error Handling
 
-- [ ] **ERRH-01**: User sees a friendly message when offline (not a silent failure)
-- [ ] **ERRH-02**: User sees a message when rate limit is reached with reset timing
-- [ ] **ERRH-03**: User sees a message when API request times out, with option to retry
-- [ ] **ERRH-04**: User sees a message when text is too long (>5000 chars) with guidance
+- [x] **ERRH-01**: User sees a friendly message when offline (not a silent failure)
+- [x] **ERRH-02**: User sees a message when rate limit is reached with reset timing
+- [x] **ERRH-03**: User sees a message when API request times out, with option to retry
+- [x] **ERRH-04**: User sees a message when text is too long (>5000 chars) with guidance
 
 ### Extension Foundation
 
@@ -99,7 +99,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | SIMP-01 | Phase 1 | Complete |
-| SIMP-02 | Phase 2 | Pending |
+| SIMP-02 | Phase 2 | Complete |
 | SIMP-03 | Phase 3 | Pending |
 | SIMP-04 | Phase 3 | Pending |
 | DISP-01 | Phase 3 | Pending |
@@ -113,10 +113,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BACK-02 | Phase 2 | Complete |
 | BACK-03 | Phase 2 | Complete |
 | BACK-04 | Phase 2 | Complete |
-| ERRH-01 | Phase 2 | Pending |
-| ERRH-02 | Phase 2 | Pending |
-| ERRH-03 | Phase 2 | Pending |
-| ERRH-04 | Phase 2 | Pending |
+| ERRH-01 | Phase 2 | Complete |
+| ERRH-02 | Phase 2 | Complete |
+| ERRH-03 | Phase 2 | Complete |
+| ERRH-04 | Phase 2 | Complete |
 | EXTF-01 | Phase 1 | Complete |
 | EXTF-02 | Phase 1 | Complete |
 | EXTF-03 | Phase 1 | Complete |
