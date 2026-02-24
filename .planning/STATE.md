@@ -12,9 +12,9 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 **Milestone:** v1.1 Landing Page
 **Current phase:** 6 of 7 (Phase 6: Playground Interactivity)
 **Current Plan:** 06-03 (Plan 3 of 3)
-**Status:** In progress
+**Status:** Complete
 
-Progress: [██████░░░░] 60% (v1.1)
+Progress: [████████░░] 75% (v1.1)
 
 ## Decisions
 
@@ -37,6 +37,9 @@ Progress: [██████░░░░] 60% (v1.1)
 - Playground fixed options: tone 12, depth medium, profession empty — sensible defaults for hardcoded demo
 - Playground.tsx uses useCallback for handleClick; toast rendered inside .zine-box with overflow-hidden for natural slide-in effect
 - Mid-stream SSE errors preserve typed text and disable button (partial success state)
+- Vite proxy /api -> http://localhost:3001 added to vite.config.ts for local dev (keeps Playground component portable, no hardcoded baseURL)
+- Legend labels: COMPLEX ORIGINAL is active/highlighted in idle state; swaps to SIMPLIFIED VERSION after AI completion
+- E2E Playwright tests added in /e2e directory with playwright.config.ts at root — 9/9 pass for Phase 6 playground flow
 
 ## Session Log
 
@@ -51,6 +54,7 @@ Progress: [██████░░░░] 60% (v1.1)
 - 2026-02-24: Completed 05-04-PLAN.md — Integration: all sections wired into App.tsx, smooth scroll enabled, 13/13 Playwright tests passed
 - 2026-02-24: Completed 06-01-PLAN.md — POST /api/playground SSE endpoint with hardcoded sample text and 60 req/min per-IP rate limiter
 - 2026-02-24: Completed 06-02-PLAN.md — Playground React component with SSE typing animation, one-shot lock, and toast error handling
+- 2026-02-24: Completed 06-03-PLAN.md — Wired Playground into App.tsx, added Vite proxy, corrected legend labels, 9/9 E2E tests pass — Phase 6 complete
 
 ## Accumulated Context
 
