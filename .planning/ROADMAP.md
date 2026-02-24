@@ -11,7 +11,7 @@
 
 - [x] **Phase 1: Foundation & Text Selection** - Extension architecture, service worker, content script, floating button UI (completed 2026-02-23)
 - [x] **Phase 2: Backend Integration & AI Simplification** - Cloudflare Workers proxy, AI integration, rate limiting, error handling (completed 2026-02-24)
-- [ ] **Phase 3: Personalization & UX Polish** - Progressive onboarding, tone/depth preferences, keyboard shortcuts, revert functionality
+- [x] **Phase 3: Personalization & UX Polish** - Progressive onboarding, tone/depth preferences, keyboard shortcuts, revert functionality (completed 2026-02-24)
 
 ---
 
@@ -104,7 +104,7 @@ Plans:
 4. User can toggle between replace-in-page mode (default) and floating popup mode via settings UI
 5. User can revert any simplified text to original with one-click "Undo" button; revert action is immediate (no API call needed)
 
-**Plans:** 5/6 plans executed
+**Plans:** 6/6 plans complete
 
 Plans:
 - [ ] 03-01-PLAN.md — Settings storage foundation (UserSettings + useStorageSyncValue)
@@ -122,7 +122,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Foundation & Text Selection | 4/4 | Complete   | 2026-02-23 |
 | 2. Backend Integration & AI Simplification | 4/4 | Complete    | 2026-02-24 |
-| 3. Personalization & UX Polish | 5/6 | In Progress|  |
+| 3. Personalization & UX Polish | 5/6 | Complete    | 2026-02-24 |
 
 ---
 

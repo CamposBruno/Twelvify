@@ -8,8 +8,8 @@ See: .planning/PROJECT.md
 
 **Milestone:** v1.0 milestone
 **Current phase:** 03-personalization-ux-polish
-**Current Plan:** 03-05 (next)
-**Status:** In progress
+**Current Plan:** Not started
+**Status:** Milestone complete
 
 ## Decisions
 
