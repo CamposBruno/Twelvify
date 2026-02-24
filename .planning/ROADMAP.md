@@ -10,7 +10,7 @@
 ## Phases
 
 - [x] **Phase 1: Foundation & Text Selection** - Extension architecture, service worker, content script, floating button UI (completed 2026-02-23)
-- [ ] **Phase 2: Backend Integration & AI Simplification** - Cloudflare Workers proxy, AI integration, rate limiting, error handling
+- [x] **Phase 2: Backend Integration & AI Simplification** - Cloudflare Workers proxy, AI integration, rate limiting, error handling (completed 2026-02-24)
 - [ ] **Phase 3: Personalization & UX Polish** - Progressive onboarding, tone/depth preferences, keyboard shortcuts, revert functionality
 
 ---
@@ -71,7 +71,7 @@ Plans:
 4. Extension shows friendly error messages for: offline, rate limit exceeded, timeout, text too long
 5. Backend logs no text content; logs only track usage metadata (hashed user IDs, feature use, input length bins)
 
-**Plans:** 3/4 plans executed
+**Plans:** 4/4 plans complete
 
 Plans:
 - [ ] 02-01-PLAN.md — Express backend proxy: SSE streaming, rate limiting, privacy logging, OpenAI integration
@@ -113,7 +113,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Text Selection | 4/4 | Complete   | 2026-02-23 |
-| 2. Backend Integration & AI Simplification | 3/4 | In Progress|  |
+| 2. Backend Integration & AI Simplification | 4/4 | Complete   | 2026-02-24 |
 | 3. Personalization & UX Polish | 0/? | Not started | — |
 
 ---

@@ -8,8 +8,8 @@ See: .planning/PROJECT.md
 
 **Milestone:** v1.0 milestone
 **Current phase:** 02-backend-integration-ai-simplification
-**Current Plan:** 02-03 complete (02-04 next)
-**Status:** In progress
+**Current Plan:** 02-04 complete (phase complete)
+**Status:** Phase 02 complete — ready for Phase 03
 
 ## Decisions
 
@@ -50,3 +50,6 @@ See: .planning/PROJECT.md
 - [Phase 02-03]: ErrorTooltip positioned absolute relative to fixed FloatingButton container — no portal needed, no z-index management
 - [Phase 02-03]: isShaking state separate from errorState lifetime — prevErrorRef detects null-to-error transitions, shake fires once only
 - [Phase 02-03]: useStorageValue setter used for dismiss — keeps dismissal path consistent with storage-driven visibility pattern
+- 2026-02-23: Completed 02-04 (Human UAT — Phase 2 end-to-end verification). Tasks: 1 checkpoint, commits: 9b62e6c (fix). Human-verified: streaming works, all 4 error scenarios pass, no user text in logs, quality acceptable. Phase 02 complete.
+- [Phase 02-04]: CORS ALLOWED_ORIGIN must be * for content scripts — content scripts send page origin (not extension origin), static extension-origin allowlist cannot work
+- [Phase 02-04]: Backend URL uses localhost:3001 for local dev — must update content.ts URL and host_permissions in wxt.config.ts before Render deployment / Web Store submission
