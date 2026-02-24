@@ -6,7 +6,8 @@ export type MessageType =
   | 'CLEAR_SELECTION'
   | 'SET_LOADING'
   | 'SIMPLIFY_COMPLETE'
-  | 'SIMPLIFY_ERROR';
+  | 'SIMPLIFY_ERROR'
+  | 'SIMPLIFY_HOTKEY';
 
 export interface TextSelectedMessage {
   type: 'TEXT_SELECTED';
@@ -34,12 +35,17 @@ export interface SimplifyErrorMessage {
   resetAt?: string;       // ISO string, only present for rate_limit errors
 }
 
+export interface SimplifyHotkeyMessage {
+  type: 'SIMPLIFY_HOTKEY';
+}
+
 export type ExtensionMessage =
   | TextSelectedMessage
   | ClearSelectionMessage
   | SetLoadingMessage
   | SimplifyCompleteMessage
-  | SimplifyErrorMessage;
+  | SimplifyErrorMessage
+  | SimplifyHotkeyMessage;
 
 export interface MessageResponse {
   status: 'received' | 'error';

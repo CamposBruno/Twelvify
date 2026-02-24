@@ -19,6 +19,15 @@ export default defineConfig({
     },
     action: {
       default_title: 'Twelveify'
+    },
+    commands: {
+      'simplify-hotkey': {
+        suggested_key: {
+          default: 'Ctrl+Shift+1',
+          mac: 'Command+Shift+1'
+        },
+        description: 'Simplify selected text'
+      }
     }
   }
 });
