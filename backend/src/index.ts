@@ -5,6 +5,7 @@ import { requestLogger } from './middleware/logging';
 import { errorHandler } from './middleware/errorHandler';
 import { healthRouter } from './routes/health';
 import { simplifyRouter } from './routes/simplify';
+import { playgroundRouter } from './routes/playground';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(requestLogger);
 
 app.use(healthRouter);
 app.use(simplifyRouter);
+app.use(playgroundRouter);
 app.use(errorHandler);
 
 const port = parseInt(env.PORT, 10);
