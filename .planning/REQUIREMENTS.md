@@ -29,10 +29,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Backend & Infrastructure
 
-- [ ] **BACK-01**: Backend proxy server handles all AI API calls (user never sees API keys)
-- [ ] **BACK-02**: Backend implements rate limiting per anonymous user
-- [ ] **BACK-03**: Backend logs zero text content — only anonymous usage metrics (token counts, timestamps)
-- [ ] **BACK-04**: Extension communicates with backend via HTTPS with request validation
+- [x] **BACK-01**: Backend proxy server handles all AI API calls (user never sees API keys)
+- [x] **BACK-02**: Backend implements rate limiting per anonymous user
+- [x] **BACK-03**: Backend logs zero text content — only anonymous usage metrics (token counts, timestamps)
+- [x] **BACK-04**: Extension communicates with backend via HTTPS with request validation
 
 ### Error Handling
 
@@ -109,10 +109,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PERS-02 | Phase 3 | Pending |
 | PERS-03 | Phase 3 | Pending |
 | PERS-04 | Phase 3 | Pending |
-| BACK-01 | Phase 2 | Pending |
-| BACK-02 | Phase 2 | Pending |
-| BACK-03 | Phase 2 | Pending |
-| BACK-04 | Phase 2 | Pending |
+| BACK-01 | Phase 2 | Complete |
+| BACK-02 | Phase 2 | Complete |
+| BACK-03 | Phase 2 | Complete |
+| BACK-04 | Phase 2 | Complete |
 | ERRH-01 | Phase 2 | Pending |
 | ERRH-02 | Phase 2 | Pending |
 | ERRH-03 | Phase 2 | Pending |
