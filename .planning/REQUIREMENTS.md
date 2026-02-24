@@ -19,8 +19,8 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 
 ### Sections
 
-- [ ] **SECT-01**: Hero section with tagline, description, install/demo CTAs, social proof avatars, and browser mockup
-- [ ] **SECT-02**: How-it-works section with 3-step cards (Highlight, Click Wand, Read Simplified)
+- [x] **SECT-01**: Hero section with tagline, description, install/demo CTAs, social proof avatars, and browser mockup
+- [x] **SECT-02**: How-it-works section with 3-step cards (Highlight, Click Wand, Read Simplified)
 - [ ] **SECT-03**: Playground section with live AI demo — user clicks "Fix This Mess" and text is simplified via dedicated backend endpoint
 - [x] **SECT-04**: Features section with 3 feature cards (In-page Replacement, Privacy by Design, Native Feel) and illustration
 - [x] **SECT-05**: CTA section with final install call-to-action and "Free to use — Forever" badge
@@ -29,7 +29,7 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 ### Interactive
 
 - [ ] **INTX-01**: Playground calls dedicated `/api/playground` endpoint to simplify sample text with streaming response
-- [ ] **INTX-02**: Smooth scroll navigation for anchor links
+- [x] **INTX-02**: Smooth scroll navigation for anchor links
 - [x] **INTX-03**: Hover effects matching design (rotation resets, shadow transitions, color transitions)
 - [ ] **INTX-04**: Playground button disabled after first successful simplification (one-shot demo)
 - [ ] **INTX-05**: Graceful rate-limit error handling — friendly message when playground limit exceeded
@@ -104,12 +104,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PERF-02 | Phase 4 | Complete |
 | LAYOUT-01 | Phase 5 | Complete |
 | LAYOUT-02 | Phase 5 | Complete |
-| SECT-01 | Phase 5 | Pending |
-| SECT-02 | Phase 5 | Pending |
+| SECT-01 | Phase 5 | Complete |
+| SECT-02 | Phase 5 | Complete |
 | SECT-04 | Phase 5 | Complete |
 | SECT-05 | Phase 5 | Complete |
 | SECT-06 | Phase 5 | Complete |
-| INTX-02 | Phase 5 | Pending |
+| INTX-02 | Phase 5 | Complete |
 | INTX-03 | Phase 5 | Complete |
 | SEO-01 | Phase 5 | Complete |
 | SEO-02 | Phase 5 | Complete |

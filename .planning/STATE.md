@@ -11,10 +11,10 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Milestone:** v1.1 Landing Page
 **Current phase:** 5 of 7 (Phase 5: Static Sections)
-**Current Plan:** 05-03 complete (Plan 3 of 4)
+**Current Plan:** 05-04 complete (Plan 4 of 4) — Phase 5 complete
 **Status:** In progress
 
-Progress: [████░░░░░░] 40% (v1.1)
+Progress: [█████░░░░░] 50% (v1.1)
 
 ## Decisions
 
@@ -27,7 +27,7 @@ Progress: [████░░░░░░] 40% (v1.1)
 - Google Fonts loaded via index.html link tag for pre-hydration availability
 - Two separate preconnect tags required: googleapis.com (no crossorigin) + gstatic.com (with crossorigin)
 - display=swap delivered via URL param (&display=swap) in Google Fonts href — no additional CSS needed
-- App.tsx is temporary demo scaffold — Phase 5 will replace with real sections
+- App.tsx wires Nav > Hero > HowItWorks > Playground placeholder (#try-it) > Features > CTA > Footer — matches code.html document order
 - CHROME_STORE_URL defined in constants.ts — placeholder, easy to swap when extension goes live
 - Nav uses hidden md:flex for section links — mobile shows logo + CTA only
 - CSS placeholder div used for Features illustration — Phase 7 will add real image
@@ -43,6 +43,7 @@ Progress: [████░░░░░░] 40% (v1.1)
 - 2026-02-24: Completed 05-01-PLAN.md — App shell, Nav component, CHROME_STORE_URL constant, SEO meta tags
 - 2026-02-24: Completed 05-02-PLAN.md — Hero section with CSS browser mockup and HowItWorks with 3 rotating zine-box cards
 - 2026-02-24: Completed 05-03-PLAN.md — Features, CTA, and Footer components with rotating icon boxes and paper-tear CTA
+- 2026-02-24: Completed 05-04-PLAN.md — Integration: all sections wired into App.tsx, smooth scroll enabled, 13/13 Playwright tests passed
 
 ## Accumulated Context
 

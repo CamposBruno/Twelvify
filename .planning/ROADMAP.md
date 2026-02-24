@@ -23,7 +23,7 @@
 **Milestone Goal:** Implement the existing HTML/Tailwind landing page design as a React app and deploy to Netlify/Vercel to drive Chrome Web Store installs.
 
 - [x] **Phase 4: Foundation** - React app with design system, fonts, and Tailwind config **[2 plans]** (completed 2026-02-24)
-- [ ] **Phase 5: Static Sections** - All page sections (nav, hero, how-it-works, features, CTA, footer), responsive layout, and SEO **[4 plans]**
+- [x] **Phase 5: Static Sections** - All page sections (nav, hero, how-it-works, features, CTA, footer), responsive layout, and SEO **[4 plans]** (completed 2026-02-24)
 - [ ] **Phase 6: Playground & Interactivity** - Live AI demo section, backend endpoint, and all interactive behaviors
 - [ ] **Phase 7: Launch** - Analytics, performance optimization, and production deployment
 
@@ -94,7 +94,7 @@ Plans:
 | 2. Backend Integration & AI Simplification | v1.0 | 4/4 | Complete | 2026-02-24 |
 | 3. Personalization & UX Polish | v1.0 | 6/6 | Complete | 2026-02-24 |
 | 4. Foundation | 2/2 | Complete    | 2026-02-24 | - |
-| 5. Static Sections | 3/4 | In Progress|  | - |
+| 5. Static Sections | 4/4 | Complete   | 2026-02-24 | - |
 | 6. Playground & Interactivity | v1.1 | 0/? | Not started | - |
 | 7. Launch | v1.1 | 0/? | Not started | - |
 
