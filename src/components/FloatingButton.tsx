@@ -2,8 +2,9 @@
 // Floating simplify button — always rendered, visibility driven by selectedText in storage
 // CSS visibility approach: no Popover API, no race conditions with React render cycle
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useStorageValue } from '../storage/useStorage';
+import type { ExtensionState } from '../storage/types';
 
 interface FloatingButtonProps {
   onSimplify: () => void;
@@ -12,6 +13,16 @@ interface FloatingButtonProps {
 export function FloatingButton({ onSimplify }: FloatingButtonProps) {
   const [isLoading] = useStorageValue<boolean>('isLoading', false);
   const [selectedText] = useStorageValue<string>('selectedText', '');
+  const [errorState] = useStorageValue<ExtensionState['errorState']>('errorState', null);
+
+  // Auto-dismiss error after 5 seconds — clears errorState from storage
+  useEffect(() => {
+    if (!errorState) return;
+    const timerId = setTimeout(() => {
+      chrome.storage.local.set({ errorState: null });
+    }, 5000);
+    return () => clearTimeout(timerId);
+  }, [errorState]);
 
   // Always render — visibility controlled via CSS, not conditional null return.
   // Conditional null caused a race: DOM element didn't exist when content.ts

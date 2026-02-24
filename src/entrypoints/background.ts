@@ -61,6 +61,28 @@ function handleMessage(
       );
       break;
 
+    case 'SIMPLIFY_ERROR':
+      // Persist error state to storage — FloatingButton reads this to show error UI
+      chrome.storage.local.set(
+        {
+          isLoading: false,
+          errorState: {
+            code: message.errorCode,
+            message: message.message,
+            ...(message.resetAt ? { resetAt: message.resetAt } : {}),
+          },
+        },
+        () => sendResponse({ status: 'received' })
+      );
+      break;
+
+    case 'SIMPLIFY_COMPLETE':
+      chrome.storage.local.set(
+        { isLoading: false, errorState: null },
+        () => sendResponse({ status: 'received' })
+      );
+      break;
+
     default:
       sendResponse({ status: 'error', error: 'Unknown message type' });
   }
