@@ -2,7 +2,7 @@
 // MV3 Service Worker — state manager and message router
 // CRITICAL: All listeners at TOP LEVEL — never inside async functions
 
-import type { ExtensionMessage, MessageResponse } from '../messaging/messages';
+import type { ExtensionMessage, MessageResponse, SimplifyHotkeyMessage } from '../messaging/messages';
 import { DEFAULT_STATE } from '../storage/types';
 
 export default defineBackground(() => {
@@ -15,6 +15,27 @@ export default defineBackground(() => {
       return true;
     }
   );
+
+  // Keyboard shortcut handler — routes Ctrl+Shift+1 to active tab's content script
+  // CRITICAL: Registered at top level (not inside async) — service worker restart safety
+  chrome.commands.onCommand.addListener((command) => {
+    if (command === 'simplify-hotkey') {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const activeTab = tabs[0];
+        if (activeTab?.id) {
+          chrome.tabs.sendMessage(
+            activeTab.id,
+            { type: 'SIMPLIFY_HOTKEY' } satisfies SimplifyHotkeyMessage,
+            () => {
+              // Suppress "Could not establish connection" error if content script not injected
+              // (e.g., on chrome:// pages where content scripts cannot run)
+              if (chrome.runtime.lastError) { /* intentionally silent */ }
+            }
+          );
+        }
+      });
+    }
+  });
 
   // Initialize storage with defaults on first install
   chrome.runtime.onInstalled.addListener(({ reason }) => {
@@ -81,6 +102,12 @@ function handleMessage(
         { isLoading: false, errorState: null },
         () => sendResponse({ status: 'received' })
       );
+      break;
+
+    case 'SIMPLIFY_HOTKEY':
+      // Hotkey is routed via chrome.commands.onCommand — not expected here.
+      // Acknowledge to prevent "Unknown message type" errors if routed back.
+      sendResponse({ status: 'received' });
       break;
 
     default:
