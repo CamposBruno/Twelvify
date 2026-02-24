@@ -1,8 +1,5 @@
 import { useState, useCallback } from 'react';
 
-const SAMPLE_TEXT =
-  'The superfluous utilization of sesquipedalian verbiage inevitably precipitates a profound state of intellectual vertigo for the uninitiated observer.';
-
 export default function Playground() {
   const [phase, setPhase] = useState<'idle' | 'loading' | 'typing' | 'done'>('idle');
   const [displayText, setDisplayText] = useState('');
