@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  h1, h2, h3 {
+    @apply font-display tracking-tight uppercase;
+    transform: rotate(-1deg);
+  }
+
+  .zine-box {
+    @apply border-2 border-slate-900 dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.2)];
+    background-image: radial-gradient(#e5e7eb 0.5px, transparent 0.5px);
+    background-size: 10px 10px;
+  }
+
+  .paper-tear {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 98% 98%, 95% 94%, 92% 99%, 88% 94%, 85% 100%, 80% 95%, 75% 99%, 70% 94%, 65% 100%, 60% 95%, 55% 98%, 50% 94%, 45% 99%, 40% 94%, 35% 100%, 30% 95%, 25% 99%, 20% 94%, 15% 100%, 10% 95%, 5% 99%, 0% 94%);
+  }
+}
