@@ -11,7 +11,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **SIMP-01**: User can highlight text on any webpage and see a floating action icon appear
 - [x] **SIMP-02**: User can click the floating icon to trigger AI-powered text simplification
-- [ ] **SIMP-03**: User can use a keyboard shortcut (e.g., Ctrl+Shift+S) to simplify selected text
+- [x] **SIMP-03**: User can use a keyboard shortcut (e.g., Ctrl+Shift+S) to simplify selected text
 - [ ] **SIMP-04**: User can revert rewritten text back to the original with one click
 
 ### Display
@@ -100,7 +100,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | SIMP-01 | Phase 1 | Complete |
 | SIMP-02 | Phase 2 | Complete |
-| SIMP-03 | Phase 3 | Pending |
+| SIMP-03 | Phase 3 | Complete |
 | SIMP-04 | Phase 3 | Pending |
 | DISP-01 | Phase 3 | Pending |
 | DISP-02 | Phase 3 | Pending |

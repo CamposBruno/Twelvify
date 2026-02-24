@@ -8,7 +8,7 @@ See: .planning/PROJECT.md
 
 **Milestone:** v1.0 milestone
 **Current phase:** 03-personalization-ux-polish
-**Current Plan:** 03-02 (next)
+**Current Plan:** 03-04 (next)
 **Status:** In progress
 
 ## Decisions
@@ -54,8 +54,14 @@ See: .planning/PROJECT.md
 - [Phase 02-04]: CORS ALLOWED_ORIGIN must be * for content scripts — content scripts send page origin (not extension origin), static extension-origin allowlist cannot work
 - [Phase 02-04]: Backend URL uses localhost:3001 for local dev — must update content.ts URL and host_permissions in wxt.config.ts before Render deployment / Web Store submission
 - 2026-02-24: Completed 03-01 (Settings storage foundation — UserSettings, ToneLevel, DEFAULT_SETTINGS, useStorageSyncValue, initSyncDefaults). Tasks: 2, commits: acbf780, 2f02816.
+- 2026-02-24: Completed 03-03 (Keyboard shortcut plumbing — simplify-hotkey in manifest, SIMPLIFY_HOTKEY message type, chrome.commands.onCommand handler in background.ts). Tasks: 2, commits: 103f81b, 739bbd5.
 - [Phase 03-01]: ToneLevel uses literal numbers (5, 12, 18) and string literals (baby, big_boy) — union type prevents invalid tone values
 - [Phase 03-01]: chrome.storage.sync chosen for UserSettings — syncs across profiles and survives browser restarts
 - [Phase 03-01]: onChanged listener guards areaName === 'sync' to prevent local storage changes from triggering sync hook re-renders
 - [Phase 03-01]: initSyncDefaults only writes absent keys — safe to call on every install/update without clobbering prefs
 - [Phase 03-01]: keyboardShortcut stored in sync for display only — actual binding managed by chrome.commands in manifest
+- [Phase 03-02]: (completed previously)
+- [Phase 03-03]: suggested_key uses object form { default/mac } per Chrome commands API spec (not flat string)
+- [Phase 03-03]: chrome.commands.onCommand registered at top level of defineBackground() for MV3 service worker restart safety
+- [Phase 03-03]: SIMPLIFY_HOTKEY switch case added to handleMessage to prevent Unknown message type errors if routed back
+- [Phase 03-03]: Silent lastError suppression in sendMessage callback handles chrome:// pages where content scripts cannot inject

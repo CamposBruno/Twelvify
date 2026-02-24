@@ -104,7 +104,7 @@ Plans:
 4. User can toggle between replace-in-page mode (default) and floating popup mode via settings UI
 5. User can revert any simplified text to original with one-click "Undo" button; revert action is immediate (no API call needed)
 
-**Plans:** 6 plans
+**Plans:** 2/6 plans executed
 
 Plans:
 - [ ] 03-01-PLAN.md — Settings storage foundation (UserSettings + useStorageSyncValue)
@@ -122,7 +122,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Foundation & Text Selection | 4/4 | Complete   | 2026-02-23 |
 | 2. Backend Integration & AI Simplification | 4/4 | Complete    | 2026-02-24 |
-| 3. Personalization & UX Polish | 0/? | Not started | — |
+| 3. Personalization & UX Polish | 2/6 | In Progress|  |
 
 ---
 
