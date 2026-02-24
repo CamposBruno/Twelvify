@@ -14,8 +14,8 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 
 ### Layout
 
-- [ ] **LAYOUT-01**: Sticky nav bar with logo, section links (How it works, Features, Playground), and "Add to Chrome" CTA
-- [ ] **LAYOUT-02**: Responsive layout — mobile-first with desktop breakpoints matching design grid
+- [x] **LAYOUT-01**: Sticky nav bar with logo, section links (How it works, Features, Playground), and "Add to Chrome" CTA
+- [x] **LAYOUT-02**: Responsive layout — mobile-first with desktop breakpoints matching design grid
 
 ### Sections
 
@@ -42,9 +42,9 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 
 ### SEO
 
-- [ ] **SEO-01**: Meta tags (title, description, canonical URL)
-- [ ] **SEO-02**: Open Graph and Twitter Card tags for social sharing
-- [ ] **SEO-03**: Semantic HTML structure (proper heading hierarchy, landmarks)
+- [x] **SEO-01**: Meta tags (title, description, canonical URL)
+- [x] **SEO-02**: Open Graph and Twitter Card tags for social sharing
+- [x] **SEO-03**: Semantic HTML structure (proper heading hierarchy, landmarks)
 
 ### Analytics
 
@@ -102,8 +102,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | DSGN-03 | Phase 4 | Complete |
 | PERF-02 | Phase 4 | Complete |
-| LAYOUT-01 | Phase 5 | Pending |
-| LAYOUT-02 | Phase 5 | Pending |
+| LAYOUT-01 | Phase 5 | Complete |
+| LAYOUT-02 | Phase 5 | Complete |
 | SECT-01 | Phase 5 | Pending |
 | SECT-02 | Phase 5 | Pending |
 | SECT-04 | Phase 5 | Pending |
@@ -111,9 +111,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SECT-06 | Phase 5 | Pending |
 | INTX-02 | Phase 5 | Pending |
 | INTX-03 | Phase 5 | Pending |
-| SEO-01 | Phase 5 | Pending |
-| SEO-02 | Phase 5 | Pending |
-| SEO-03 | Phase 5 | Pending |
+| SEO-01 | Phase 5 | Complete |
+| SEO-02 | Phase 5 | Complete |
+| SEO-03 | Phase 5 | Complete |
 | SECT-03 | Phase 6 | Pending |
 | INTX-01 | Phase 6 | Pending |
 | INTX-04 | Phase 6 | Pending |

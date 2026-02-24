@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core value:** When a user highlights confusing text and clicks the icon, they get back a clear, personalized rewrite that makes sense to them — every time.
-**Current focus:** v1.1 Landing Page — Phase 4: Foundation
+**Current focus:** v1.1 Landing Page — Phase 5: Static Sections
 
 ## Position
 
 **Milestone:** v1.1 Landing Page
-**Current phase:** 4 of 7 (Phase 4: Foundation)
-**Current Plan:** Not started
-**Status:** Milestone complete
+**Current phase:** 5 of 7 (Phase 5: Static Sections)
+**Current Plan:** 05-01 complete (Plan 1 of 3)
+**Status:** In progress
 
-Progress: [██░░░░░░░░] 20% (v1.1)
+Progress: [███░░░░░░░] 30% (v1.1)
 
 ## Decisions
 
@@ -28,6 +28,8 @@ Progress: [██░░░░░░░░] 20% (v1.1)
 - Two separate preconnect tags required: googleapis.com (no crossorigin) + gstatic.com (with crossorigin)
 - display=swap delivered via URL param (&display=swap) in Google Fonts href — no additional CSS needed
 - App.tsx is temporary demo scaffold — Phase 5 will replace with real sections
+- CHROME_STORE_URL defined in constants.ts — placeholder, easy to swap when extension goes live
+- Nav uses hidden md:flex for section links — mobile shows logo + CTA only
 
 ## Session Log
 
@@ -36,6 +38,7 @@ Progress: [██░░░░░░░░] 20% (v1.1)
 - 2026-02-24: v1.1 roadmap created — 4 phases (4-7), 27/27 requirements mapped
 - 2026-02-24: Completed 04-01-PLAN.md — Vite+React+TS+Tailwind scaffold with zine/punk design system
 - 2026-02-24: Completed 04-02-PLAN.md — Google Fonts preconnect loading + design system demo, human-verified
+- 2026-02-24: Completed 05-01-PLAN.md — App shell, Nav component, CHROME_STORE_URL constant, SEO meta tags
 
 ## Accumulated Context
 
