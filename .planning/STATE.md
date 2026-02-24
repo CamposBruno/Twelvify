@@ -11,10 +11,10 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Milestone:** v1.1 Landing Page
 **Current phase:** 4 of 7 (Phase 4: Foundation)
-**Current Plan:** 1 of 4 complete (Plan 04-01 done)
+**Current Plan:** 2 of 4 complete (Plan 04-02 done)
 **Status:** In progress
 
-Progress: [█░░░░░░░░░] 10% (v1.1)
+Progress: [██░░░░░░░░] 20% (v1.1)
 
 ## Decisions
 
@@ -25,6 +25,9 @@ Progress: [█░░░░░░░░░] 10% (v1.1)
 - Vite project scaffolded manually (npm create vite cancelled on existing landing/ dir)
 - .zine-box and .paper-tear defined in @layer base, not as utilities
 - Google Fonts loaded via index.html link tag for pre-hydration availability
+- Two separate preconnect tags required: googleapis.com (no crossorigin) + gstatic.com (with crossorigin)
+- display=swap delivered via URL param (&display=swap) in Google Fonts href — no additional CSS needed
+- App.tsx is temporary demo scaffold — Phase 5 will replace with real sections
 
 ## Session Log
 
@@ -32,6 +35,7 @@ Progress: [█░░░░░░░░░] 10% (v1.1)
 - 2026-02-24: Milestone v1.1 Landing Page started
 - 2026-02-24: v1.1 roadmap created — 4 phases (4-7), 27/27 requirements mapped
 - 2026-02-24: Completed 04-01-PLAN.md — Vite+React+TS+Tailwind scaffold with zine/punk design system
+- 2026-02-24: Completed 04-02-PLAN.md — Google Fonts preconnect loading + design system demo, human-verified
 
 ## Accumulated Context
 

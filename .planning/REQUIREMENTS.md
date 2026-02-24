@@ -10,7 +10,7 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 ### Setup
 
 - [x] **SETUP-01**: React app bootstrapped with Tailwind CSS, custom theme (fonts, colors, borders matching design)
-- [ ] **SETUP-02**: Google Fonts loaded (Permanent Marker, Special Elite, Inter) and Material Symbols Icons
+- [x] **SETUP-02**: Google Fonts loaded (Permanent Marker, Special Elite, Inter) and Material Symbols Icons
 
 ### Layout
 
@@ -53,7 +53,7 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 ### Performance
 
 - [ ] **PERF-01**: Lighthouse performance score 90+ (image optimization, lazy loading, efficient asset delivery)
-- [ ] **PERF-02**: Font loading optimized (preconnect, font-display: swap)
+- [x] **PERF-02**: Font loading optimized (preconnect, font-display: swap)
 
 ### Backend
 
@@ -97,11 +97,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | SETUP-01 | Phase 4 | Complete |
-| SETUP-02 | Phase 4 | Pending |
+| SETUP-02 | Phase 4 | Complete |
 | DSGN-01 | Phase 4 | Complete |
 
 | DSGN-03 | Phase 4 | Complete |
-| PERF-02 | Phase 4 | Pending |
+| PERF-02 | Phase 4 | Complete |
 | LAYOUT-01 | Phase 5 | Pending |
 | LAYOUT-02 | Phase 5 | Pending |
 | SECT-01 | Phase 5 | Pending |
