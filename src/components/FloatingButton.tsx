@@ -3,18 +3,46 @@
 // CSS visibility approach: no Popover API, no race conditions with React render cycle
 
 import React, { useEffect } from 'react';
-import { useStorageValue } from '../storage/useStorage';
-import type { ExtensionState } from '../storage/types';
+import { useStorageValue, useStorageSyncValue } from '../storage/useStorage';
+import type { ExtensionState, ToneLevel } from '../storage/types';
 import { ErrorTooltip } from './ErrorTooltip';
 
 interface FloatingButtonProps {
   onSimplify: () => void;
+  onUndo?: () => void;    // Called when undo button clicked
+  hasUndo?: boolean;      // True when undo stack has entries — shows undo mode
 }
 
-export function FloatingButton({ onSimplify }: FloatingButtonProps) {
+/**
+ * Returns the ONE-LEVEL-LOWER age label for the button.
+ * The button invites the user to simplify to the level BELOW their current setting.
+ *
+ * Wrapping order (from highest to lowest, then wraps around):
+ *   big_boy → 18 → 12 → 5 → baby → big_boy (wrap-around)
+ */
+function getButtonLabel(tone: ToneLevel): string {
+  switch (tone) {
+    case 'big_boy':
+      return "Explain like I'm 18";
+    case 18:
+      return "Explain like I'm 12";
+    case 12:
+      return "Explain like I'm 5";
+    case 5:
+      return "Explain like I'm a Baby";
+    case 'baby':
+      return "Explain like I'm a Big Boy";
+    default:
+      // TypeScript exhaustiveness guard — ToneLevel covers all 5 cases above
+      return "Simplify";
+  }
+}
+
+export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonProps) {
   const [isLoading] = useStorageValue<boolean>('isLoading', false);
   const [selectedText] = useStorageValue<string>('selectedText', '');
   const [errorState, setErrorState] = useStorageValue<ExtensionState['errorState']>('errorState', null);
+  const [tone] = useStorageSyncValue<ToneLevel>('tone', 12);
 
   // Auto-dismiss error after 5 seconds — clears errorState from storage
   const dismissTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -50,6 +78,34 @@ export function FloatingButton({ onSimplify }: FloatingButtonProps) {
   // tried to call showPopover(), so the button never appeared.
   const isVisible = Boolean(selectedText);
 
+  // --- Button state priority hierarchy ---
+  // 1. isLoading → spinner + "Simplifying..." (unchanged)
+  // 2. errorState → yellow button + ErrorTooltip (unchanged)
+  // 3. hasUndo → green undo button (new)
+  // 4. default → age-level label + indigo button (modified)
+
+  const isUndoMode = Boolean(hasUndo) && !isLoading;
+
+  const buttonBgColor = isLoading
+    ? '#6366f1'   // Indigo during loading
+    : errorState
+      ? '#f59e0b' // Warning yellow on error
+      : isUndoMode
+        ? '#10b981' // Green for undo mode
+        : '#6366f1'; // Default indigo
+
+  const buttonAriaLabel = isLoading
+    ? 'Simplifying...'
+    : isUndoMode
+      ? 'Revert to original text'
+      : 'Simplify selected text';
+
+  const handleClick = isLoading
+    ? undefined
+    : isUndoMode
+      ? onUndo
+      : onSimplify;
+
   return (
     // Always-present container — opacity/pointerEvents toggle makes it visible/hidden
     <div
@@ -71,19 +127,16 @@ export function FloatingButton({ onSimplify }: FloatingButtonProps) {
         />
       )}
       <button
-        onClick={isLoading ? undefined : onSimplify}
+        onClick={handleClick}
         disabled={isLoading}
-        aria-label={isLoading ? 'Simplifying...' : 'Simplify selected text'}
+        aria-label={buttonAriaLabel}
+        title={!isLoading && !isUndoMode ? `Simplify selected text (Ctrl+Shift+1)` : undefined}
         style={{
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
           padding: '10px 16px',
-          backgroundColor: isLoading
-            ? '#6366f1'   // Indigo during loading
-            : errorState
-              ? '#f59e0b' // Warning yellow on error
-              : '#6366f1', // Default indigo
+          backgroundColor: buttonBgColor,
           color: '#ffffff',
           border: 'none',
           borderRadius: '8px',
@@ -114,6 +167,9 @@ export function FloatingButton({ onSimplify }: FloatingButtonProps) {
             </svg>
             Simplifying...
           </>
+        ) : isUndoMode ? (
+          // Undo mode — green button, no spark icon, just text
+          <>&#x21A9; Undo</>
         ) : (
           <>
             {/* Spark icon — inline SVG */}
@@ -126,7 +182,7 @@ export function FloatingButton({ onSimplify }: FloatingButtonProps) {
             >
               <path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z" />
             </svg>
-            Simplify
+            {getButtonLabel(tone)}
           </>
         )}
       </button>
