@@ -87,7 +87,12 @@ Plans:
   1. Landing page is accessible at a custom domain via Netlify or Vercel, deploying automatically on git push
   2. Lighthouse performance score is 90+ — images are optimized, assets are hashed and minified
   3. Page views and "Add to Chrome" CTA click events are captured in an analytics dashboard
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Plausible analytics integration + CTA click event tracking
+- [ ] 07-02-PLAN.md — Vercel config (vercel.json) + production build verification
+- [ ] 07-03-PLAN.md — Live deployment, GoDaddy DNS, custom domain + Lighthouse 90+ verification
 
 ## Progress
 
@@ -101,7 +106,7 @@ Plans:
 | 4. Foundation | 2/2 | Complete    | 2026-02-24 | - |
 | 5. Static Sections | 4/4 | Complete    | 2026-02-24 | - |
 | 6. Playground & Interactivity | 3/3 | Complete    | 2026-02-24 | - |
-| 7. Launch | v1.1 | 0/? | Not started | - |
+| 7. Launch | v1.1 | 0/3 | Not started | - |
 
 ---
 
