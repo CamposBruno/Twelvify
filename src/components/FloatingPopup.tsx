@@ -19,14 +19,14 @@ export function FloatingPopup({ simplifiedText, onClose }: FloatingPopupProps): 
     position: 'fixed',
     bottom: '80px',
     right: '24px',
-    background: '#ffffff',
-    border: '1px solid #e5e7eb',
-    borderRadius: '12px',
+    background: '#f8f6f6',
+    border: '1px solid #d1d5db',
+    borderRadius: '0px',
     padding: '16px',
     maxWidth: '360px',
     maxHeight: '300px',
     overflowY: 'auto',
-    boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+    boxShadow: '0 3px 4px rgba(0,0,0,0.1)',
     zIndex: 2147483646,
     fontFamily: 'system-ui, -apple-system, sans-serif',
     opacity: visible ? 1 : 0,
@@ -47,6 +47,7 @@ export function FloatingPopup({ simplifiedText, onClose }: FloatingPopupProps): 
     letterSpacing: '0.08em',
     color: '#6b7280',
     margin: '0',
+    fontFamily: "'Special Elite', monospace",
   };
 
   const closeButtonStyle: React.CSSProperties = {
