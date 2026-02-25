@@ -34,6 +34,10 @@
 **Milestone Goal:** Redesign the extension's user-facing UI with toned-down zine/punk aesthetic from the landing page, deploy backend to production on Render, and submit to Chrome Web Store.
 
 - [ ] **Phase 8: UI Redesign** - Redesign popup panel and floating button with landing page brand aesthetic; verify CSS isolation on high-complexity websites
+  Plans:
+  - [ ] 08-01-PLAN.md — Popup brand styling (fonts, colors, grid background, App.tsx + SettingsPanel.tsx)
+  - [ ] 08-02-PLAN.md — Floating button brand styling (red, wand icon, sharp corners) + FloatingPopup + ErrorTooltip
+  - [ ] 08-03-PLAN.md — Build + human visual verification on 5 complex sites
 - [ ] **Phase 9: Backend Production Deploy** - Deploy Express backend to Render with health checks, graceful shutdown, and production CORS configuration
 - [ ] **Phase 10: Chrome Web Store Submission** - Publish privacy policy, prepare store assets, and submit extension
 
@@ -48,7 +52,7 @@
   2. Floating button displays with the branded icon and styled appearance; it is visible and clickable on Gmail, YouTube, GitHub, Reddit, and Medium without z-index conflicts
   3. Popup panel layout is clean and usable — zine/punk aesthetic applied with toned-down intensity (no heavy rotations or textures)
   4. If custom fonts fail to load, popup and floating button display legibly with system font fallbacks (no broken UI)
-**Plans**: TBD
+**Plans**: 3 plans
 
 ### Phase 9: Backend Production Deploy
 **Goal**: Express backend runs on Render in production with health monitoring, zero-downtime deploys, and CORS correctly scoped for extension and landing page clients
