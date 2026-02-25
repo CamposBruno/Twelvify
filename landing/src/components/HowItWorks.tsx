@@ -13,7 +13,7 @@ export default function HowItWorks() {
             The "Don't Look Dumb" Workflow
           </h2>
           <p className="font-punk text-lg text-slate-500 max-w-xl bg-yellow-100 px-4 py-2 inline-block rotate-1">
-            No apps to open, no tabs to switch. Twelveify lives within your workflow.
+            No apps to open, no tabs to switch. Twelvify lives within your workflow.
           </p>
         </div>
 

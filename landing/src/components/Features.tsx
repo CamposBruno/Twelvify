@@ -17,7 +17,7 @@ function Features() {
             </h2>
 
             <p className="font-punk text-xl text-slate-600 max-w-lg border-r-4 border-slate-200 pr-6">
-              Twelveify isn't just a tool; it's an upgrade for your entire web browsing experience. We focused on the details that make software disappear.
+              Twelvify isn't just a tool; it's an upgrade for your entire web browsing experience. We focused on the details that make software disappear.
             </p>
 
             <div className="space-y-8 pt-6">

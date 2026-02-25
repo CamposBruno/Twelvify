@@ -12,7 +12,7 @@ function Nav() {
           <div className="bg-primary p-2 border-2 border-slate-900 rotate-[-4deg]">
             <Icon name="pedal_bike" className="text-white w-8 h-8" />
           </div>
-          <span className="text-3xl font-display uppercase tracking-tighter text-slate-900">Twelveify</span>
+          <span className="text-3xl font-display uppercase tracking-tighter text-slate-900">Twelvify</span>
         </div>
 
         {/* Section links — hidden on mobile, visible md+ */}

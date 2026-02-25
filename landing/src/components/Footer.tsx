@@ -14,7 +14,7 @@ function Footer() {
               <div className="bg-primary p-2 border-2 border-white rotate-[-10deg]">
                 <Icon name="pedal_bike" className="text-white w-8 h-8" />
               </div>
-              <span className="text-4xl font-display uppercase tracking-tighter">Twelveify</span>
+              <span className="text-4xl font-display uppercase tracking-tighter">Twelvify</span>
             </div>
             <p className="font-punk text-slate-400 text-lg leading-relaxed italic border-l-2 border-primary pl-4">
               Making the internet readable for everyone, one sentence at a time. The truly invisible browser assistant.
@@ -63,7 +63,7 @@ function Footer() {
 
         {/* Bottom bar */}
         <div className="pt-12 border-t-4 border-slate-800 flex flex-col md:flex-row justify-between items-center gap-8 font-punk text-xs uppercase tracking-widest text-slate-500">
-          <p>© 2024 Twelveify Inc. — Deal with it.</p>
+          <p>© 2024 Twelvify Inc. — Deal with it.</p>
           <div className="flex gap-10">
             <a className="hover:text-primary transition-colors underline decoration-2 underline-offset-4" href="#">Twitter</a>
             <a className="hover:text-primary transition-colors underline decoration-2 underline-offset-4" href="#">GitHub</a>
