@@ -1,4 +1,5 @@
 import { CHROME_STORE_URL } from '../constants'
+import { trackEvent } from '../analytics'
 
 function Nav() {
   return (
@@ -36,7 +37,7 @@ function Nav() {
         </div>
 
         {/* CTA button — always visible */}
-        <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer">
+        <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('cta_click', { location: 'nav' })}>
           <button className="bg-slate-900 text-white font-punk border-2 border-slate-900 px-6 py-3 hover:bg-primary transition-all shadow-[4px_4px_0px_0px_rgba(245,96,96,1)]">
             ADD TO CHROME
           </button>

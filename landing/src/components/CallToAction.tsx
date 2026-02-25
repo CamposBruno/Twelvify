@@ -1,4 +1,5 @@
 import { CHROME_STORE_URL } from '../constants'
+import { trackEvent } from '../analytics'
 
 function CallToAction() {
   return (
@@ -16,7 +17,7 @@ function CallToAction() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
-              <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer">
+              <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('cta_click', { location: 'cta_section' })}>
                 <button className="bg-slate-900 text-white px-12 py-6 text-3xl font-display border-4 border-white shadow-[10px_10px_0px_0px_rgba(255,255,255,0.3)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
                   ADD TO CHROME
                 </button>

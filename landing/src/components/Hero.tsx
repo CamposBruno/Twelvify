@@ -1,4 +1,5 @@
 import { CHROME_STORE_URL } from '../constants';
+import { trackEvent } from '../analytics';
 
 export default function Hero() {
   return (
@@ -28,7 +29,7 @@ export default function Hero() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6">
-            <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer">
+            <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('cta_click', { location: 'hero' })}>
               <button className="bg-primary text-white border-4 border-slate-900 px-10 py-6 text-2xl font-display shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
                 Install Twelveify
               </button>
