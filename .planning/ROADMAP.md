@@ -48,7 +48,7 @@
 **Depends on**: Nothing (first phase of v1.2)
 **Requirements**: UIRD-01, UIRD-02, UIRD-03, UIRD-04, UIRD-05, UIRD-06
 **Success Criteria** (what must be TRUE):
-  1. Popup panel renders Permanent Marker and Special Elite fonts with the indigo accent color palette and sharp borders matching the landing page brand
+  1. Popup panel renders Permanent Marker and Special Elite fonts with the red (#f56060) brand color palette and sharp borders matching the landing page brand
   2. Floating button displays with the branded icon and styled appearance; it is visible and clickable on Gmail, YouTube, GitHub, Reddit, and Medium without z-index conflicts
   3. Popup panel layout is clean and usable — zine/punk aesthetic applied with toned-down intensity (no heavy rotations or textures)
   4. If custom fonts fail to load, popup and floating button display legibly with system font fallbacks (no broken UI)
