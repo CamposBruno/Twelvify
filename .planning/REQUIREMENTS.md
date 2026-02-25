@@ -62,8 +62,8 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 
 ### Deploy
 
-- [ ] **DEPLOY-01**: Production build optimized (minified, tree-shaken, assets hashed)
-- [ ] **DEPLOY-02**: Deploy to Netlify or Vercel with CI from git push
+- [x] **DEPLOY-01**: Production build optimized (minified, tree-shaken, assets hashed)
+- [x] **DEPLOY-02**: Deploy to Netlify or Vercel with CI from git push
 - [ ] **DEPLOY-03**: Custom domain configured on hosting platform
 
 ## Future Requirements
@@ -122,8 +122,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-02 | Phase 6 | Complete |
 | ANALYTICS-01 | Phase 7 | Complete |
 | PERF-01 | Phase 7 | Pending |
-| DEPLOY-01 | Phase 7 | Pending |
-| DEPLOY-02 | Phase 7 | Pending |
+| DEPLOY-01 | Phase 7 | Complete |
+| DEPLOY-02 | Phase 7 | Complete |
 | DEPLOY-03 | Phase 7 | Pending |
 
 **Coverage:**

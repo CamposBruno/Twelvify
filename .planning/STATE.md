@@ -43,6 +43,10 @@ Progress: [█████████░] 90% (v1.1)
 - Plausible Analytics chosen for landing page: privacy-first CDN script (~1KB), no cookie consent required, zero bundle overhead
 - trackPageView is a no-op hook for future SPA routing; Plausible auto-tracks initial page views from script load
 - cta_click event with location prop (nav | hero | cta_section) is the analytics event naming convention
+- vercel.json lives at landing/ (rootDirectory); outputDirectory: dist; framework: vite for Vercel-optimized pipeline
+- www.twelvify.com -> twelvify.com 301 redirect via vercel.json has-host matcher (no redirect loop risk)
+- Deploy-on-tag via Ignored Build Step: [ "$VERCEL_GIT_COMMIT_REF" != "main" ] && [[ "$VERCEL_GIT_COMMIT_TAG" != website_* ]] — set in Vercel Dashboard
+- Vendor chunk split added to vite.config.ts: react+react-dom (11KB) isolated from app code (199KB)
 
 ## Session Log
 
@@ -59,6 +63,7 @@ Progress: [█████████░] 90% (v1.1)
 - 2026-02-24: Completed 06-02-PLAN.md — Playground React component with SSE typing animation, one-shot lock, and toast error handling
 - 2026-02-24: Completed 06-03-PLAN.md — Wired Playground into App.tsx, added Vite proxy, corrected legend labels, 9/9 E2E tests pass — Phase 6 complete
 - 2026-02-25: Completed 07-01-PLAN.md — Plausible Analytics wired: deferred CDN script in index.html, typed analytics.ts helper, cta_click events in Nav/Hero/CallToAction
+- 2026-02-25: Completed 07-02-PLAN.md — vercel.json with www redirect, cache/security headers, .vercelignore, vendor chunk split in vite.config.ts
 
 ## Accumulated Context
 
