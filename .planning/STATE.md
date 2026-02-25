@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core value:** When a user highlights confusing text and clicks the icon, they get back a clear, personalized rewrite that makes sense to them — every time.
-**Current focus:** v1.1 Landing Page — Phase 6: Playground Interactivity
+**Current focus:** v1.1 Landing Page — Phase 7: Launch
 
 ## Position
 
 **Milestone:** v1.1 Landing Page
-**Current phase:** 6 of 7 (Phase 6: Playground Interactivity)
-**Current Plan:** Not started
-**Status:** Milestone complete
+**Current phase:** 7 of 7 (Phase 7: Launch)
+**Current Plan:** 2 of 3 complete
+**Status:** In progress
 
-Progress: [████████░░] 75% (v1.1)
+Progress: [█████████░] 90% (v1.1)
 
 ## Decisions
 
@@ -40,6 +40,9 @@ Progress: [████████░░] 75% (v1.1)
 - Vite proxy /api -> http://localhost:3001 added to vite.config.ts for local dev (keeps Playground component portable, no hardcoded baseURL)
 - Legend labels: COMPLEX ORIGINAL is active/highlighted in idle state; swaps to SIMPLIFIED VERSION after AI completion
 - E2E Playwright tests added in /e2e directory with playwright.config.ts at root — 9/9 pass for Phase 6 playground flow
+- Plausible Analytics chosen for landing page: privacy-first CDN script (~1KB), no cookie consent required, zero bundle overhead
+- trackPageView is a no-op hook for future SPA routing; Plausible auto-tracks initial page views from script load
+- cta_click event with location prop (nav | hero | cta_section) is the analytics event naming convention
 
 ## Session Log
 
@@ -55,6 +58,7 @@ Progress: [████████░░] 75% (v1.1)
 - 2026-02-24: Completed 06-01-PLAN.md — POST /api/playground SSE endpoint with hardcoded sample text and 60 req/min per-IP rate limiter
 - 2026-02-24: Completed 06-02-PLAN.md — Playground React component with SSE typing animation, one-shot lock, and toast error handling
 - 2026-02-24: Completed 06-03-PLAN.md — Wired Playground into App.tsx, added Vite proxy, corrected legend labels, 9/9 E2E tests pass — Phase 6 complete
+- 2026-02-25: Completed 07-01-PLAN.md — Plausible Analytics wired: deferred CDN script in index.html, typed analytics.ts helper, cta_click events in Nav/Hero/CallToAction
 
 ## Accumulated Context
 

@@ -106,7 +106,7 @@ Plans:
 | 4. Foundation | 2/2 | Complete    | 2026-02-24 | - |
 | 5. Static Sections | 4/4 | Complete    | 2026-02-24 | - |
 | 6. Playground & Interactivity | 3/3 | Complete    | 2026-02-24 | - |
-| 7. Launch | v1.1 | 0/3 | Not started | - |
+| 7. Launch | 2/3 | In Progress|  | - |
 
 ---
 

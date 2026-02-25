@@ -48,7 +48,7 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 
 ### Analytics
 
-- [ ] **ANALYTICS-01**: Analytics integration (Google Analytics, Plausible, or similar) tracking page views and CTA clicks
+- [x] **ANALYTICS-01**: Analytics integration (Google Analytics, Plausible, or similar) tracking page views and CTA clicks
 
 ### Performance
 
@@ -120,7 +120,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INTX-05 | Phase 6 | Complete |
 | API-01 | Phase 6 | Complete |
 | API-02 | Phase 6 | Complete |
-| ANALYTICS-01 | Phase 7 | Pending |
+| ANALYTICS-01 | Phase 7 | Complete |
 | PERF-01 | Phase 7 | Pending |
 | DEPLOY-01 | Phase 7 | Pending |
 | DEPLOY-02 | Phase 7 | Pending |
