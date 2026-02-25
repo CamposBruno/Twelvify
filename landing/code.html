@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Twelveify | Understand anything, anywhere.</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&amp;family=Special+Elite&amp;family=Inter:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#f56060",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010"
+                    },
+                    fontFamily: {
+                        display: ["'Permanent Marker'", "cursive"],
+                        punk: ["'Special Elite'", "monospace"],
+                        body: ["'Inter'", "sans-serif"]
+                    },
+                    borderRadius: {
+                        DEFAULT: "0px",
+                        lg: "0px",
+                        xl: "0px",
+                        full: "9999px"
+                    }
+                }
+            }
+        };
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            h1, h2, h3 {
+                @apply font-display tracking-tight uppercase;
+                transform: rotate(-1deg);
+            }
+            .zine-box {
+                @apply border-2 border-slate-900 dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.2)];
+                background-image: radial-gradient(#e5e7eb 0.5px, transparent 0.5px);
+                background-size: 10px 10px;
+            }
+            .paper-tear {
+                clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 98% 98%, 95% 94%, 92% 99%, 88% 94%, 85% 100%, 80% 95%, 75% 99%, 70% 94%, 65% 100%, 60% 95%, 55% 98%, 50% 94%, 45% 99%, 40% 94%, 35% 100%, 30% 95%, 25% 99%, 20% 94%, 15% 100%, 10% 95%, 5% 99%, 0% 94%);
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-body text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden selection:bg-primary selection:text-white">
+<nav class="sticky top-0 z-50 border-b-4 border-slate-900 dark:border-white bg-white dark:bg-background-dark">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 flex h-20 items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary p-2 border-2 border-slate-900 rotate-[-4deg]">
+<span class="material-symbols-outlined text-white text-3xl">pedal_bike</span>
+</div>
+<span class="text-3xl font-display uppercase tracking-tighter text-slate-900 dark:text-white">Twelveify</span>
+</div>
+<div class="hidden md:flex items-center gap-8 font-punk font-bold">
+<a class="hover:bg-primary hover:text-white px-2 py-1 transition-all -rotate-1" href="#how-it-works">HOW IT WORKS</a>
+<a class="hover:bg-primary hover:text-white px-2 py-1 transition-all rotate-2" href="#features">FEATURES</a>
+<a class="hover:bg-primary hover:text-white px-2 py-1 transition-all -rotate-1" href="#try-it">PLAYGROUND</a>
+</div>
+<button class="bg-slate-900 text-white font-punk border-2 border-slate-900 px-6 py-3 hover:bg-primary transition-all shadow-[4px_4px_0px_0px_rgba(245,96,96,1)]">
+            ADD TO CHROME
+        </button>
+</div>
+</nav>
+<header class="relative pt-24 pb-32 overflow-hidden">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="space-y-10 relative z-10">
+<div class="inline-block px-4 py-2 bg-yellow-300 text-slate-900 border-2 border-slate-900 font-punk font-bold rotate-[-2deg] mb-4">
+                NOW IN THE WEB STORE (DUH)
+            </div>
+<h1 class="text-6xl lg:text-8xl font-display leading-[0.9] text-slate-900 dark:text-white -rotate-2">
+                Stop pretending you <span class="bg-primary text-white px-4 inline-block transform rotate-3">understand</span> jargon.
+            </h1>
+<p class="text-xl font-punk text-slate-700 dark:text-slate-300 max-w-lg leading-relaxed border-l-4 border-primary pl-6 py-2 rotate-1">
+                The browser extension that translates high-brow nonsense into plain English. Because nobody actually knows what "concomitant" means.
+            </p>
+<div class="flex flex-col sm:flex-row gap-6">
+<button class="bg-primary text-white border-4 border-slate-900 px-10 py-6 text-2xl font-display shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                    Install Twelveify
+                </button>
+<button class="bg-white dark:bg-slate-800 border-4 border-slate-900 px-10 py-6 text-2xl font-display shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all rotate-1">
+                    View Demo
+                </button>
+</div>
+<div class="flex items-center gap-6 font-punk text-sm">
+<div class="flex -space-x-4">
+<img class="size-12 border-2 border-slate-900 grayscale hover:grayscale-0 transition-all rotate-3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHdfz6yXgghgGUlHRoxtjlI7H1zqYtE68woQo341WPtpt5w3Z4LpMcieZhM0Vax__Syoc2amryPpx0CzqoLEgMjQN5ae0og72m4j7B3M3NMLanpJ8U7EN27jmreOInEJSM28-dR-dFS8jhI-TRcRMxz-pLNvR0QmLranjtEmiorIhiUUs0H4ZheJrGVXLo-mNekjGJmvXsHYuaC_EGLHMTZMKcnadRvb4L708sLy1KMqUF1TWuaC4P8_JzuLLdr1PXAEdi5yShNPM6"/>
+<img class="size-12 border-2 border-slate-900 grayscale hover:grayscale-0 transition-all -rotate-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVzOmDNfoBX-u7yIBd8CqdENskzsWnMccbOXRi0N-Svbjnns5jkQQTRB1frrW-DSwC62Jv0Xo1Bs-gocPUrCmqubXcIV2eRJaKjm2tOy9Z-NBvKgMJ_e33HNUNhkgKnwHKBwJt53y3_6k6aLlsbestnnJZoVTUjLXcc67ont9jv2khs7f2388EyMrmltgS5DSuldPNJEyFqzXApG7Ljb4OfL6QVlscmHnxFOi8RLaRumlW2rpCZRpNwiFfqXava8Cd0y8ZXKjjkbSy"/>
+<img class="size-12 border-2 border-slate-900 grayscale hover:grayscale-0 transition-all rotate-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKsRY9YbpkalEn9UtugxW3LAOJV9rqvvzTBtHRZTQtDsFMlEFHibFWRw82U3CjskAU0FSeFUv6ZPzWV2M2Knab5rqykDvKNubUteqMGLjXUpl1lDI92XZZrx96J6K1Pt2A6JHfioQh4SAaEfQqicNZzU1Ot6mN2RjoVKLGVsSA4UzZhV7CG6G2vTGbo-eM4El4fh2dQQ0SOv-TXXa6-FyuIBBL6rkdAPvQ9TMso6DfKKT2ccGHjK9xB-ukfXp9p8g2EXcfNeVZPqiw"/>
+</div>
+<span class="bg-slate-900 text-white px-2 py-1">JOINED BY 10K+ DAILY READERS</span>
+</div>
+</div>
+<div class="relative lg:mt-0 mt-20">
+<div class="zine-box bg-white dark:bg-slate-900 p-2 transform rotate-3 scale-105">
+<div class="border-b-4 border-slate-900 px-4 py-3 flex items-center justify-between bg-slate-100 dark:bg-slate-800">
+<div class="flex gap-2">
+<div class="size-4 border-2 border-slate-900 bg-red-500"></div>
+<div class="size-4 border-2 border-slate-900 bg-yellow-400"></div>
+<div class="size-4 border-2 border-slate-900 bg-green-500"></div>
+</div>
+<div class="font-punk text-xs font-bold text-slate-500">WIKIPEDIA.RUIN/QUANTUM</div>
+</div>
+<div class="p-8 space-y-6">
+<div class="h-6 w-1/2 bg-slate-200 dark:bg-slate-700"></div>
+<div class="space-y-3">
+<div class="h-4 w-full bg-slate-100 dark:bg-slate-800"></div>
+<div class="h-4 w-full bg-slate-100 dark:bg-slate-800"></div>
+<div class="relative bg-primary text-white p-4 font-punk rotate-[-1deg] border-2 border-slate-900">
+                            The wave function is a mathematical description of the quantum state of an isolated quantum system.
+                            <div class="absolute -bottom-8 -right-4 bg-yellow-300 text-slate-900 p-2 border-2 border-slate-900 flex items-center gap-2 rotate-6">
+<span class="material-symbols-outlined text-lg">auto_fix_high</span>
+<span class="text-xs font-black">SIMPLIFY THIS MESS</span>
+</div>
+</div>
+<div class="h-4 w-3/4 bg-slate-100 dark:bg-slate-800"></div>
+</div>
+</div>
+</div>
+<div class="absolute -top-4 left-1/2 w-24 h-8 bg-white/40 backdrop-blur-sm border-x border-slate-900/10 rotate-12 -z-10"></div>
+</div>
+</div>
+</header>
+<section class="py-32 relative bg-white dark:bg-background-dark border-y-8 border-slate-900 dark:border-white" id="how-it-works">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="mb-24 relative">
+<h2 class="text-5xl lg:text-6xl text-slate-900 dark:text-white mb-6">The "Don't Look Dumb" Workflow</h2>
+<p class="font-punk text-lg text-slate-500 max-w-xl bg-yellow-100 dark:bg-slate-800 px-4 py-2 inline-block rotate-1">
+                No apps to open, no tabs to switch. Twelveify lives within your workflow.
+            </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-16 relative">
+<div class="zine-box p-8 rotate-[-2deg] bg-white dark:bg-slate-900 hover:rotate-0 transition-transform">
+<div class="text-4xl font-display text-primary mb-4 underline decoration-slate-900 decoration-4">01.</div>
+<h3 class="text-2xl mb-4">Highlight</h3>
+<p class="font-punk leading-relaxed text-slate-600 dark:text-slate-400">
+                    Highlight the word salad. You know the one. That sentence that makes your brain itch.
+                </p>
+<span class="material-symbols-outlined absolute -top-6 -right-6 text-6xl text-slate-200 dark:text-slate-800 -z-10 rotate-12">draw</span>
+</div>
+<div class="zine-box p-8 rotate-[3deg] bg-white dark:bg-slate-900 hover:rotate-0 transition-transform translate-y-4">
+<div class="text-4xl font-display text-primary mb-4 underline decoration-slate-900 decoration-4">02.</div>
+<h3 class="text-2xl mb-4">Click Wand</h3>
+<p class="font-punk leading-relaxed text-slate-600 dark:text-slate-400">
+                    Tap the magic wand. Our AI starts sweating so you don't have to.
+                </p>
+<span class="material-symbols-outlined absolute -bottom-6 -left-6 text-6xl text-slate-200 dark:text-slate-800 -z-10 -rotate-12">auto_fix_high</span>
+</div>
+<div class="zine-box p-8 rotate-[-1deg] bg-white dark:bg-slate-900 hover:rotate-0 transition-transform">
+<div class="text-4xl font-display text-primary mb-4 underline decoration-slate-900 decoration-4">03.</div>
+<h3 class="text-2xl mb-4">Read Simplified</h3>
+<p class="font-punk leading-relaxed text-slate-600 dark:text-slate-400">
+                    Read like a normal person. The jargon disappears, replaced by words you actually use.
+                </p>
+</div>
+</div>
+</div>
+</section>
+<section class="py-32 bg-slate-100 dark:bg-slate-950" id="try-it">
+<div class="max-w-4xl mx-auto px-6">
+<div class="zine-box bg-white dark:bg-slate-900 p-12 relative overflow-hidden">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+<div class="relative">
+<h2 class="text-4xl mb-4 -rotate-3">Is this even English?</h2>
+<p class="font-punk text-slate-500 italic uppercase">Highlight the text below and see the magic.</p>
+</div>
+<button class="bg-primary text-white border-2 border-slate-900 px-8 py-4 font-display text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-900 transition-colors rotate-2">
+<span class="material-symbols-outlined align-middle mr-2">auto_fix_high</span> FIX THIS MESS
+                </button>
+</div>
+<div class="p-10 border-4 border-dashed border-slate-300 dark:border-slate-700 bg-background-light dark:bg-slate-800/50 rotate-1">
+<p class="text-2xl lg:text-3xl font-punk leading-loose text-slate-800 dark:text-slate-200 selection:bg-primary/30">
+                    The <span class="bg-primary/20 px-1 border-b-4 border-primary">superfluous</span> utilization of <span class="bg-primary/20 px-1 border-b-4 border-primary">sesquipedalian</span> verbiage inevitably precipitates a profound state of <span class="bg-primary/20 px-1 border-b-4 border-primary">intellectual vertigo</span> for the uninitiated observer.
+                </p>
+</div>
+<div class="mt-12 flex flex-wrap items-center justify-center gap-10 font-punk font-bold uppercase text-sm">
+<div class="flex items-center gap-3 text-slate-400 border-2 border-slate-200 px-4 py-1 rotate-[-2deg]">
+<div class="size-3 bg-slate-300"></div> COMPLEX ORIGINAL
+                </div>
+<span class="material-symbols-outlined text-slate-300 scale-150">trending_flat</span>
+<div class="flex items-center gap-3 text-primary border-2 border-primary px-4 py-1 rotate-[2deg]">
+<div class="size-3 bg-primary"></div> SIMPLIFIED VERSION
+                </div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-32 bg-white dark:bg-background-dark border-t-8 border-slate-900" id="features">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+<div class="space-y-12">
+<h2 class="text-5xl lg:text-6xl leading-tight">Designed to feel like it's <span class="text-primary underline decoration-slate-900 decoration-8 underline-offset-8">not even there</span>.</h2>
+<p class="font-punk text-xl text-slate-600 dark:text-slate-400 max-w-lg border-r-4 border-slate-200 pr-6">
+                    Twelveify isn't just a tool; it's an upgrade for your entire web browsing experience. We focused on the details that make software disappear.
+                </p>
+<div class="space-y-8 pt-6">
+<div class="flex gap-6 items-start group">
+<div class="bg-slate-900 text-white p-3 rotate-12 group-hover:rotate-0 transition-transform">
+<span class="material-symbols-outlined text-2xl">swap_horiz</span>
+</div>
+<div>
+<h4 class="text-2xl font-display mb-2">In-page Replacement</h4>
+<p class="font-punk text-slate-500">Magic, basically. It swaps the text right where it sits. No new tabs, no distractions, no headache.</p>
+</div>
+</div>
+<div class="flex gap-6 items-start group">
+<div class="bg-primary text-white p-3 -rotate-6 group-hover:rotate-0 transition-transform">
+<span class="material-symbols-outlined text-2xl">shield_with_heart</span>
+</div>
+<div>
+<h4 class="text-2xl font-display mb-2">Privacy by Design</h4>
+<p class="font-punk text-slate-500">We're not creepy. We don't want your data, your history, or your soul. We just want to fix your reading list.</p>
+</div>
+</div>
+<div class="flex gap-6 items-start group">
+<div class="bg-slate-900 text-white p-3 rotate-3 group-hover:rotate-0 transition-transform">
+<span class="material-symbols-outlined text-2xl">palette</span>
+</div>
+<div>
+<h4 class="text-2xl font-display mb-2">Native Feel</h4>
+<p class="font-punk text-slate-500">Stays in its lane. It matches the site's style so perfectly you'll forget we're even there.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative group mt-16 lg:mt-0">
+<div class="absolute -top-12 -left-12 text-9xl font-display opacity-10 pointer-events-none select-none -rotate-12 dark:text-white">SHH!</div>
+<div class="zine-box p-2 bg-white rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
+<img alt="Twelveify features illustration" class="grayscale hover:grayscale-0 transition-all duration-700 border-2 border-slate-900" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUS3dfDMHEbczrLinBMByPMauW_ngaN9_6SoQVnAsd_lx04xRN3ZSGOOT08nmr7tEJgjSCSSNscX8324clrUiFIC7IBp0Pj0G_9EZUJlVmSpG-9o2i9wKYYT8vWOEz8D4y0yfc39sNgKhsPCRFKnNoTlX_PqLAkxg-FWZoCaGab5mtEM_0PeQ9UDkiuKtlZQegCtUcImd6dniICrUNplHhMeMWIVeP9Tfvgs_bQezjruXmQ-sGNQN2mW3vgPwmGUMdmrJWKSP0dw4O"/>
+</div>
+<div class="absolute -bottom-10 -right-6 bg-yellow-300 border-2 border-slate-900 p-4 font-display text-2xl rotate-6 shadow-xl">
+                    CLEAN AS HELL
+                </div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-32 px-6">
+<div class="max-w-7xl mx-auto">
+<div class="bg-primary border-8 border-slate-900 p-12 lg:p-24 text-center relative paper-tear">
+<div class="relative z-10 space-y-12">
+<h2 class="text-5xl lg:text-7xl text-white max-w-3xl mx-auto leading-[0.9] -rotate-1">
+                    Ready to stop feeling like a toddler? Join the waitlist.
+                </h2>
+<div class="font-punk bg-white text-slate-900 px-6 py-2 inline-block font-black text-lg rotate-2 uppercase tracking-widest border-2 border-slate-900">
+                    Free to use — Forever
+                </div>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-8">
+<button class="bg-slate-900 text-white px-12 py-6 text-3xl font-display border-4 border-white shadow-[10px_10px_0px_0px_rgba(255,255,255,0.3)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                        ADD TO CHROME
+                    </button>
+<button class="bg-transparent border-4 border-white text-white px-12 py-6 text-3xl font-display hover:bg-white hover:text-primary transition-all rotate-[-1deg]">
+                        LEARN MORE
+                    </button>
+</div>
+</div>
+<div class="absolute top-10 right-10 opacity-20 text-9xl font-display text-white select-none -rotate-45">!</div>
+<div class="absolute bottom-10 left-10 opacity-20 text-8xl font-display text-white select-none rotate-12">?</div>
+</div>
+</div>
+</section>
+<footer class="bg-slate-900 text-white py-24 border-t-8 border-primary overflow-hidden">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="flex flex-col md:flex-row justify-between gap-16 mb-20 relative">
+<div class="space-y-8 max-w-md">
+<div class="flex items-center gap-4">
+<div class="bg-primary p-2 border-2 border-white rotate-[-10deg]">
+<span class="material-symbols-outlined text-white text-3xl">pedal_bike</span>
+</div>
+<span class="text-4xl font-display uppercase tracking-tighter">Twelveify</span>
+</div>
+<p class="font-punk text-slate-400 text-lg leading-relaxed italic border-l-2 border-primary pl-4">
+                    Making the internet readable for everyone, one sentence at a time. The truly invisible browser assistant.
+                </p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-16 relative font-punk font-bold uppercase text-sm">
+<div class="space-y-6">
+<h5 class="text-primary text-lg font-display">Product</h5>
+<ul class="space-y-4">
+<li><a class="hover:text-primary transition-colors hover:underline" href="#">Extension</a></li>
+<li><a class="hover:text-primary transition-colors hover:underline" href="#">Enterprise</a></li>
+<li><a class="hover:text-primary transition-colors hover:underline" href="#">Pricing</a></li>
+</ul>
+</div>
+<div class="space-y-6">
+<h5 class="text-primary text-lg font-display">Resources</h5>
+<ul class="space-y-4">
+<li><a class="hover:text-primary transition-colors hover:underline" href="#">Documentation</a></li>
+<li><a class="hover:text-primary transition-colors hover:underline" href="#">API</a></li>
+<li><a class="hover:text-primary transition-colors hover:underline" href="#">Changelog</a></li>
+</ul>
+</div>
+<div class="space-y-6">
+<h5 class="text-primary text-lg font-display">Legal</h5>
+<ul class="space-y-4">
+<li><a class="hover:text-primary transition-colors hover:underline" href="#">Privacy</a></li>
+<li><a class="hover:text-primary transition-colors hover:underline" href="#">Terms</a></li>
+<li><a class="hover:text-primary transition-colors hover:underline" href="#">Security</a></li>
+</ul>
+</div>
+</div>
+<div class="absolute -right-20 -top-10 text-[10rem] font-display text-white/5 select-none rotate-12">ZINE</div>
+</div>
+<div class="pt-12 border-t-4 border-slate-800 flex flex-col md:flex-row justify-between items-center gap-8 font-punk text-xs uppercase tracking-widest text-slate-500">
+<p>© 2024 Twelveify Inc. — Deal with it.</p>
+<div class="flex gap-10">
+<a class="hover:text-primary transition-colors underline decoration-2 underline-offset-4" href="#">Twitter</a>
+<a class="hover:text-primary transition-colors underline decoration-2 underline-offset-4" href="#">GitHub</a>
+<a class="hover:text-primary transition-colors underline decoration-2 underline-offset-4" href="#">Discord</a>
+</div>
+</div>
+</div>
+</footer>
+
+</body></html>
