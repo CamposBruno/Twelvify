@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import Icon from './Icon';
 
 export default function Playground() {
   const [phase, setPhase] = useState<'idle' | 'loading' | 'typing' | 'done'>('idle');
@@ -132,9 +133,10 @@ export default function Playground() {
                   : 'bg-primary hover:bg-slate-900 rotate-2'
               } border-2 border-slate-900 px-8 py-4 font-display text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-colors text-white`}
             >
-              <span className="material-symbols-outlined align-middle mr-2">
-                {phase === 'loading' ? 'hourglass_empty' : 'auto_fix_high'}
-              </span>
+              <Icon
+                name={phase === 'loading' ? 'hourglass_empty' : 'auto_fix_high'}
+                className="inline-block align-middle mr-2 w-5 h-5"
+              />
               {phase === 'loading'
                 ? 'FIXING...'
                 : phase === 'done' || disabled
@@ -178,7 +180,7 @@ export default function Playground() {
             >
               <div className={`size-3 ${phase === 'done' ? 'bg-slate-300' : 'bg-primary'}`} /> COMPLEX ORIGINAL
             </div>
-            <span className="material-symbols-outlined text-slate-300 scale-150">trending_flat</span>
+            <Icon name="trending_flat" className="text-slate-300 w-9 h-9" />
             <div
               className={`flex items-center gap-3 border-2 px-4 py-1 rotate-[2deg] ${
                 phase === 'done'

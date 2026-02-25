@@ -1,5 +1,6 @@
 import { CHROME_STORE_URL } from '../constants'
 import { trackEvent } from '../analytics'
+import Icon from './Icon'
 
 function Nav() {
   return (
@@ -9,7 +10,7 @@ function Nav() {
         {/* Logo */}
         <div className="flex items-center gap-3">
           <div className="bg-primary p-2 border-2 border-slate-900 rotate-[-4deg]">
-            <span className="material-symbols-outlined text-white text-3xl">pedal_bike</span>
+            <Icon name="pedal_bike" className="text-white w-8 h-8" />
           </div>
           <span className="text-3xl font-display uppercase tracking-tighter text-slate-900">Twelveify</span>
         </div>

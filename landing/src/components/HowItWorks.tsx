@@ -1,3 +1,5 @@
+import Icon from './Icon'
+
 export default function HowItWorks() {
   return (
     <section
@@ -26,9 +28,7 @@ export default function HowItWorks() {
             <p className="font-punk leading-relaxed text-slate-600">
               Highlight the word salad. You know the one. That sentence that makes your brain itch.
             </p>
-            <span className="material-symbols-outlined absolute -top-6 -right-6 text-6xl text-slate-200 -z-10 rotate-12">
-              draw
-            </span>
+            <Icon name="draw" className="absolute -top-6 -right-6 w-16 h-16 text-slate-200 -z-10 rotate-12" />
           </div>
 
           {/* Card 2 — Click Wand */}
@@ -40,9 +40,7 @@ export default function HowItWorks() {
             <p className="font-punk leading-relaxed text-slate-600">
               Tap the magic wand. Our AI starts sweating so you don't have to.
             </p>
-            <span className="material-symbols-outlined absolute -bottom-6 -left-6 text-6xl text-slate-200 -z-10 -rotate-12">
-              auto_fix_high
-            </span>
+            <Icon name="auto_fix_high" className="absolute -bottom-6 -left-6 w-16 h-16 text-slate-200 -z-10 -rotate-12" />
           </div>
 
           {/* Card 3 — Read Simplified */}

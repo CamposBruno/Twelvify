@@ -1,3 +1,5 @@
+import Icon from './Icon'
+
 function Features() {
   return (
     <section id="features" className="py-32 bg-white border-t-8 border-slate-900">
@@ -23,7 +25,7 @@ function Features() {
               {/* Feature 1 — In-page Replacement */}
               <div className="flex gap-6 items-start group">
                 <div className="bg-slate-900 text-white p-3 rotate-12 group-hover:rotate-0 transition-transform">
-                  <span className="material-symbols-outlined text-2xl">swap_horiz</span>
+                  <Icon name="swap_horiz" className="w-6 h-6" />
                 </div>
                 <div>
                   <h4 className="text-2xl font-display mb-2">In-page Replacement</h4>
@@ -34,7 +36,7 @@ function Features() {
               {/* Feature 2 — Privacy by Design */}
               <div className="flex gap-6 items-start group">
                 <div className="bg-primary text-white p-3 -rotate-6 group-hover:rotate-0 transition-transform">
-                  <span className="material-symbols-outlined text-2xl">shield_with_heart</span>
+                  <Icon name="shield_with_heart" className="w-6 h-6" />
                 </div>
                 <div>
                   <h4 className="text-2xl font-display mb-2">Privacy by Design</h4>
@@ -45,7 +47,7 @@ function Features() {
               {/* Feature 3 — Native Feel */}
               <div className="flex gap-6 items-start group">
                 <div className="bg-slate-900 text-white p-3 rotate-3 group-hover:rotate-0 transition-transform">
-                  <span className="material-symbols-outlined text-2xl">palette</span>
+                  <Icon name="palette" className="w-6 h-6" />
                 </div>
                 <div>
                   <h4 className="text-2xl font-display mb-2">Native Feel</h4>
@@ -63,7 +65,7 @@ function Features() {
             </div>
             <div className="zine-box p-2 bg-white rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
               <div className="w-full h-64 bg-slate-100 border-2 border-slate-900 flex items-center justify-center">
-                <span className="material-symbols-outlined text-8xl text-slate-300">image</span>
+                <Icon name="image" className="w-24 h-24 text-slate-300" />
               </div>
             </div>
             <div className="absolute -bottom-10 -right-6 bg-yellow-300 border-2 border-slate-900 p-4 font-display text-2xl rotate-6 shadow-xl">

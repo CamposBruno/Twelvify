@@ -1,5 +1,6 @@
 import { CHROME_STORE_URL } from '../constants';
 import { trackEvent } from '../analytics';
+import Icon from './Icon';
 
 export default function Hero() {
   return (
@@ -77,7 +78,7 @@ export default function Hero() {
                   The wave function is a mathematical description of the quantum state of an
                   isolated quantum system.
                   <div className="absolute -bottom-8 -right-4 bg-yellow-300 text-slate-900 p-2 border-2 border-slate-900 flex items-center gap-2 rotate-6">
-                    <span className="material-symbols-outlined text-lg">auto_fix_high</span>
+                    <Icon name="auto_fix_high" className="w-5 h-5" />
                     <span className="text-xs font-black">SIMPLIFY THIS MESS</span>
                   </div>
                 </div>

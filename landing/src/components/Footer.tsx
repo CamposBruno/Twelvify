@@ -1,3 +1,5 @@
+import Icon from './Icon'
+
 function Footer() {
   return (
     <footer className="bg-slate-900 text-white py-24 border-t-8 border-primary overflow-hidden">
@@ -10,7 +12,7 @@ function Footer() {
           <div className="space-y-8 max-w-md">
             <div className="flex items-center gap-4">
               <div className="bg-primary p-2 border-2 border-white rotate-[-10deg]">
-                <span className="material-symbols-outlined text-white text-3xl">pedal_bike</span>
+                <Icon name="pedal_bike" className="text-white w-8 h-8" />
               </div>
               <span className="text-4xl font-display uppercase tracking-tighter">Twelveify</span>
             </div>
