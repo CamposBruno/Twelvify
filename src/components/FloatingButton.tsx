@@ -92,10 +92,10 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonPr
   const simplifyLabel = isSelectingSimplified ? getDowngradeLabel(tone) : getButtonLabel(tone);
 
   const simplifyBgColor = isLoading
-    ? '#6366f1'
+    ? '#f56060'      // Red during loading (was indigo)
     : errorState
-      ? '#f59e0b'
-      : '#6366f1';
+      ? '#f59e0b'    // Amber on error (keep amber for error states)
+      : '#f56060';   // Red default (red replaces indigo as primary)
 
   return (
     <div
@@ -131,12 +131,12 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonPr
             padding: '10px 14px',
             backgroundColor: '#10b981',
             color: '#ffffff',
-            border: 'none',
-            borderRadius: '8px',
+            border: '1px solid #059669',   // Sharp 1px border
+            borderRadius: '0px',           // Sharp rectangle
             fontSize: '14px',
             fontWeight: '600',
             cursor: 'pointer',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            boxShadow: '0 2px 3px rgba(0, 0, 0, 0.1)',  // Small shadow
             fontFamily: 'system-ui, -apple-system, sans-serif',
           }}
         >
@@ -157,12 +157,12 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonPr
             padding: '10px 16px',
             backgroundColor: simplifyBgColor,
             color: '#ffffff',
-            border: 'none',
-            borderRadius: '8px',
+            border: '1px solid rgba(0,0,0,0.12)',   // Thin sharp border
+            borderRadius: '0px',                    // Sharp rectangle
             fontSize: '14px',
             fontWeight: '600',
             cursor: isLoading ? 'not-allowed' : 'pointer',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            boxShadow: '0 2px 3px rgba(0, 0, 0, 0.1)',  // Small 2-3px shadow
             fontFamily: 'system-ui, -apple-system, sans-serif',
             opacity: isLoading ? 0.8 : 1,
             animation: isShaking ? 'twelvify-shake 0.6s ease' : undefined,
@@ -191,10 +191,19 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonPr
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
-                fill="currentColor"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 aria-hidden="true"
               >
-                <path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z" />
+                <line x1="3" y1="21" x2="21" y2="3" />
+                <path d="M21 3l-2.5 1M21 3l-1 2.5" />
+                <path d="M3 21l2.5-1M3 21l1-2.5" />
+                <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none" />
+                <circle cx="7" cy="7" r="0.8" fill="currentColor" stroke="none" />
+                <circle cx="17" cy="17" r="0.8" fill="currentColor" stroke="none" />
               </svg>
               {simplifyLabel}
             </>
