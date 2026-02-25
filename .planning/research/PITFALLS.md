@@ -1,580 +1,1038 @@
-# Pitfalls Research: AI-Powered Chrome Extension (Text Simplification)
+# Pitfalls Research: Chrome Extension UI Redesign + Production Deploy + Web Store Submission
 
-**Domain:** AI-backed text simplification Chrome extension (Manifest V3)
-**Researched:** 2026-02-20
-**Confidence:** HIGH (Chrome MV3 patterns verified via official docs; AI integration pitfalls cross-validated with multiple sources; text handling edge cases documented in community forums and official Chrome docs)
-
----
-
-## Critical Pitfalls
-
-### Pitfall 1: Service Worker Lifetime Termination Eating Global State
-
-**What goes wrong:**
-Service workers are ephemeral — they terminate when idle (often after ~30 seconds) to conserve memory. Developers rely on global variables to store preferences, pending requests, or user state, only to discover those variables are lost when the service worker restarts. On the next user action, the extension has no memory of what happened before, causing unpredictable behavior or lost context.
-
-**Why it happens:**
-Developers migrating from Manifest V2 (persistent background pages) unconsciously assume a persistent runtime. Service workers feel like they have the same lifetime guarantees. Without explicit state management, global variables appear to work during initial testing but fail when the service worker cycle is interrupted.
-
-**How to avoid:**
-- Never rely on global variables for state that must persist across service worker lifecycle boundaries
-- Treat `chrome.storage.local` as the single source of truth for all application state (user preferences, pending simplification requests, feature adoption analytics)
-- Implement a state initialization function that runs at service worker startup and loads from `chrome.storage.local`
-- For time-sensitive data (e.g., "is a simplification currently in progress?"), use storage with a TTL pattern (store a timestamp, check if stale on load)
-- Test by manually terminating the service worker in DevTools (Service Workers pane) and verifying that restarting the extension re-initializes correctly
-
-**Warning signs:**
-- State appears to work during development but breaks after the extension sits unused
-- Behavior is inconsistent when switching between tabs
-- User preferences revert unexpectedly
-- Analytics data sporadic or missing entirely
-
-**Phase to address:**
-Phase 1 (Core Extension Architecture) — must establish correct storage architecture before any feature development.
+**Domain:** UI redesign + Render backend deployment + Chrome Web Store submission for Chrome extension
+**Researched:** 2026-02-25
+**Confidence:** HIGH (official Chrome docs, Render documentation, Web Store policies verified; industry practice patterns confirmed across multiple sources)
 
 ---
 
-### Pitfall 2: Event Listener Registration Inside Async Code Never Fires
+## Critical Pitfalls for v1.2 Redesign + Ship
+
+### Pitfall 1: Content Script CSS Leaking Into or Being Overridden by Host Page Styles
 
 **What goes wrong:**
-Developers register event listeners inside promise `.then()` blocks or `async` function bodies, expecting them to be available when events fire. When the service worker restarts (which happens _after_ an event fires), those conditionally-registered listeners don't exist yet, so the event is missed. The extension becomes unresponsive to user interactions.
+The extension redesigns the UI with custom fonts (Permanent Marker, Special Elite) and brand colors. The popup styling ships to production. But when the extension is used on certain websites with aggressive CSS resets or high-specificity styles, the extension's fonts fail to load, colors get overridden, or the layout breaks entirely. On Twitter, Gmail, or news sites with their own design systems, the simplified text styling becomes unreadable or invisible.
 
 **Why it happens:**
-Developers assume all code runs synchronously at startup. They write defensive code like:
-```javascript
-chrome.runtime.onMessage.addListener(async (msg) => {
-  const config = await chrome.storage.local.get('userPrefs');
-  // handle message with config
-});
-```
-This works until the service worker restarts — then on the next message, no listener exists because the code after `await` never runs.
+CSS specificity battles: the page's stylesheet loads before or after the content script injects styles, and one wins unpredictably. Font-face declarations use `@@extension_id` URLs that may fail if CSP blocks them. The developer tested on clean, simple websites (news articles) but not on complex SPA sites with shadow DOM and CSS-in-JS libraries. Global CSS classes used in the extension (e.g., `.simplified-text`, `.underline`) collide with page classes.
 
 **How to avoid:**
-- Register ALL event listeners at the top level of your service worker script, before any async operations
-- Move initialization logic into a separate async function that doesn't block listener registration
-- Pattern: Register listeners first, then call an async init function that populates state:
-```javascript
-// At top level
-chrome.runtime.onMessage.addListener(handleMessage);
-chrome.action.onClicked.addListener(handleIconClick);
+- **Namespace all CSS:** Use highly specific class names prefixed with your extension ID:
+  ```css
+  .twelvify-simplified-text { /* not .simplified-text */ }
+  .twelvify-styled-font { /* not .font */ }
+  ```
+- **Use Shadow DOM for complete isolation:**
+  ```javascript
+  const shadowRoot = document.createElement('div');
+  shadowRoot.attachShadow({ mode: 'open' });
+  // Inject styles and content into shadowRoot, not document.body
+  ```
+  This creates a new CSS scope where page styles cannot bleed in or be overridden.
 
-// Then async init runs after listeners are registered
-initExtension();
+- **For inline replacements (not shadow DOM), use inline styles with !important sparingly:**
+  ```javascript
+  element.style.cssText = `
+    font-family: 'Special Elite', serif !important;
+    color: #your-brand-color !important;
+  `;
+  ```
+  Only use `!important` if the page is known to have high-specificity competing styles.
 
-async function initExtension() {
-  const config = await chrome.storage.local.get('userPrefs');
-  // Store in storage, not global variables
-}
-```
-- For the content script messaging the backend, ensure the content script doesn't assume the service worker has state from previous messages — each message should be self-contained or reference stored state
-
-**Warning signs:**
-- Extension works fine during normal use but stops responding after a few minutes of inactivity
-- Second or third invocation of the extension fails silently
-- DevTools shows no errors, but the extension doesn't react to user clicks
-- Message passing between content script and service worker becomes unreliable
-
-**Phase to address:**
-Phase 1 (Core Extension Architecture) — establish the listener registration pattern early.
-
----
-
-### Pitfall 3: setTimeout/setInterval Silently Cancelled on Service Worker Termination
-
-**What goes wrong:**
-A developer uses `setTimeout()` to debounce multiple text simplification requests or retry a failed API call after 5 seconds. When the service worker terminates (which happens unpredictably), the timer is cancelled without warning. The retry never happens; the debounce stops working.
-
-**Why it happens:**
-Developers expect timers to behave like they do in persistent background pages or regular JavaScript. Service workers terminate timers when they shut down to prevent memory leaks. No error is thrown — the callback just never fires.
-
-**How to avoid:**
-- Never use `setTimeout()` or `setInterval()` in the service worker for operations that must survive termination
-- Replace with Chrome's Alarms API (`chrome.alarms`), which persists across service worker restarts
-- Example: Instead of `setTimeout(() => retryRequest(), 5000)`, use:
-```javascript
-chrome.alarms.create('retrySimplification', { delayInMinutes: 0.083 }); // ~5 seconds
-chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === 'retrySimplification') {
-    retryRequest();
+- **Load custom fonts from extension package, not external CDN:**
+  ```css
+  @font-face {
+    font-family: 'Permanent Marker';
+    src: url('chrome-extension://__MSG_@@extension_id__/fonts/permanent-marker.ttf');
   }
-});
-```
-- Register alarm listeners at the top level, alongside message listeners
-- For debouncing user actions, consider debouncing on the content script side instead (before sending the message to the service worker)
+  ```
+  Declare fonts as `web_accessible_resources` in manifest.json to avoid CSP blocking.
+
+- **Test on high-CSS-complexity sites:**
+  - Gmail (heavy CSS-in-JS, shadow DOM)
+  - Twitter/X (complex DOM, TailwindCSS)
+  - GitHub (dark mode, CSS modules)
+  - Google Docs (contenteditable with complex styling)
+
+  Verify that:
+  - Fonts actually load (check DevTools Network tab)
+  - Colors match your design on light AND dark mode
+  - Text remains readable with page's own styles active
+  - No FOUC (flash of unstyled content)
 
 **Warning signs:**
-- Retry logic never triggers
-- Debounced requests occasionally get sent multiple times unexpectedly
-- Delayed operations (like marking analytics as sent) sometimes don't complete
-- Rate limiting mitigation timers fail, causing request storms
+- Font-face fails to load in DevTools (404 or CSP error)
+- On certain websites, simplified text is invisible or unreadable
+- Users report styles work on some sites but not others (e.g., "works on Medium but not LinkedIn")
+- Text color or font family changes unpredictably after page reflows or SPA navigation
+- Dark mode sites show unreadable light text if you only tested light mode
 
 **Phase to address:**
-Phase 1 (Core Extension Architecture) → Phase 2 (Error Handling & Resilience).
+Phase 1 (UI Redesign) — must test CSS isolation before shipping redesign to Web Store.
 
 ---
 
-### Pitfall 4: CSP Blocks Fetch to Backend, or Incorrect CSP Breaks the Extension
+### Pitfall 2: Custom Fonts Fail to Load Due to CSP or Missing web_accessible_resources
 
 **What goes wrong:**
-A developer writes the fetch request to the backend API but forgets to add the API domain to the CSP's `connect-src` directive (or `default-src`). Every fetch silently fails because CSP blocks it. The extension appears broken — no errors in the service worker console, but the simplification never returns.
+The extension redesign includes custom fonts (Permanent Marker, Special Elite) embedded as .ttf or .woff files in the extension package. The developer adds `@font-face` declarations but forgets to list the font files in `web_accessible_resources` in the manifest. When users install the extension, the fonts fail to load silently—no error message, just fallback system fonts. The design doesn't match the mockups.
 
-Alternatively, a developer over-permits CSP to debug issues (`connect-src *`) and ships it to production, passing security review by accident, then someone exploits an XSS vulnerability to make unauthorized API calls.
+Alternatively, the manifest CSP is too restrictive and blocks font requests. Or the font file paths are incorrect in the CSS, and the browser can't find them.
 
 **Why it happens:**
-CSP is strict in Manifest V3 and requires explicit allowlisting of every external domain. Developers don't realize CSP rejection is silent when using `fetch()` — it fails with no console warning. The habit from Manifest V2 of using looser CSP carries over.
+Manifest V3 requires explicit declaration of resources that are accessible to content scripts and the page. Developers assume all files in the extension package are accessible by default (true in MV2, not in MV3). They don't check the Network tab in DevTools to verify the font loaded, so the bug isn't caught during development.
 
 **How to avoid:**
-- In `manifest.json`, explicitly list the backend API domain in CSP:
+- In `manifest.json`, add fonts to `web_accessible_resources`:
+  ```json
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "fonts/permanent-marker.ttf",
+        "fonts/special-elite.woff2"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+  ```
+  (Scoping to `<all_urls>` is safe because fonts are not sensitive data; they're CSS resources.)
+
+- In content script CSS, use absolute paths:
+  ```css
+  @font-face {
+    font-family: 'Permanent Marker';
+    src: url(chrome-extension://__MSG_@@extension_id__/fonts/permanent-marker.ttf);
+  }
+  ```
+
+- Alternatively, base64-encode small fonts directly in CSS (works for all browsers):
+  ```css
+  @font-face {
+    font-family: 'Permanent Marker';
+    src: url(data:font/ttf;base64,AAABDQEAEA...);
+  }
+  ```
+  (Use a tool like `woff2base64` to generate.)
+
+- Verify fonts load:
+  1. Open extension in DevTools
+  2. Inject content script with font styles
+  3. Check Network tab for font requests (should be 200, not 404 or CSP block)
+  4. On a real website, check Computed Styles to confirm font-family is applied
+  5. Test on multiple sites; fonts should load consistently
+
+- Document font licensing:
+  - Permanent Marker and Special Elite are Google Fonts (open source, CC0 license)
+  - Include license attribution in your extension description or privacy policy if required
+
+**Warning signs:**
+- Fonts don't appear in DevTools Network tab (likely not in `web_accessible_resources`)
+- Network tab shows 404 for font URLs
+- CSP error in DevTools console: "Refused to load font because it violates Content Security Policy"
+- Font displays correctly in development (when running unpacked) but fails after Chrome Web Store install
+- Users report text is always in default serif/sans-serif, never the custom font
+
+**Phase to address:**
+Phase 1 (UI Redesign) — verify fonts in `web_accessible_resources` and load correctly before submitting to Web Store.
+
+---
+
+### Pitfall 3: Render Free Tier Spins Down After 15 Minutes, Breaking SSE Connections Mid-Simplification
+
+**What goes wrong:**
+The backend is deployed to Render free tier to save costs. Users start a simplification request, and if the response takes more than 15 minutes to arrive (unlikely but possible during high load or slow API responses), OR if the user's browser is left idle for >15 minutes and tries to make a new request, the Render service is spinning down due to inactivity, and a fresh request triggers a cold start. The cold start adds 5-30 seconds of latency.
+
+More critically: If an SSE stream has been open for >15 minutes without activity (no new events sent), Render may close the connection, dropping the client mid-stream. The user sees a spinner forever, then an error.
+
+**Why it happens:**
+Render's free tier automatically suspends services after 15 minutes of no incoming requests to conserve resources. When a request arrives, the service wakes up (cold start). SSE connections are long-lived (intentionally kept open for streaming data), so they naturally go idle between events. Render treats a silent SSE stream as "inactive" and closes the connection or the entire service instance.
+
+The developer didn't realize that "no activity" doesn't mean "no requests"—it means no *new* requests. A single long-lived SSE stream counts as one request, and if no *new* request arrives, the service is eligible for shutdown.
+
+**How to avoid:**
+
+**For production backend use Render Starter plan ($7/mo) or Standard plan:**
+- Render Standard plans never spin down
+- Starter plans have a slightly longer inactivity timeout but are reliable for moderate traffic
+- Cost is justified; free tier is not production-ready for stateful services like SSE
+
+**If free tier must be used (for development/testing):**
+1. Implement keep-alive mechanism on the SSE stream:
+   ```javascript
+   // Backend (Express)
+   app.get('/api/simplify', (req, res) => {
+     res.setHeader('Content-Type', 'text/event-stream');
+     res.setHeader('Cache-Control', 'no-cache');
+     res.setHeader('Connection', 'keep-alive');
+
+     // Send a keep-alive comment every 30 seconds
+     const keepAliveInterval = setInterval(() => {
+       res.write(': keep-alive\n\n');
+     }, 30000);
+
+     // Actual simplification logic...
+     // After stream ends, clear interval
+     req.on('close', () => clearInterval(keepAliveInterval));
+   });
+   ```
+
+2. Configure Node.js keep-alive timeouts:
+   ```javascript
+   const server = app.listen(3000);
+   server.keepAliveTimeout = 60000; // 60 seconds
+   server.headersTimeout = 65000; // 65 seconds, slightly longer than keepAliveTimeout
+   ```
+
+3. On the client (extension), set a timeout per request:
+   ```javascript
+   const timeoutMs = 120000; // 2 minute max per simplification
+   const timeoutHandle = setTimeout(() => {
+     abortController.abort();
+     showError('Simplification took too long. Try again.');
+   }, timeoutMs);
+   ```
+
+4. For backend warm-up (keeping it alive), use:
+   - **Uptime Robot** (free plan: ping every 5 minutes)
+   - **GitHub Actions** cron job (free for public repos)
+   - **EasyCron** (free tier available)
+
+   These send a dummy request every 5 minutes to keep the service warm.
+
+**Decision:** For v1.2 production deploy, recommend Starter plan ($7/mo) instead of free. The cost is negligible, and reliability is guaranteed.
+
+**Warning signs:**
+- Users report that simplification "hangs" sometimes, especially after app sits idle
+- Render Metrics tab shows "Cold Start Duration" spikes of 5-30+ seconds
+- SSE connections close unexpectedly after 10-15 minutes of inactivity
+- Users see spinner for 30+ seconds before simplification arrives
+- Error logs show requests arriving after a gap of >15 minutes always fail the first time
+
+**Phase to address:**
+Phase 2 (Backend Production Deploy) — configure Render plan and keep-alive before production launch. This is critical.
+
+---
+
+### Pitfall 4: WebSocket/SSE Keep-Alive Timeout Kills Long Simplifications Mid-Stream
+
+**What goes wrong:**
+A user selects a large block of text (e.g., a full article, 5000+ words). The simplification request is sent to the backend. The Express server opens an SSE stream and starts writing the simplified text word-by-word. Midway through (say, after 40 seconds), the connection times out because:
+1. The intermediate proxy/firewall on the user's network has a 60-second idle timeout
+2. Express's default keep-alive timeout is 5 seconds
+3. The client's fetch request times out at 30 seconds
+
+The simplified text stops arriving, the stream closes abruptly, and the user sees an incomplete result.
+
+**Why it happens:**
+SSE is a long-lived HTTP connection that stays open while the server sends data. If the server doesn't send data frequently enough, intermediary proxies, firewalls, or the operating system assume the connection is dead and close it. By default, Express's `keepAliveTimeout` is 5 seconds, so any SSE stream that pauses for >5 seconds triggers a disconnect.
+
+The developer didn't configure keep-alive parameters or test with large text selections that take >30 seconds to simplify.
+
+**How to avoid:**
+- Configure Node.js/Express keep-alive explicitly:
+  ```javascript
+  const server = app.listen(3000);
+
+  // Increase keep-alive from default 5s to 120s (2 minutes)
+  server.keepAliveTimeout = 120000;
+
+  // Set headersTimeout to slightly longer than keepAliveTimeout
+  // This prevents "Timeout awaiting 'headers'" errors
+  server.headersTimeout = 125000;
+  ```
+
+- Implement a keep-alive comment in SSE streams:
+  ```javascript
+  app.get('/api/simplify-stream', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    // Send keep-alive comment every 20 seconds if no data is being sent
+    let keepAliveTimer;
+    const resetKeepAlive = () => {
+      clearTimeout(keepAliveTimer);
+      keepAliveTimer = setTimeout(() => {
+        res.write(': keep-alive\n\n');
+        resetKeepAlive(); // Reset timer
+      }, 20000);
+    };
+
+    // Start keep-alive timer
+    resetKeepAlive();
+
+    // When data is sent, reset the timer
+    const sendEvent = (eventName, data) => {
+      res.write(`event: ${eventName}\ndata: ${JSON.stringify(data)}\n\n`);
+      resetKeepAlive();
+    };
+
+    // Example: stream simplified text
+    (async () => {
+      const stream = await openaiStream(text); // Pseudo-code
+      for await (const chunk of stream) {
+        sendEvent('chunk', { text: chunk });
+      }
+      sendEvent('done', {});
+      clearTimeout(keepAliveTimer);
+      res.end();
+    })();
+  });
+  ```
+
+- On the client, set realistic timeouts:
+  ```javascript
+  const maxSimplifyTimeoutMs = 120000; // 2 minute max for very large text
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), maxSimplifyTimeoutMs);
+
+  try {
+    const response = await fetch(backendUrl, {
+      signal: controller.signal,
+      // ...
+    });
+    // Handle SSE stream
+  } catch (e) {
+    if (e.name === 'AbortError') {
+      showError('Simplification took too long.');
+    }
+  } finally {
+    clearTimeout(timeoutId);
+  }
+  ```
+
+- Set a max text length to prevent excessively long simplifications:
+  ```javascript
+  const MAX_TEXT_LENGTH = 10000; // Reasonable limit
+  if (text.length > MAX_TEXT_LENGTH) {
+    showError(`Text is too long (${text.length} chars). Please select up to ${MAX_TEXT_LENGTH} characters.`);
+    return;
+  }
+  ```
+
+- Test with realistic latency:
+  - Simulate 50ms, 200ms, 500ms, 1000ms latencies
+  - Test with large text selections (5KB, 10KB)
+  - Verify stream doesn't disconnect mid-transmission
+  - Monitor keep-alive comments in browser DevTools Network tab
+
+**Warning signs:**
+- Simplification "hangs" when text is large (>2000 words)
+- Users see partial simplified text, then connection drops
+- "Timeout" errors in console after 30-60 seconds for large requests
+- Browser shows RST (reset) packets in Network tab for SSE stream
+- Keep-alive comments never appear in SSE stream (keep-alive not configured)
+
+**Phase to address:**
+Phase 2 (Backend Production Deploy) — test with realistic text sizes and latencies; configure keep-alive before production.
+
+---
+
+### Pitfall 5: Localhost URLs Still in Production Build, Causing Web Store Rejection
+
+**What goes wrong:**
+During development, the extension's manifest or service worker hardcodes the backend URL as `http://localhost:3001/api`. The developer updates this to the production Render URL in some places but misses others. The extension is submitted to the Chrome Web Store with a mix of localhost and production URLs. Or, the manifest has a conditional that still references localhost:
+
+```javascript
+// In service worker
+const API_URL = process.env.NODE_ENV === 'development'
+  ? 'http://localhost:3001'
+  : 'https://backend.render.com';
+```
+
+But `process.env.NODE_ENV` is never set in the production build, so it defaults to `development` and tries to hit localhost. Google's automated review catches the localhost URL in the manifest and rejects the submission.
+
+**Why it happens:**
+The developer didn't do a final build verification. They assume build tools (Vite, WXT) will correctly inject the production URL via environment variables. Or they have multiple build targets (dev, staging, prod) but forgot to test the actual production build before submission. The manifest.json is never manually reviewed before Web Store submission.
+
+**How to avoid:**
+- **Set environment variables in build config:**
+  ```javascript
+  // vite.config.ts or wxt.config.ts
+  export default defineConfig({
+    define: {
+      __API_URL__: JSON.stringify(
+        process.env.API_URL || 'https://backend.render.com'
+      ),
+    },
+  });
+  ```
+
+- **Use the injected variable in code (not hardcoded):**
+  ```javascript
+  const API_URL = __API_URL__; // From build-time injection
+  ```
+
+- **Before Web Store submission, verify the production build:**
+  ```bash
+  # Build for production
+  API_URL=https://backend.render.com npm run build
+
+  # Unpack the built extension and inspect manifest.json
+  unzip dist/extension.zip
+  cat manifest.json | grep localhost
+  # Should output nothing (no localhost references)
+
+  # Check CSP connect-src to verify backend domain is allowed
+  grep "connect-src" manifest.json
+  # Should include the production backend domain, not localhost
+  ```
+
+- **In manifest.json, explicitly declare the backend domain in CSP:**
+  ```json
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; connect-src 'self' https://your-render-backend.com;"
+  }
+  ```
+
+- **Document the build process clearly:**
+  ```markdown
+  ## Building for Production
+
+  1. Set API_URL environment variable:
+     ```bash
+     export API_URL=https://twelveify-backend.onrender.com
+     ```
+
+  2. Build:
+     ```bash
+     npm run build
+     ```
+
+  3. Verify:
+     ```bash
+     grep -r "localhost" dist/
+     # Should output nothing
+     ```
+
+  4. Create production zip and test locally
+  5. Submit to Chrome Web Store
+  ```
+
+- **Use a CI/CD check before allowing Web Store submission:**
+  ```yaml
+  # .github/workflows/web-store-check.yml
+  - name: Verify no localhost in build
+    run: |
+      npm run build
+      if grep -r "localhost" dist/; then
+        echo "ERROR: localhost found in production build"
+        exit 1
+      fi
+  ```
+
+**Warning signs:**
+- Web Store rejection: "Extension contains references to localhost or other development URLs"
+- Manifest review shows `http://localhost:3001` in any field
+- CSP `connect-src` includes `localhost` or `127.0.0.1`
+- After install, extension tries to connect to localhost and fails silently
+- Build output contains multiple manifest.json files with different URLs
+
+**Phase to address:**
+Phase 3 (Web Store Submission) — add a pre-submission build verification step to catch this.
+
+---
+
+### Pitfall 6: Missing or Incorrect Privacy Policy Causes Web Store Rejection
+
+**What goes wrong:**
+The extension collects user data (selected text, personalization preferences) and processes it via the backend. The developer provides a privacy policy URL in the Chrome Web Store form, but:
+1. The URL is incorrect or returns 404
+2. The privacy policy doesn't actually describe what data is collected (it's generic boilerplate)
+3. No privacy policy is provided at all; developer assumed it's optional
+4. The privacy policy is provided in the description field instead of the dedicated "Privacy Policy" field
+
+Google's automated review rejects the submission with: "Privacy Policy Required" or "Privacy Policy Does Not Match Extension Functionality."
+
+**Why it happens:**
+The privacy policy is not considered a "fun" part of shipping—it's a legal/compliance requirement. Developers prioritize feature work and leave it for the end, then rush it or skip it. They don't realize that Google's review is strict about privacy policies, especially for extensions that interact with user-provided content.
+
+**How to avoid:**
+- Create a clear, specific privacy policy before submitting to Web Store:
+  ```markdown
+  # Privacy Policy - Twelveify
+
+  ## Data Collection
+
+  Twelveify does **not** store, log, or retain user text on any server. Here's what happens:
+
+  1. User selects text on a webpage
+  2. Text is sent to our backend (Render) via HTTPS
+  3. Backend sends text to OpenAI API for simplification
+  4. Simplified result is returned to extension
+  5. **Text is NOT logged, stored, or used for any other purpose**
+
+  ## Data NOT Collected
+
+  - We do **not** log the original text
+  - We do **not** log the simplified result
+  - We do **not** store browsing history
+  - We do **not** track which websites you visit (beyond connection logs)
+
+  ## Data We DO Collect (Anonymously)
+
+  - **Usage counts**: How many simplifications per user (hashed user ID, no personal info)
+  - **Feature adoption**: Which preferences users select (to improve UI)
+  - **Error rates**: HTTP status codes and error types (no user content)
+  - **Performance metrics**: Simplification latency, success rate
+
+  All data is:
+  - Anonymous (no email, username, or identifying info)
+  - Aggregated (no per-user logs)
+  - Retained for 30 days maximum, then deleted
+  - Never shared with third parties
+
+  ## Permissions Justification
+
+  - **activeTab**: Required to access selected text on the current page
+  - **storage**: Required to save user preferences (tone, depth) locally
+  - **scripting**: Required to inject the simplification button and styled result
+
+  ## Contact
+
+  For privacy questions, email: privacy@twelveify.com
+  ```
+
+- In Chrome Web Store submission form:
+  - Use the **"Privacy Policy"** field (not the description field)
+  - Ensure the URL is live and returns the actual policy (not 404 or a generic landing page)
+  - Policy must be public-facing and specific to the extension
+  - Include the privacy policy text on your website (e.g., twelvify.com/privacy)
+
+- Make the privacy policy match your actual implementation:
+  - If you're using Plausible Analytics on your website, mention it in the privacy policy
+  - If you're not logging text, say so explicitly
+  - If you're using OpenAI's API, disclose it:
+    ```markdown
+    ## Third-Party Services
+
+    Twelveify uses OpenAI's API to simplify text. Text sent to OpenAI is subject to OpenAI's privacy policy: https://openai.com/privacy
+    ```
+
+- Have legal/compliance review the policy before submitting (especially for data handling claims)
+
+- Include the policy link in your extension description and the landing page footer
+
+**Warning signs:**
+- Web Store rejection: "Privacy Policy Required"
+- Web Store rejection: "The privacy policy you provided does not match the extension's actual data practices"
+- Users can't find the privacy policy URL (404, timeout, or generic page)
+- Privacy policy doesn't mention what data is collected, how it's used, or how long it's retained
+- No mention of third-party services (OpenAI) or their privacy implications
+
+**Phase to address:**
+Phase 3 (Web Store Submission) — finalize privacy policy and test URL before submission. Required for approval.
+
+---
+
+### Pitfall 7: Over-Permissive Permissions Trigger Web Store Rejection (Exceeding Least Privilege)
+
+**What goes wrong:**
+The extension's manifest.json includes:
+```json
+"permissions": ["<all_urls>", "storage", "scripting"],
+"host_permissions": ["<all_urls>"]
+```
+
+The developer assumed these broad permissions are necessary to "access any website." But Google's review policy explicitly rejects extensions with overly broad permissions. The extension only needs to simplify text on the *current* page the user is viewing, not all pages universally.
+
+Google rejects with: "Extension requests excessive permissions. Scope narrowed to specific domains or use activeTab permission."
+
+**Why it happens:**
+Manifest V3 documentation shows `<all_urls>` as an example, and developers use it as a template without understanding the least-privilege principle. They don't realize that `activeTab` (which grants access only to the *currently active* tab) is the modern, preferred approach. Or they assumed `<all_urls>` was necessary for the extension to work on any website.
+
+**How to avoid:**
+- Use `activeTab` permission instead of `<all_urls>`:
+  ```json
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": []  // Empty; activeTab is sufficient
+  ```
+
+  This grants access to content scripts on the currently active tab only—exactly what the extension needs.
+
+- If you must specify certain domains (e.g., for backend API calls), list them explicitly:
+  ```json
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": [
+    "https://backend.render.com/*"  // Only the backend domain
+  ]
+  ```
+
+- Avoid requesting permissions you don't use:
+  - Remove `"tabs"` if you're not reading tab metadata
+  - Remove `"history"` if you're not accessing browsing history
+  - Remove `"webRequest"` or `"declarativeNetRequest"` unless you're filtering network requests
+  - Remove `"clipboardWrite"` unless you're copying to clipboard
+
+- In manifest.json, document why each permission is needed:
+  ```json
+  "permissions": [
+    "activeTab",       // Access selected text on current page
+    "scripting",       // Inject content script and styled result
+    "storage"          // Save user preferences locally
+  ]
+  ```
+
+- Before Web Store submission, audit permissions:
+  ```bash
+  # Extract permissions from manifest
+  jq '.permissions, .host_permissions' manifest.json
+
+  # Verify each permission is actually used in code
+  grep -r "activeTab\|scripting\|storage" src/
+
+  # Check for unused permissions (grep returns nothing)
+  jq '.permissions[]' manifest.json | \
+    while read perm; do
+      grep -q "$perm" src/ || echo "Potentially unused: $perm"
+    done
+  ```
+
+- Test with minimal permissions:
+  - Build and install unpacked extension with just `activeTab`
+  - Verify text simplification works on various websites
+  - If it fails, identify the missing permission and add only that one
+
+**Warning signs:**
+- Web Store rejection: "Extension requests excessive or unnecessary permissions"
+- Manifest includes `"<all_urls>"` or wildcard host permissions
+- `host_permissions` array is non-empty and very broad
+- Users see an "access your data on all websites" warning when installing (privacy red flag)
+- Permissions list includes items that aren't used in the code
+
+**Phase to address:**
+Phase 3 (Web Store Submission) — audit and minimize permissions before submission. This is a common rejection reason.
+
+---
+
+### Pitfall 8: Missing or Invalid Chrome Web Store Metadata (Screenshots, Description, Icons)
+
+**What goes wrong:**
+The developer submits the extension to the Chrome Web Store but forgets or provides invalid metadata:
+- **Screenshots:** Only 1 screenshot provided; Google requires at least 1, recommends 2-4. Or screenshot shows development UI with "localhost" visible.
+- **Description:** Empty or too short (<10 characters). Or description is misleading (e.g., "Ad blocker" when it's a text simplifier).
+- **Icon:** Missing or incorrect size (should be 128x128 for primary icon; also provide 16x16 and 48x48 versions).
+- **Category:** Not selected or incorrect category chosen.
+
+Google's automated review rejects with: "Missing or invalid extension metadata."
+
+**Why it happens:**
+Developers focus on code and features, treating Chrome Web Store metadata as secondary. They upload the extension quickly without filling out all fields carefully. Or they use placeholder screenshots from development that include localhost URLs or WIP UI.
+
+**How to avoid:**
+- Prepare metadata BEFORE uploading to Web Store:
+  - **Icon (128x128):** The extension's branded icon (with zine/punk aesthetic). Test that it's recognizable at small sizes.
+  - **Screenshots (1280x800 min):**
+    1. Show the floating button on a real website
+    2. Show the popup panel with personalization options
+    3. Show before/after simplification (original text + simplified text)
+    4. Use clean, production URLs (no localhost)
+    5. Highlight the key value: "Select text → Click → Get instant simplification"
+  - **Short description (35-character max):** e.g., "Simplify any text on any page"
+  - **Full description (4000-character max):**
+    ```
+    Turn confusing text into plain language instantly.
+
+    Twelveify rewrites complex or technical text into clear, easy-to-understand explanations tailored to you.
+
+    How it works:
+    1. Select any text on a webpage
+    2. Click the floating icon
+    3. See a clear, personalized rewrite in seconds
+
+    Features:
+    - Instant simplification (powered by AI)
+    - Customizable tone (from casual to formal)
+    - Explanation depth control (brief to detailed)
+    - One-click undo to see original text
+    - Works on any website
+    - Zero account needed—start simplifying immediately
+
+    Privacy First:
+    - No text is stored on any server
+    - No browsing history tracking
+    - Anonymous usage data only
+
+    Perfect for students, professionals, and anyone who encounters confusing text.
+
+    [Rate us and let us know what to build next!]
+    ```
+  - **Category:** "Productivity" or "Utilities" (not "Ad Blocker" or unrelated category)
+  - **Language:** English (US) or appropriate regional variant
+
+- Test metadata before submission:
+  ```bash
+  # Ensure icon files exist and are correct size
+  identify extension/icons/icon-128.png
+  # Output: extension/icons/icon-128.png PNG 128x128 ...
+
+  # Check description length
+  wc -c <<< "Your description"
+  # Should be <4000 characters
+  ```
+
+- Have someone outside the dev team review the screenshots and description
+  - Do they understand what the extension does?
+  - Are the screenshots clear and professional?
+  - Is the description compelling and honest?
+
+- Include a screenshot showing the extension icon location (where users will find it)
+
+**Warning signs:**
+- Web Store submission form shows empty fields or validation errors
+- Screenshots contain development UI, localhost URLs, or placeholder text
+- Description doesn't clearly explain what the extension does
+- Icon is blurry, cut off, or poorly sized at 16x16
+- Web Store rejection: "Missing or incomplete store listing"
+
+**Phase to address:**
+Phase 3 (Web Store Submission) — prepare all metadata 1-2 weeks before submission; get feedback before uploading.
+
+---
+
+### Pitfall 9: CSP Mismatch Between Manifest and Production Backend Domain
+
+**What goes wrong:**
+The manifest.json has the correct CSP:
 ```json
 "content_security_policy": {
-  "extension_pages": "default-src 'self'; connect-src 'self' https://your-backend.com; script-src 'self';"
-}
-```
-- For any external domain the service worker fetches from, add to `connect-src`
-- Never use `connect-src *` or `default-src *` in production
-- Test CSP violations by intentionally making a fetch to an unlisted domain and verifying it fails with a CSP error in the service worker console
-- Use `fetch()` with an explicit error handler to catch network failures:
-```javascript
-try {
-  const response = await fetch(backendUrl);
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  return await response.json();
-} catch (e) {
-  console.error('Backend fetch failed:', e);
-  // Return graceful fallback or error state
+  "extension_pages": "default-src 'self'; connect-src 'self' https://backend.render.com;"
 }
 ```
 
+But during development, the developer tested with `localhost:3001`. When the build is finalized, the backend URL is changed to `https://twelveify-backend.onrender.com` in the code, but the CSP is not updated to match. The extension builds and installs, but all requests to the backend are silently blocked by CSP.
+
+The user highlights text, clicks the button, sees a spinner, and it times out. No error message. The service worker console shows CSP violations.
+
+**Why it happens:**
+The CSP is set once during development and then forgotten. The code references the backend URL in multiple places, and when the URL changes, the developer updates the code but forgets to update the manifest. Or the build process doesn't inject the backend domain into the CSP dynamically.
+
+**How to avoid:**
+- Document where the backend domain needs to appear:
+  1. **manifest.json CSP:** `connect-src 'self' https://your-backend.com;`
+  2. **Backend URL in code:** `const API_URL = 'https://your-backend.com';`
+  3. **Environment variable at build time:** `API_URL=https://your-backend.com npm run build`
+
+- If the backend domain is dynamic, inject it at build time:
+  ```javascript
+  // vite.config.ts
+  export default defineConfig({
+    define: {
+      __API_DOMAIN__: JSON.stringify(process.env.API_URL || 'https://backend.render.com'),
+    },
+  });
+  ```
+
+- Then, in the manifest.json template (if using a template), interpolate the domain:
+  ```json
+  {
+    "content_security_policy": {
+      "extension_pages": "default-src 'self'; connect-src 'self' __API_DOMAIN__;"
+    }
+  }
+  ```
+
+  But *simpler*: Just hardcode the production domain and never change it:
+  ```json
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; connect-src 'self' https://twelveify-backend.onrender.com;"
+  }
+  ```
+
+- Before submitting to Web Store, verify CSP:
+  ```bash
+  # Extract CSP from manifest
+  jq '.content_security_policy' manifest.json
+
+  # Ensure your production backend domain is present
+  # Should output:
+  # {
+  #   "extension_pages": "default-src 'self'; connect-src 'self' https://twelveify-backend.onrender.com;"
+  # }
+  ```
+
+- Test CSP by intentionally making a request to a blocked domain:
+  ```javascript
+  // In service worker console
+  fetch('https://example.com/blocked')
+    .catch(e => console.log('Expected failure:', e));
+  // Should show CSP error: "refused to connect"
+
+  // Then test to allowed domain
+  fetch('https://twelveify-backend.onrender.com/api/health')
+    .then(r => console.log('Success:', r.status))
+    .catch(e => console.log('Unexpected error:', e));
+  // Should succeed (HTTP 200 or similar)
+  ```
+
 **Warning signs:**
-- Extension loads but simplification always fails
-- Network tab shows no requests to the backend
-- Service worker console has no fetch errors, but the API call never completes
-- CSP errors visible in the extension console (chrome://extensions > Service Worker)
+- All simplification requests timeout
+- Service worker console shows CSP violations: "Refused to connect to [backend-domain] because it does not appear in connect-src"
+- Backend logs show zero requests from extension, but the extension claims to have sent requests
+- After building for production, the extension still tries to connect to localhost:3001 (CSP mismatch + stale backend URL)
+- Users report "the extension doesn't work" but no clear error message
 
 **Phase to address:**
-Phase 1 (Core Extension Architecture) → Phase 2 (Backend Integration).
+Phase 2 (Backend Production Deploy) → Phase 3 (Web Store Submission).
 
 ---
 
-### Pitfall 5: Uncontrolled API Costs Spiraling Due to No Rate Limiting
+### Pitfall 10: Manifest V3 Remote Code Execution (Eval, Dynamic Script Tags)
 
 **What goes wrong:**
-An extension is published to users. A single user highlights large blocks of text repeatedly, or a bug causes the extension to retry failed requests in an exponential loop. Within hours, the backend receives 100K API calls instead of the expected 1K, consuming months of budget. The backend becomes an uncontrolled financial liability.
+The developer adds a "debug mode" to the extension that runs user-provided code to test the simplification logic. They use `eval()` or create a dynamic `<script>` tag:
 
-**Why it happens:**
-Free beta mindset: developers assume usage will be light and defer cost controls as a "later problem." No per-request token budgets, no user-level rate limits, no circuit breaker to stop calling the API when it's failing. The API provider's rate limit becomes the only brake, and by then, significant charges have accumulated.
-
-**How to avoid:**
-- Implement hard and soft budget limits on the backend immediately, before publishing:
-  - Soft limit (80%): Log warning, notify ops
-  - Hard limit (100%): Return HTTP 429 (Too Many Requests) and stop processing, or switch to free fallback behavior
-- Set per-user rate limits (e.g., max 5 simplifications per minute, max 50 per day for free users)
-- Implement exponential backoff with a maximum retry count (e.g., max 3 retries, each backoff doubles, max 2 min delay)
-- On the client, cache the simplified text for identical selections (same text + same preferences = same result) to avoid redundant API calls
-- Add a "cancel in-flight request" mechanism so users can stop a slow simplification instead of it timing out and retrying
-- Monitor API costs daily in the backend dashboard; set up alerts if daily cost exceeds a threshold (e.g., 10x expected daily cost)
-- In the content script, implement a simple debounce so rapid selections don't trigger multiple simultaneous requests
-
-**Warning signs:**
-- API provider sends unexpectedly high usage alerts
-- Backend logs show requests from same user with identical text within seconds
-- Cost per user is wildly inconsistent (some users 10x more expensive than others)
-- Failed requests are retried indefinitely instead of failing fast
-
-**Phase to address:**
-Phase 2 (Backend Integration) — must be in place before MVP launch.
-
----
-
-### Pitfall 6: Text Selection Edge Cases Break Content Script
-
-**What goes wrong:**
-The extension works fine when selecting plain text in paragraphs. But when a user selects text inside a form field (`<input>`, `<textarea>`, `contenteditable`), or text split across multiple shadow DOM boundaries, or hidden text revealed by CSS, the content script fails to extract the selection correctly. Sometimes it gets an empty string, sometimes malformed text, sometimes the selection is lost entirely.
-
-**Why it happens:**
-`window.getSelection()` and `document.execCommand()` have complex behavior across different element types. Text inside shadow DOM roots is not directly accessible to the page's JavaScript. Form fields have their own selection API (`input.selectionStart/End`). The extension's naïve selection handler doesn't account for these variations.
-
-**How to avoid:**
-- Handle selection extraction for multiple element types:
 ```javascript
-function getSelectedText() {
-  const selection = window.getSelection();
-
-  // Case 1: Normal text selection
-  if (selection.toString().length > 0) {
-    return selection.toString();
-  }
-
-  // Case 2: Form field selection (input, textarea)
-  const activeElement = document.activeElement;
-  if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
-    const start = activeElement.selectionStart;
-    const end = activeElement.selectionEnd;
-    return activeElement.value.substring(start, end);
-  }
-
-  // Case 3: Contenteditable selection
-  if (activeElement && activeElement.contentEditable === 'true') {
-    return selection.toString();
-  }
-
-  return null;
-}
+// BAD: eval is forbidden in MV3
+const userCode = getUserInput();
+eval(userCode); // Chrome Web Store automatic review catches this and rejects
 ```
-- For shadow DOM: the content script cannot directly access text inside shadow roots (security boundary). Workaround: Inject a tiny script into the page (not the extension context) that extracts selection from shadow DOM and posts it back via `window.postMessage()`
-- Test selection behavior on: `<input>`, `<textarea>`, `<div contenteditable>`, text inside iframes, text inside shadow DOM (e.g., YouTube comments), selected text that spans multiple elements
-- When replacing text, be aware that replacing inside form fields requires setting `element.value` and triggering a change event, not using `document.execCommand('insertText')`
 
-**Warning signs:**
-- Extension works on news articles but fails on LinkedIn/Twitter (which use complex DOM)
-- Form fields can't be simplified because selection is empty or malformed
-- User reports that contenteditable areas (e.g., Google Docs, email compose) don't work
-- Selected text appears truncated or corrupted
+Or, during onboarding, the developer fetches a configuration script from a remote server:
+```javascript
+// BAD: Remote code
+const script = document.createElement('script');
+script.src = 'https://backend.com/config.js'; // Downloaded dynamically
+script.onload = () => { /* use config */ };
+document.head.appendChild(script);
+```
 
-**Phase to address:**
-Phase 2 (Text Selection & Replacement) → Phase 3 (Advanced DOM Handling) for shadow DOM support.
-
----
-
-### Pitfall 7: MutationObserver Performance Degradation or Missed DOM Updates
-
-**What goes wrong:**
-The extension uses a `MutationObserver` to watch for newly injected content (e.g., on a single-page application where paragraphs load dynamically). The observer is set to watch too many elements or with settings that trigger on every character typed. The observer callback runs constantly, consuming CPU and making the page sluggish. Or, the observer is missing key mutations because the developer didn't enable the right mutation flags (`childList`, `characterData`, etc.), so new content appears without being observed.
+Google's automated review detects `eval`, `Function()`, or remotely-fetched scripts in the extension code and automatically rejects with: "Extension violates remote code execution policy (Manifest V3 requirement)."
 
 **Why it happens:**
-Developers copy paste a broad `MutationObserver` configuration without understanding which flags trigger callbacks. They observe the entire document body with `subtree: true`, or they forget to call `disconnect()` when the observer is no longer needed.
+The developer doesn't realize that Manifest V3 has a strict no-eval policy to prevent code injection attacks. They add debug utilities or dynamic config loading without thinking about security implications. Or they copy code from a pre-MV3 extension that used `eval()`.
 
 **How to avoid:**
-- Be specific about what mutations to observe:
-```javascript
-const observer = new MutationObserver((mutations) => {
-  mutations.forEach((mutation) => {
-    if (mutation.addedNodes.length > 0) {
-      // Handle newly added DOM nodes
-      mutation.addedNodes.forEach((node) => {
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          // Check if this is new text content worth observing
-          handleNewContent(node);
-        }
-      });
+- **Never use `eval()` or `new Function()` in extension code:**
+  ```javascript
+  // BAD
+  eval('const result = ' + jsonString);
+
+  // GOOD: Use JSON.parse instead
+  const result = JSON.parse(jsonString);
+  ```
+
+- **Never dynamically fetch and execute scripts:**
+  ```javascript
+  // BAD
+  fetch('/config.js').then(r => r.text()).then(code => eval(code));
+
+  // GOOD: Fetch data, not code
+  fetch('/config.json').then(r => r.json()).then(config => {
+    applyConfig(config); // applyConfig is a static function
+  });
+  ```
+
+- **For dynamic behavior, use a message dispatch pattern:**
+  ```javascript
+  // Instead of eval, use a message handler
+  const handlers = {
+    'simplify': (text) => simplifyText(text),
+    'revert': () => revertChanges(),
+    'update-preferences': (prefs) => updatePrefs(prefs),
+  };
+
+  chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    const handler = handlers[msg.action];
+    if (handler) {
+      sendResponse(handler(msg.data));
     }
   });
-});
+  ```
 
-observer.observe(document.body, {
-  childList: true,    // Observe child nodes being added/removed
-  subtree: true,      // Observe all descendants
-  characterData: false, // Don't observe text changes (too noisy)
-  characterDataOldValue: false,
-  attributes: false   // Don't observe attribute changes
-});
-```
-- Throttle or debounce the mutation callback to avoid running expensive operations on every mutation:
-```javascript
-let mutationTimeout;
-const observer = new MutationObserver(() => {
-  clearTimeout(mutationTimeout);
-  mutationTimeout = setTimeout(() => {
-    // Process mutations every 250ms instead of on every change
-    processPendingMutations();
-  }, 250);
-});
-```
-- Call `observer.disconnect()` when the page unloads or the extension is disabled
-- In the callback, iterate over mutations and process only the ones you care about (e.g., only text nodes, not attribute changes)
-- Test on a real single-page application (LinkedIn, Twitter, Gmail) to ensure the observer keeps up with DOM changes
-
-**Warning signs:**
-- Page becomes noticeably slower after the extension is enabled
-- DevTools shows the mutation observer callback running hundreds of times per second
-- New content loads on an SPA but the extension doesn't detect it
-- The extension's simplification requests never trigger for dynamically-added text
-
-**Phase to address:**
-Phase 2 (Text Selection & Replacement) → Phase 3 (SPA Support).
-
----
-
-### Pitfall 8: Backend Timeout or Failure With No Graceful Fallback
-
-**What goes wrong:**
-The user highlights text, clicks the simplify icon, and nothing happens. The request to the backend times out after 30 seconds or fails silently. The extension shows no error message, no spinner, no explanation. The user thinks the extension is broken and uninstalls it.
-
-**Why it happens:**
-The content script sends a message to the service worker, which fetches from the backend, and if the fetch fails, the error is logged to the service worker console (which the user never sees). There's no timeout handling, no retry logic, and no UI feedback mechanism to tell the user what's happening.
-
-**How to avoid:**
-- Implement timeout and retry at the content script level:
-```javascript
-async function simplifyText(text, preferences) {
-  const maxRetries = 2;
-  const timeoutMs = 10000; // 10 second timeout per attempt
-
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      // Use Promise.race to enforce timeout
-      const result = await Promise.race([
-        chrome.runtime.sendMessage({
-          action: 'simplify',
-          text,
-          preferences
-        }),
-        new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Timeout')), timeoutMs)
-        )
-      ]);
-
-      return result;
-    } catch (error) {
-      if (attempt === maxRetries - 1) {
-        // Last attempt failed, return error
-        return { error: 'Failed to simplify. Try again later.' };
-      }
-      // Wait before retrying (exponential backoff)
-      await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
-    }
+- **For configuration, use a static JSON config file or chrome.storage:**
+  ```json
+  // config.json (shipped in extension package)
+  {
+    "defaultTone": "casual",
+    "maxChars": 10000,
+    "apiEndpoint": "https://backend.render.com"
   }
-}
-```
-- Update the UI to show the user what's happening:
-  - Show a spinner while waiting for the backend
-  - Display an error message if the request fails
-  - Offer a "retry" button
-- Set a reasonable timeout (10–30 seconds depending on expected latency), not indefinite
-- Log failures and errors for monitoring (anonymous, no content data), so the team can detect if the backend is having issues
-- Implement a fallback behavior: if the backend is down, show a friendly message like "Our service is temporarily unavailable. Try again in a few minutes." rather than silently failing
+  ```
+
+  Then load at startup:
+  ```javascript
+  const config = await fetch('config.json').then(r => r.json());
+  // Use config, never execute it
+  ```
+
+- **If you must support user-provided expressions, use a safe sandbox:**
+  - Use a Web Worker in a restricted context
+  - Or use a library like `expr-eval` that parses and evaluates mathematical expressions safely (no arbitrary code execution)
+  - Or avoid entirely; users don't need to write code in an extension
+
+- **Audit your code for forbidden patterns before submission:**
+  ```bash
+  # Search for dangerous functions
+  grep -r "eval(" src/
+  grep -r "new Function" src/
+  grep -r "innerHTML" src/  # Can lead to XSS if not careful
+  grep -r "dangerouslySetInnerHTML" src/  # React version of innerHTML
+
+  # Search for dynamic script loading
+  grep -r "createElement.*script" src/
+  grep -r "appendChild.*script" src/
+  grep -r "<script.*src=" src/  # Dynamic script tags in templates
+
+  # All of these should return empty (no matches)
+  ```
 
 **Warning signs:**
-- Users report the extension "doesn't work" but no errors appear
-- Backend logs show timeouts but the content script doesn't know
-- Support requests pile up without a clear technical cause
-- No visibility into whether failures are user-side, network, or backend
+- Web Store rejection: "Extension violates Manifest V3 remote code execution policy"
+- Code audit finds `eval()` or `Function()` constructor
+- Extension dynamically fetches and executes JavaScript
+- Debug features use `eval()` to run arbitrary code
+- Anyone can inject arbitrary code into the extension (security vulnerability)
 
 **Phase to address:**
-Phase 2 (Backend Integration) → Phase 3 (Error Handling & UX).
+Phase 1 (Core Architecture) → Phase 3 (Web Store Submission). Verify no forbidden patterns before submitting.
 
 ---
 
-### Pitfall 9: Privacy Violations — Content Logged on Backend
+## Integration Pitfalls Specific to Redesign + Deploy + Ship
 
-**What goes wrong:**
-To debug issues, the backend logs all incoming requests, including the text being simplified. This text is sensitive: it could include medical notes, financial information, or personal secrets. The backend stores logs in an unsafe location, or logs are accidentally committed to version control. An attacker accesses the logs and harvests private user data.
-
-**Why it happens:**
-Developers enable debug logging to troubleshoot issues, forgetting that this is production user data. The privacy-first promise (made in PROJECT.md) becomes a liability if the backend doesn't enforce it. Logs aren't explicitly excluded from backups or encrypted.
-
-**How to avoid:**
-- Establish an explicit logging policy: never log content, only metadata
-  - Allowed: request ID, timestamp, user ID hash, response time, error code, feature flag state
-  - Forbidden: the text being simplified, user preferences, request payloads, response content
-- If debugging requires seeing sample content, hash it or truncate it so it's not reversible:
-```javascript
-// Backend logging
-const contentHash = require('crypto').createHash('sha256').update(text).digest('hex');
-logger.info({
-  requestId,
-  timestamp,
-  contentHash, // Only the hash, not the original text
-  contentLength: text.length,
-  responseTime,
-  succeeded: true
-});
-```
-- Ensure logs are:
-  - Stored in a restricted location with access controls (not world-readable)
-  - Encrypted at rest
-  - Automatically deleted after 7–30 days (retention policy)
-  - Never committed to version control (use `.gitignore` for log directories)
-- During code review, explicitly check that logging code doesn't accidentally include content
-- Document the privacy policy on the extension homepage and in the Chrome Web Store listing, specifically stating what data is and isn't collected
-
-**Warning signs:**
-- Debug logs in production contain user text
-- Logs are stored in unencrypted text files with world-readable permissions
-- The team doesn't have a clear policy on what's safe to log
-- Users ask "what data do you store?" and there's no clear answer
-
-**Phase to address:**
-Phase 1 (Core Extension Architecture) — establish logging policy early.
+| Integration | Pitfall | Impact | Prevention |
+|-------------|---------|--------|-----------|
+| **UI Redesign + Content Script Injection** | Custom fonts fail to load or are overridden by page styles | Users see broken design; brand colors/fonts don't match | Use Shadow DOM or highly-namespaced CSS; verify fonts in `web_accessible_resources`; test on 5+ high-CSS sites |
+| **Backend URL + Manifest CSP** | CSP doesn't include production backend domain; all API calls blocked | Extension appears broken after install; requests timeout silently | Ensure production domain in both code and CSP before building; audit manifest after build |
+| **Environment Variables + Build Process** | Localhost URL leaks into production build | Web Store rejects; users can't use extension after install | Set `API_URL` env var at build time; grep build output for localhost; add CI/CD verification step |
+| **Privacy Policy + Web Store Submission** | Policy URL returns 404 or is generic boilerplate | Automatic rejection; delays approval; trust erosion | Create specific policy before submission; test URL works; include privacy policy link on landing page |
+| **Permissions + Least Privilege** | Manifest includes `<all_urls>` instead of `activeTab` | Web Store rejects; users see privacy warning | Replace `<all_urls>` with `activeTab`; audit each permission against code usage |
+| **Render Backend + Stateful SSE** | Free tier spins down during idle; SSE connection closes mid-stream | User sees spinner forever; incomplete simplification; trust lost | Upgrade to Starter plan ($7/mo); implement keep-alive if free tier used; test long streams |
+| **Express Server + Keep-Alive Timeouts** | Default 5s keep-alive timeout kills long simplifications (>30s) | Large text selections fail; user frustration | Configure `server.keepAliveTimeout` to 120s; implement keep-alive comments every 20s |
+| **Metadata + Screenshots** | Screenshots show localhost URLs; description is empty or misleading | Web Store rejects; poor user first impression if approved | Prepare metadata 1-2 week before; use production URLs in screenshots; get external review |
+| **Remote Code Execution + Manifest V3** | Code includes `eval()` or dynamic script loading | Automatic Web Store rejection; security vulnerability | Audit code for eval/Function/dynamic scripts; use static config and message handlers |
+| **CSP + Font Loading** | @font-face uses localhost or unregistered domain in production | Fonts don't load; design breaks | Declare fonts in web_accessible_resources; use extension:// URLs or base64; test font load on install |
 
 ---
 
-### Pitfall 10: Floating Icon UI Breaks Due to Z-Index Wars and Positioning Conflicts
+## Phase-Specific Deployment Checklist
 
-**What goes wrong:**
-The extension renders a floating icon/button to trigger the simplification. On some websites (especially those using high z-index values), the icon appears behind other content and is unusable. On other sites, the icon positions itself incorrectly, overlapping text or button it's supposed to follow. Mobile-friendly sites reflow the icon off-screen.
+### Phase 1: UI Redesign
+- [ ] All custom fonts declared in `web_accessible_resources`
+- [ ] Font file paths verified (no 404s in production build)
+- [ ] CSS namespaced with extension ID prefix (e.g., `.twelvify-*`)
+- [ ] Tested on: Gmail, Twitter, GitHub, Medium, LinkedIn, Google Docs (ensure fonts load, colors visible)
+- [ ] Dark mode verified (fonts and colors work on both light and dark)
+- [ ] No CSS conflicts with page styles (shadow DOM or specificity tested)
 
-**Why it happens:**
-Simple z-index values (e.g., `z-index: 9999`) are not enough — they only work within their own stacking context. If the page has an element with a stacking context and a lower z-index, all children of that element will sit behind the floating icon, even with a z-index of millions. The developer didn't account for shadow DOM isolation or absolute vs. fixed positioning across different viewport states.
+### Phase 2: Backend Production Deploy
+- [ ] Render plan chosen (Starter plan $7/mo minimum; free tier NOT production-ready)
+- [ ] Backend domain hardcoded in manifest CSP
+- [ ] Backend domain hardcoded in code (not localhost)
+- [ ] Keep-alive timeout configured in Express: `server.keepAliveTimeout = 120000`
+- [ ] Keep-alive comments implemented in SSE streams (every 20s)
+- [ ] CSP allows production backend domain (grep manifest for domain verification)
+- [ ] Max text length enforced (e.g., 10,000 chars) to prevent excessively long requests
+- [ ] Timeout per request set to 120s (2 minutes) maximum
+- [ ] Backend health endpoint created and tested (`/api/health`)
+- [ ] Tested with realistic latency: 50ms, 200ms, 500ms, 1000ms
+- [ ] Tested with large text: 1KB, 5KB, 10KB selections
+- [ ] Error handling for backend timeout, 429 (rate limit), 500 (server error)
+- [ ] Render logs monitored for "Cold Start" events (should be none after first request)
 
-**How to avoid:**
-- Use the Popover API (Chrome 114+) or CSS Anchor Positioning (Chrome 125+) instead of manual z-index management:
-```javascript
-// Modern approach: Popover API
-const icon = document.createElement('div');
-icon.popover = 'auto'; // Automatically stays on top layer
-document.body.appendChild(icon);
-```
-- If using Popover is not viable, use the CSS `top-layer` concept:
-  - Create a modal/dialog and render the icon inside it
-  - The browser manages z-index for you
-- If manual positioning is necessary:
-  - Inject the icon into a new shadow DOM root at `document.body` level (not nested inside page elements)
-  - Set `position: fixed` so it stays relative to the viewport
-  - Use a reasonable z-index (e.g., `2147483647`, the max safe integer) as a backstop
-- Test positioning on:
-  - High z-index websites (e.g., Google Workspace, Figma, Slack)
-  - Content inside iframes
-  - Mobile viewport and responsive design
-  - Dark mode and light mode if the icon has colored backgrounds
-- Consider a "configurable position" setting so users can move the icon if it conflicts with a specific site's UI
-
-**Warning signs:**
-- Icon is invisible or unusable on certain sites (e.g., Twitter, Gmail)
-- Icon position shifts unexpectedly when scrolling
-- Icon overlaps clickable elements on the page and blocks interaction
-- Users report the extension doesn't work on their most-used sites
-
-**Phase to address:**
-Phase 2 (UI & Text Selection) → Phase 3 (Advanced UI) if high z-index site support is needed.
-
----
-
-## Technical Debt Patterns
-
-| Shortcut | Immediate Benefit | Long-term Cost | When Acceptable |
-|----------|-------------------|----------------|-----------------|
-| Logging all request payloads for debugging | Quick visibility into failures | Privacy violation, data breach risk, GDPR issues | Never. Use hashed content or metadata only. |
-| Synchronous fetch to backend on user action | Simple code, feels responsive | Blocks the UI if backend is slow, timeouts kill user trust | Only in MVP if backend latency is confirmed <1s; add async timeout immediately after. |
-| Storing API key in extension code or localStorage | Simplest way to authenticate with backend | Key exposed to any XSS or compromised content script, financial liability | Never. Use backend-to-backend auth; extension is unauthenticated. |
-| Using `<all_urls>` permission instead of host_permissions | Single permission covers all sites | Privacy red flag, unnecessary permission scope, Chrome Web Store review rejection | Never. Use `activeTab` or specific host_permissions. |
-| No rate limiting on backend, trusting users to behave | Faster to launch | Uncontrolled costs, vulnerability to abuse, financial disaster | Only in alpha with known users. Add rate limits before beta/public launch. |
-| Storing user preferences in global variables | Simplest state management | Lost when service worker terminates, user frustration | Never. Preferences must persist; use `chrome.storage.local`. |
-| Single retry with no exponential backoff | Fewer moving parts | Retry storms when backend is struggling, user-facing cascade failures | Only if timeout is <2s and backend is highly reliable. Add backoff if >2s latency. |
-| No error handling in message passing | Less code to write initially | Silent failures, impossible to debug, poor user experience | Never. Every message should have a timeout and fallback. |
+### Phase 3: Web Store Submission
+- [ ] No localhost URLs in production build (grep build output)
+- [ ] Privacy policy written, URL tested (should load, not 404)
+- [ ] Permissions minimized: `activeTab` instead of `<all_urls>`
+- [ ] Unused permissions removed
+- [ ] Screenshots prepared (2-4 images, production URLs, no localhost)
+- [ ] Description written (clear, compelling, honest, <4000 chars)
+- [ ] Icon provided (128x128, 48x48, 16x16; recognizable at small sizes)
+- [ ] Category selected ("Productivity" or "Utilities")
+- [ ] No `eval()`, `Function()`, or remote code execution patterns
+- [ ] Manifest.json audited (no development URLs, no overly broad permissions)
+- [ ] Extension tested post-install (uninstall, install from Web Store, verify works)
+- [ ] Changelog updated with v1.2 features
+- [ ] Security review: XSS, CSRF, CSP bypass, localStorage inspection checked
+- [ ] Final build test: `API_URL=https://[backend] npm run build` then grep for localhost
+- [ ] Web Store submission form filled out completely (no empty fields)
 
 ---
 
-## Integration Gotchas
+## Recovery Strategies for Production Issues
 
-| Integration | Common Mistake | Correct Approach |
-|-------------|----------------|------------------|
-| **Content script to service worker messaging** | Assume the service worker has state from previous messages or is still running. | Each message should be self-contained or reference stable storage (`chrome.storage.local`). Never assume the service worker remembers context. |
-| **Backend API calls** | Hardcode the API URL in the extension code; no way to switch backends. | Store the backend URL in `chrome.storage.local` (configurable) or inject it via a manifest `host_permissions` rule. Use environment variables at build time to set the default. |
-| **User preferences personalization** | Store preferences only in memory (global variables). | Always persist to `chrome.storage.local` on every change. Load on service worker startup. |
-| **Error reporting from content script** | Send raw error messages to logging backend without rate limiting. | Batch errors, deduplicate by error type, never send user content. Rate limit to 1 error report per minute per error type. |
-| **Text replacement in the page** | Use `innerHTML` to replace content, risking XSS. | Use `textContent` for text-only replacement, or safely set `innerText`. Sanitize any HTML carefully. |
-| **Managing the floating icon lifecycle** | Create the icon on every page load without removing the old one. | Create once per page, store a reference, remove on unload or when extension is disabled. Use a flag to check if already initialized. |
-
----
-
-## Performance Traps
-
-| Trap | Symptoms | Prevention | When It Breaks |
-|------|----------|------------|----------------|
-| **Polling for configuration changes** | Background service worker constantly checks storage or makes API calls every second. | Use `chrome.storage.onChanged` listener (event-driven) instead of periodic polling. | At 1K+ active users; the constant polling becomes noticeable CPU drain per user. |
-| **Broad MutationObserver watching entire document** | Page becomes visibly slower after extension loads; JavaScript execution jank. | Observe only the container where new content appears; disconnect when not needed; use specific mutation flags (`childList` only, not `characterData`). | At >1000 DOM mutations per minute; observer callback overhead becomes visible. |
-| **Fetching large content for simplification** | Backend receives 50KB+ requests and timeouts trying to call the LLM. | Implement a max input length (e.g., 5KB) and truncate or show a warning if user selects more. | At >10K+ character selections; API latency and costs explode. |
-| **Caching simplified text without expiry** | Extension's memory grows unbounded; old cached results persist forever. | Implement a simple LRU cache with max size (e.g., 50 entries) or TTL (1 hour). | At 100+ unique text selections; memory usage becomes noticeable on lower-end devices. |
-| **Retrying failed requests without backoff** | Backend receives thundering herd of retries during outage, causing cascading failure. | Implement exponential backoff; add jitter to prevent synchronized retries. | At >10 simultaneous users; coordinated retry storms crash the backend. |
+| Scenario | Recovery Steps | Timeline |
+|----------|---|----------|
+| **Fonts not loading in production** | 1) Verify fonts in `web_accessible_resources`. 2) Check CSP for font loading blocks. 3) Test font paths in extension context. 4) Push hotfix with corrected paths. 5) Monitor Render logs for font request patterns. | 2-4 hours |
+| **Backend domain missing from CSP** | 1) Identify correct production domain. 2) Update manifest CSP. 3) Rebuild extension. 4) Push emergency update to Web Store. 5) Test post-update on real website. 6) Monitor for restored backend connectivity. | 1-2 hours (if Chrome auto-updates; users may need manual update) |
+| **SSE connections timeout mid-stream** | 1) Increase `server.keepAliveTimeout` to 120s. 2) Implement keep-alive comments. 3) Deploy backend hotfix. 4) Test with large text selections (>5KB). 5) Monitor error logs for timeout patterns. 6) Optional: Push extension update with longer client-side timeout. | 1-2 hours (backend only); 4-24 hours (extension with auto-update) |
+| **Render free tier spins down, users see errors** | 1) If critical: immediately upgrade to Starter plan ($7/mo). 2) Configure keep-alive and warm-up pings as interim. 3) Communicate to users: "We've improved backend reliability." 4) Monitor Render Metrics for cold start events (should drop to zero). | Immediate (upgrade) to 1-2 hours (reconfiguration) |
+| **Web Store rejection for localhost URLs** | 1) Audit build output: `grep -r "localhost" dist/`. 2) Identify source of localhost in code or manifest. 3) Fix at source (environment variables, hardcoded URLs). 4) Rebuild with `API_URL=` set correctly. 5) Retest build output. 6) Resubmit to Web Store. 7) Update Web Store listing with version notes. | 1-3 hours (fix and resubmit) |
+| **Web Store rejection for missing privacy policy** | 1) Write specific privacy policy (not boilerplate). 2) Host on public URL (e.g., twelvify.com/privacy). 3) Verify URL loads and is readable. 4) Update Web Store submission form with correct URL. 5) Resubmit. 6) Cite policy in extension store listing. | 2-4 hours |
+| **CSS styles conflict with page, fonts override** | 1) Identify conflicting site (e.g., Twitter, Gmail). 2) Inspect page CSS and find competing selectors. 3) Increase CSS specificity or switch to Shadow DOM. 4) Test on the problem site. 5) Push update. 6) Note the site in known issues / WAD (working as designed) if unfixable. | 4-8 hours (debug + fix) |
 
 ---
 
-## Security Mistakes
+## Pre-Submission Quality Checklist
 
-| Mistake | Risk | Prevention |
-|---------|------|------------|
-| **Storing API keys in extension code or `chrome.storage.local`** | API key exposed to page scripts (XSS) or reverse-engineered from extension code. Attacker can drain quota or bill your account. | Never store API keys in the extension. Use a backend proxy; the extension talks to your backend, your backend talks to the API provider. Your backend uses server-side API keys. |
-| **Not validating incoming messages from content script** | Malicious website injects crafted messages to manipulate the extension or trigger expensive API calls. | Always validate the sender and the message structure. Use `chrome.runtime.getURL()` to verify messages come from your extension. Type-check message payloads. |
-| **Logging user content to console or analytics** | User's private data (medical notes, passwords, financial info) leaked in logs or analytics dashboards. | Never log content; only log hashed content, metadata, or anonymized summaries. Establish a strict logging policy at the start. |
-| **Over-permissive CSP (`connect-src *`)** | An XSS vulnerability in the extension allows an attacker to fetch from any domain, exfiltrating data or attacking other services. | Explicitly list only the domains the extension needs (your backend, maybe one API provider). Use `default-src 'self'` as the base. Review CSP in security tests. |
-| **Using `eval()` or `Function()` constructor** | Classic code injection attack; user input can be executed as code. | Never use `eval()`. Avoid `Function()` constructor. Use safe DOM manipulation APIs (`textContent`, `innerText`). If you must dynamically generate code, use Web Workers in a sandboxed context. |
-| **Iframe communication without message verification** | A malicious iframe can send crafted messages to your content script and trick it into performing unintended actions. | Always verify the origin of postMessage events. Use `event.origin === expectedOrigin` check. Never blindly execute messages from cross-origin iframes. |
-| **Hardcoding credentials or secrets** | Credentials committed to version control are exposed to anyone with repo access (including attackers who fork the repo). | Use environment variables or a secrets manager; never commit `.env` files or API keys. Rotate API keys regularly. Use backend-to-backend authentication. |
-| **Not checking chrome.runtime.lastError after async chrome APIs** | API calls silently fail with no indication (e.g., message passing when service worker is terminated). Extension behavior becomes unpredictable. | After every async Chrome API call, check `chrome.runtime.lastError` and handle the error: `if (chrome.runtime.lastError) { console.error(chrome.runtime.lastError.message); }`. |
+**Redesign (Phase 1):**
+- [ ] Fonts load on real websites (not just local test)
+- [ ] Colors match design mockups on light AND dark mode
+- [ ] No FOUC (flash of unstyled content)
+- [ ] Text is readable in all color contexts (dark page, light page)
+- [ ] Icon is recognizable at 16x16 (DevTools toolbar size)
+- [ ] Popup dimensions are appropriate (not too tall, not too narrow)
 
----
+**Backend Deploy (Phase 2):**
+- [ ] Production backend URL hardcoded (no environment-dependent logic)
+- [ ] Keep-alive configured (120s timeout, 20s comments)
+- [ ] Rate limiting active (100 requests/hour per user, documented)
+- [ ] Error responses tested (500, 429, 503) and handled gracefully
+- [ ] Large text handling tested (>5KB selections don't crash backend)
+- [ ] SSE stream tested with realistic latency and large payloads
+- [ ] Health endpoint working (`GET /api/health` returns 200)
 
-## UX Pitfalls
-
-| Pitfall | User Impact | Better Approach |
-|---------|-------------|-----------------|
-| **No feedback while waiting for backend** | User highlights text, clicks icon, nothing happens for 5 seconds, then suddenly the text changes. User thinks the extension is broken and clicks again, triggering duplicate requests. | Show a spinner immediately when the user clicks the icon. Update the UI with the simplified text as soon as it arrives. Show a "Simplifying..." label. Disable the icon during the request to prevent double-clicks. |
-| **Error messages with no recovery option** | Backend times out, extension shows "Error" and the text reverts. User has no idea what happened or how to fix it. | Show a specific error (e.g., "Our service is temporarily unavailable") and offer an "Undo" button or "Try again" button. Log the error for the team to investigate. |
-| **Personalization preferences never stick** | User sets tone to "casual" on the first day, then the next day the extension reverts to "default" tone. User feels the extension doesn't remember preferences. | Save preferences to `chrome.storage.local` on every change. Load preferences when the service worker starts. Show a confirmation when preferences are saved ("Preferences saved"). |
-| **Floating icon is jumpy or repositions unexpectedly** | User highlights text, clicks the icon, but as they move the mouse toward it, the icon jumps to a new position. User frustration, accidental clicks on wrong elements. | Use fixed positioning or Popover API to keep the icon stable relative to the screen. Test that the icon doesn't move when the page scrolls or the viewport resizes. Provide a "hide" option if the icon interferes with the page. |
-| **Keyboard accessibility not considered** | User tries to use Tab to navigate to the icon and trigger it, but the extension doesn't respond. Accessibility fail. | Make the floating icon keyboard-accessible. Add a keyboard shortcut (e.g., Ctrl+Shift+S) to trigger simplification of the selected text. Support Tab navigation and Enter to activate. |
-| **No indication of which text was simplified** | User clicks the icon to simplify a selection, the text is replaced, but 30 seconds later the user forgets which text changed. If simplification is wrong, they don't know what the original was. | Highlight the replaced text briefly (e.g., yellow background for 2 seconds) so the user knows what changed. Provide an "Undo" button that reverts to the original text. |
-| **Overwhelming onboarding** | Extension shows a 5-step onboarding wizard on first use. User skips it and doesn't know what the extension does. | Use progressive onboarding: ask for one preference on first use (e.g., "What tone do you prefer?"), ask for another on the second use (e.g., "Explanation depth?"). By the 5th use, the user has naturally configured preferences without feeling overwhelmed. |
-
----
-
-## "Looks Done But Isn't" Checklist
-
-- [ ] **Text Simplification:** Works on plain paragraphs but hasn't been tested on: form fields, contenteditable areas, shadow DOM, text inside iframes, selected text that spans multiple elements. Verify each before marking done.
-- [ ] **Backend Integration:** API calls work when backend is responsive but haven't been tested with: 10+ second latency, network timeout, HTTP 500 errors, rate limit responses (HTTP 429), request cancellation. Add tests for each before shipping.
-- [ ] **Floating Icon:** Icon displays correctly on developer's test sites but hasn't been tested on: high z-index sites (Gmail, Figma, Slack), mobile viewport, dark mode, RTL languages. Test on at least 5 real sites.
-- [ ] **Service Worker State:** Extension appears to work during development but hasn't been tested with: service worker manually terminated (DevTools), extension disabled and re-enabled, user inactive for >1 minute (service worker termination), multiple browser profiles. Simulate each.
-- [ ] **Error Handling:** Happy path works but hasn't been tested with: backend down, user offline, rate limit hit, malformed backend response. Add error UI for each case.
-- [ ] **Performance:** Extension works but hasn't been tested with: 100+ DOM mutations per second (SPA), 50KB+ text selections, multiple simplification requests in parallel, browser with limited memory. Profile on realistic data.
-- [ ] **Privacy & Security:** Code reviewed but hasn't been tested for: XSS (inject malicious HTML in selected text), CSRF (crafted message from malicious site), CSP bypass, localStorage inspection, API key exposure. Run a security checklist.
-- [ ] **User Preferences:** Preferences are saved but haven't been tested with: extension re-enable, switching Chrome profiles, clearing extension data, browser update. Verify persistence in each scenario.
-
----
-
-## Recovery Strategies
-
-| Pitfall | Recovery Cost | Recovery Steps |
-|---------|---------------|----------------|
-| **Logged sensitive content in backend logs** | MEDIUM | 1) Immediately stop logging content in production. 2) Purge all existing logs containing user content. 3) Audit who accessed logs in the past 30 days. 4) Notify affected users if content was exposed. 5) File a security advisory if needed. 6) Implement automated log scanning to prevent recurrence. |
-| **API key exposed in extension code** | HIGH | 1) Immediately revoke the exposed key. 2) Generate a new key. 3) Push an emergency update to all users (auto-update via Chrome Web Store). 4) Monitor old key for unauthorized use for 30 days. 5) Audit API logs for suspicious activity. 6) Consider refunding users if charges occurred. |
-| **Service worker lifetime bug causes lost user state** | LOW | 1) Migrate state from global variables to `chrome.storage.local`. 2) Push a manual fix (version bump, auto-update). 3) Users won't need to do anything; state will be restored on next launch. 4) Consider adding a "restore preferences" one-time prompt if users have preferences set before the fix. |
-| **Backend timeout handling missing, causing silent failures** | MEDIUM | 1) Add timeout and retry logic to content script. 2) Add error UI to show the user what's happening. 3) Push update. 4) Monitor for a week to ensure failures are now visible and recoverable. |
-| **Floating icon conflicts with page UI, making extension unusable** | MEDIUM | 1) Switch to Popover API or CSS Anchor Positioning. 2) Add a keyboard shortcut as an alternative to clicking the icon. 3) Push update. 4) Consider adding a "disable icon on this domain" setting for power users. |
-| **Uncontrolled API costs reaching 10x expected budget** | HIGH | 1) Implement hard rate limit immediately (return 429 after threshold). 2) Investigate which users/requests caused the spike (analyze logs). 3) If an external attack, block suspicious IPs/users. 4) Contact API provider to discuss charges and potential credits. 5) Communicate to users that rate limits are now in place. 6) Push updated extension. |
-
----
-
-## Pitfall-to-Phase Mapping
-
-| Pitfall | Prevention Phase | Verification Method |
-|---------|------------------|-----------|
-| Service Worker Lifetime Termination | Phase 1: Core Architecture | 1) Manually terminate SW in DevTools. 2) Verify extension re-initializes and restores preferences. 3) Test after 1+ min inactivity. |
-| Event Listener Registration in Async Code | Phase 1: Core Architecture | 1) Verify all listeners registered at top level. 2) Disable/re-enable service worker. 3) Confirm events still fire. 4) Run extension through inactivity cycle. |
-| setTimeout/setInterval Cancellation | Phase 1: Core Architecture | 1) Replace any timers with Alarms API. 2) Verify alarm fires after SW termination. 3) Test retry logic survives inactivity. |
-| CSP Blocking Backend Fetch | Phase 2: Backend Integration | 1) Verify backend domain in CSP. 2) Test fetch to unlisted domain fails with CSP error. 3) Test fetch to allowed domain succeeds. 4) Code review CSP policy. |
-| Uncontrolled API Costs | Phase 2: Backend Integration | 1) Implement rate limiting on backend. 2) Test hitting rate limit (expect HTTP 429). 3) Monitor cost alerts. 4) Load test with 100+ concurrent requests; verify costs cap. |
-| Text Selection Edge Cases | Phase 2: Text Selection & Replacement | 1) Test selection in: input, textarea, contenteditable, plain text, shadow DOM (iframe workaround). 2) Test replacement in each context. 3) Test nested/multi-element selections. |
-| MutationObserver Performance | Phase 3: SPA Support | 1) Load an SPA (Reddit, Twitter). 2) Verify new content is observed. 3) Monitor CPU usage before/after enabling observer. 4) Set observer-specific limits (max 1000 mutations/sec). |
-| Backend Timeout Without Fallback | Phase 2: Backend Integration → Phase 3: UX | 1) Simulate slow backend (5s latency). 2) Verify spinner shown, timeout after 10s. 3) Retry with exponential backoff. 4) Show error UI if all retries fail. |
-| Privacy Violations (Logging Content) | Phase 1: Core Architecture | 1) Code review all logging statements. 2) Verify no content in logs (only hashes). 3) Scan logs for sensitive data monthly. 4) Document logging policy in team wiki. |
-| Floating Icon Z-Index/Positioning | Phase 2: UI & Text Selection | 1) Test on high z-index sites (Gmail, Figma, Slack). 2) Verify icon visible and clickable. 3) Test mobile viewport; icon should not be off-screen. 4) Use Popover API or CSS Anchor (Chrome 125+). |
+**Web Store Submission (Phase 3):**
+- [ ] Privacy policy URL tested (loads, is public, is readable)
+- [ ] Screenshots show production UI (no localhost, no WIP elements)
+- [ ] Description is clear and compelling
+- [ ] No `eval()`, `Function()`, or dynamic remote code execution
+- [ ] Permissions minimized and justified
+- [ ] Manifest CSP includes production backend domain
+- [ ] Build output verified free of localhost references
+- [ ] Extension installed post-build and tested end-to-end
+- [ ] Legal/Privacy review completed (optional but recommended)
 
 ---
 
 ## Sources
 
-- [Migrate to Service Workers - Chrome for Developers](https://developer.chrome.com/docs/extensions/develop/migrate/to-service-workers)
-- [Resolving Content Security Policy Issues in Chrome Extension Manifest V3](https://medium.com/@python-javascript-php-html-css/resolving-content-security-policy-issues-in-chrome-extension-manifest-v3-4ab8ee6b3275)
-- [Service Worker Debugging - Chrome Extensions](https://groups.google.com/a/chromium.org/g/chromium-extensions/c/3QAinUhCiPY)
-- [Why LLM Rate Limits and Throughput Matter More Than Benchmarks](https://www.codeant.ai/blogs/llm-throughput-rate-limits)
-- [API Rate Limiting 2026 | How It Works & Why It Matters](https://www.levo.ai/resources/blogs/api-rate-limiting-guide-2026)
-- [Web-Facing Change PSA: Fix text selection on Shadow DOM with delegatesFocus](https://groups.google.com/a/chromium.org/g/blink-dev/c/egWmzZ4MNuU)
-- [Chrome Extensions and Shadow DOM](https://blog.railwaymen.org/chrome-extensions-shadow-dom)
-- [Detect DOM changes with mutation observers - Chrome for Developers](https://developer.chrome.com/blog/detect-dom-changes-with-mutation-observers)
-- [Updated Privacy Policy & Secure Handling Requirements - Chrome Web Store](https://developer.chrome.com/docs/webstore/program-policies/user-data-faq)
-- [Browser Extension Security Vulnerabilities Cheat Sheet - OWASP](https://cheatsheetseries.owasp.org/cheatsheets/Browser_Extension_Vulnerabilities_Cheat_Sheet.html)
-- [Retrying requests when back online - Workbox](https://developer.chrome.com/docs/workbox/retrying-requests-when-back-online)
-- [Effective Strategies for Handling Browser Timeouts in API Requests](https://medium.com/@nidishllc/effective-strategies-for-handling-browser-timeouts-in-api-requests-fbc774f2e3ed)
-- [Meet the top layer: a solution to z-index:10000](https://developer.chrome.com/blog/what-is-the-top-layer)
-- [CSS Anchor Positioning: Complete Guide to the New CSS API 2026](https://devtoolbox.dedyn.io/blog/css-anchor-positioning-guide)
-- [AI API Pricing Guide 2026: Cost Comparison and How to Optimize Your Spending](https://medium.com/@anyapi.ai/ai-api-pricing-guide-2026-cost-comparison-and-how-to-optimize-your-spending-c74f2254a2a8)
-- [Declare Permissions - Chrome Extensions](https://developer.chrome.com/docs/extensions/develop/concepts/declare-permissions)
-- [Grammarly and QuillBot Chrome Extensions Privacy Risks 2026](https://www.helpnetsecurity.com/2026/01/28/incogni-chrome-extensions-privacy-risks-report/)
-- [Chrome Extension V3: Mitigate service worker timeout issue](https://medium.com/@bhuvan.gandhi/chrome-extension-v3-mitigate-service-worker-timeout-issue-in-the-easiest-way-fccc01877abd)
-- [Using Shadow DOM - MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM)
+**Chrome Extension + Manifest V3:**
+- [Chrome Extensions: Declare permissions](https://developer.chrome.com/docs/extensions/develop/concepts/declare-permissions)
+- [Chrome Extensions: Content Security Policy](https://developer.chrome.com/docs/extensions/develop/concepts/content-security-policy)
+- [Chrome Extensions: Troubleshooting Chrome Web Store violations](https://developer.chrome.com/docs/webstore/troubleshooting)
+- [Chrome Extensions: Chrome Web Store review process](https://developer.chrome.com/docs/webstore/review-process)
+- [Chrome Extensions: Permissions list](https://developer.chrome.com/docs/extensions/reference/permissions-list)
+- [Chrome Extensions: Remote Code Execution policy (Manifest V3)](https://developer.chrome.com/docs/webstore/program-policies)
+
+**Content Scripts + CSS Isolation + Fonts:**
+- [How to add style and webfonts to a Chrome Extension content script (CSS)](https://medium.com/@charlesdouglasosborn/how-to-add-style-and-webfonts-to-a-chrome-extension-content-script-css-47d354025980)
+- [Using @font-face in a Content Script for a Chrome Extension: A Guide](https://copyprogramming.com/howto/how-to-use-font-face-on-a-chrome-extension-in-a-content-script)
+- [Using the Shadow DOM for CSS Isolation](https://www.chrisfarber.net/posts/2023/css-isolation)
+- [CSS Shadow DOM Pitfalls: Styling Web Components Correctly](https://blog.pixelfreestudio.com/css-shadow-dom-pitfalls-styling-web-components-correctly)
+- [Encapsulating Style and Structure with Shadow DOM](https://css-tricks.com/encapsulating-style-and-structure-with-shadow-dom)
+
+**Render Platform + Backend Deployment:**
+- [Render Docs: WebSockets](https://render.com/docs/websocket)
+- [Building real-time applications with WebSockets](https://render.com/articles/building-real-time-applications-with-websockets)
+- [Understanding Latency in Free Backend Hosting on Render.com](https://medium.com/@python-javascript-php-html-css/understanding-latency-in-free-backend-hosting-on-render-com-d1ce9c2571de)
+- [Keep Your Render Free Apps Alive 24/7](https://medium.com/@prajju.18gryphon/keep-your-render-free-apps-alive-24-7-41aa85d71256)
+- [Keeping Your Node.js Server Awake on Render's Free Tier](https://medium.com/@itsandreas/keeping-your-node-js-server-awake-on-renders-free-tie-5c7effa23330)
+
+**Express + Node.js + Keep-Alive / SSE:**
+- [Check your server.keepAliveTimeout](https://shuheikagawa.com/blog/2019/04/25/keep-alive-timeout)
+- [Tuning HTTP Keep-Alive in Node.js](https://connectreport.com/blog/tuning-http-keep-alive-in-node-js)
+- [Http connections aborted after 5s / keepAliveTimeout](https://github.com/nodejs/node/issues/13391)
+- [Server-Sent Events (SSE) — MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events)
+
+**Chrome Web Store Policies:**
+- [Chrome Web Store Rejection Codes. Introduction](https://medium.com/@bajajdilip48/chrome-web-store-rejection-codes-b71f817ceaea)
+- [Top 5 Reasons Your Extension Could Get Rejected by Google](https://dev.to/spooja151/top-5-reasons-your-extension-could-get-rejected-by-google-1nf2)
+- [Why Chrome Extensions Get Rejected (15 Reasons + How to Fix Each One)](https://www.extensionradar.com/blog/chrome-extension-rejected)
+- [Chrome Web Store Rejection Codes: Meaning & Fixes](https://www.coditude.com/insights/chrome-web-store-rejection-codes/)
 
 ---
 
-*Pitfalls research for: AI-powered text simplification Chrome extension (Twelveify)*
-*Researched: 2026-02-20*
+*Pitfalls research for: Twelveify v1.2 — Chrome extension UI redesign + Render production backend + Chrome Web Store submission*
+*Researched: 2026-02-25*

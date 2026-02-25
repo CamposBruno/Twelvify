@@ -1,19 +1,17 @@
-# Project Research Summary: Twelveify
+# Project Research Summary: Twelvify v1.2
 
-**Project:** Twelveify (AI-powered text simplification Chrome extension)
-**Domain:** Browser extension with backend AI proxy
-**Researched:** 2026-02-20
+**Project:** Twelvify v1.2 — Chrome Extension UI Redesign + Production Backend Deploy
+**Domain:** AI-powered Chrome extension (text simplification) with production backend and Web Store publication
+**Researched:** 2026-02-25
 **Confidence:** HIGH
-
----
 
 ## Executive Summary
 
-Twelveify is a **personalized text simplification Chrome extension** positioned to win against competitors (Rewordify, Text Simplifier, Simplify) by combining in-page text replacement, progressive onboarding, and tone/depth customization that existing tools lack. The research reveals a clear gap in the market: no competitor offers both **in-page display + personalized tone control + privacy-first architecture**.
+Twelvify v1.2 marks the transition from MVP (functional v1.0) and landing page (v1.1) to a **production-ready, publicly distributed product**. This requires three coordinated efforts: (1) translating the toned-down zine/punk aesthetic from the landing page into the extension UI with custom fonts (Permanent Marker, Special Elite) and sharp brand colors, (2) deploying the Express.js backend from localhost to Render with health checks and graceful shutdown for zero-downtime deploys, and (3) submitting to the Chrome Web Store with polished assets, accurate privacy policy, and minimal permissions.
 
-The recommended tech stack is **modern and proven**: WXT framework (not Plasmo, which is in maintenance mode), React 18, Tailwind CSS, Zustand for state, and **Cloudflare Workers for the backend** (sub-5ms latency, 70% cheaper than Lambda at scale). OpenAI GPT-4o mini is the recommended AI provider due to cost efficiency ($0.15/$0.60 per M tokens). The extension follows Manifest V3 patterns with strict separation: content script → service worker → backend proxy, with no API keys exposed to the client.
+The research reveals a **well-defined, low-risk path** to launch built on established patterns: WXT is the modern Chrome extension framework (Plasmo is now in maintenance mode), Render is the reliable backend platform (with careful attention to keep-alive timeouts for SSE streams), and Chrome Web Store submission has clear, documented requirements that are mostly compliance-driven rather than technically complex. The primary risks are **CSS isolation issues** (custom fonts/colors being overridden by host pages), **SSE timeout bugs** during long simplifications, and **submission rejections** due to missing privacy policies or overly broad permissions—all preventable with focused testing and documentation.
 
-**Key risks to mitigate:** (1) Service worker ephemeral state—all user state must persist to `chrome.storage.local`, not global variables. (2) Uncontrolled API costs—rate limiting with two layers (soft limit in extension, hard limit on backend) must be in place before public launch. (3) Floating UI conflicts on high z-index sites—use Popover API or CSS Anchor Positioning, not manual z-index. If these are handled correctly, the product can launch with MVP in one 4-6 week phase and scale to v1.1+ iterations afterward.
+**Recommended approach:** Build in five sequential phases that respect dependencies: (Phase 1) redesign extension UI with design tokens and test CSS isolation on high-complexity websites, (Phase 2) productionize the backend with health checks and keep-alive configuration, (Phase 3) update manifest and verify end-to-end, (Phase 4) prepare Web Store assets and privacy policy, (Phase 5) submit and obtain approval. This order ensures the extension works reliably before adding production infrastructure concerns, and both work before Web Store submission gates everything.
 
 ---
 
@@ -21,269 +19,232 @@ The recommended tech stack is **modern and proven**: WXT framework (not Plasmo, 
 
 ### Recommended Stack
 
-The technology stack emphasizes **modern, actively-maintained tooling** with proven patterns for Chrome extension development:
+**From STACK.md:** The recommended stack is mature and well-tested. WXT (v0.21+) is the consensus choice for new Chrome extensions in 2026, offering smaller bundles than Plasmo (now in maintenance mode), framework-agnostic UI support, and excellent Vite-based HMR. React 18.x with TypeScript provides safe, battle-tested UI development. Tailwind CSS 3.4+ paired with custom CSS properties (via design tokens) avoids runtime overhead while enabling future dark mode support. For backend, Express.js on Render (Starter plan or higher—free tier is NOT production-ready for SSE) with Node.js 18+ LTS ensures stable, predictable behavior.
 
-**Core Extension Technologies:**
-- **WXT v0.21+** (framework): Next-gen extension framework, actively maintained, 43% smaller bundle output than Plasmo, framework-agnostic, best-in-class HMR
-- **React 18.x** (UI framework): Battle-tested, excellent with content scripts/popups, largest ecosystem
-- **Vite 5.x** (build tool): Blazing fast, optimal for extension development, built into WXT
-- **TypeScript 5.3+** (type safety): Enterprise-grade safety, official Chrome extension support
-- **Tailwind CSS 3.4+** + **shadcn/ui** (styling): Minimal bundle bloat, pre-built components, no npm dependency overhead
-- **Zustand 4.4+** (state management): Lightweight (2KB), shared state across extension contexts, much preferred to Redux (40KB)
-- **TanStack Query 5.x** (server state): Automatic API response caching, avoids redundant AI calls
+**Core technologies with rationale:**
+- **WXT (v0.21+):** Modern extension framework, 43% smaller bundle than legacy tools, actively maintained, excellent for MV3
+- **React 18.x + TypeScript 5.3+:** Type safety, vast ecosystem, battle-tested for extension UIs
+- **Tailwind CSS 3.4+ with CSS custom properties:** Minimal bundle bloat, runtime theme switching possible, no CSS-in-JS overhead
+- **Google Fonts (Permanent Marker, Special Elite):** Free, well-maintained, perfectly suited to brand aesthetic, cached globally
+- **Express.js 4.18+ on Render Starter plan:** Proven for SSE streaming, health check support, reliable Node.js runtime
+- **Chrome.storage API (for persistence):** Local-first preferences, no backend database needed
 
-**Backend & AI:**
-- **Cloudflare Workers** (serverless proxy): Sub-5ms cold starts, 70% cheaper than AWS Lambda at 10M requests/month, generous free tier
-- **OpenAI GPT-4o mini** (LLM): Lowest cost ($0.15/$0.60 per M tokens), proven quality for paraphrasing, recommended over Claude Haiku (5.3x more expensive) for MVP
-- **Server-Sent Events (SSE)** pattern: Stream AI responses token-by-token for real-time UI updates
-
-**Why NOT to use:**
-- Plasmo: In maintenance mode as of early 2026, slowed development, long-term viability uncertain
-- Redux: 40KB+ overkill for extension state (typically 5-10 values); use Zustand instead
-- CSS-in-JS (styled-components): Adds 30-50KB bundle bloat; Tailwind compiles to static CSS
-- Hardcoded API keys: Critical security vulnerability; backend proxy pattern holds keys in environment variables
+**Critical version requirements:**
+- Node.js 18+ LTS (Render default); 20.x also compatible
+- Manifest V3 required (MV2 deprecated June 2025; no exceptions)
+- Chrome 120+ minimum for extension features
 
 ### Expected Features
 
-Research identifies **clear table-stakes requirements** (users expect these) and **competitive differentiators** (where Twelveify can win):
+**From FEATURES.md:** The feature landscape for v1.2 differs fundamentally from v1.0 (building core) and v1.1 (marketing). This milestone is about **visual polish, operational reliability, and distribution**. Most core simplification features already exist; the work is UI refinement, backend robustness, and compliance.
 
-**Must Have (Table Stakes):**
-- Text selection & activation (keyboard shortcut, button, context menu)
-- Fast simplification response (<2s)
-- Display simplified text to user (in-page replacement most seamless)
-- Preserve original meaning (quality of AI model critical)
-- Work on any website/content
-- Clear, understandable output (no oversimplification)
-- Privacy indication ("no server logging")
-- Free or freemium model (free tier with usage limits)
+**Must have (table stakes for Web Store):**
+- Branded popup panel with new fonts and colors matching landing page aesthetic
+- Persistent, z-index-resilient floating button visible across high-complexity websites
+- Styled in-page simplified text with highlighting and padding
+- Chrome Web Store listing assets (icons, screenshots, promotional images)
+- Production backend connectivity (no localhost in manifest)
+- Health check endpoint for zero-downtime Render deploys
+- Privacy policy published and linked in store listing
+- Graceful shutdown handling (SIGTERM) for safe backend deploys
 
-**Should Have (Competitive Differentiators):**
-- **Personalization by user profile** (tone, depth, background)—core Twelveify value, missing in all competitors
-- **Tone customization** (casual vs. formal vs. supportive)—not just reading level
-- **Progressive onboarding** (learn preferences over first uses, not upfront wizard)—reduces friction, differentiates from Rewordify's "set level upfront"
-- **Click-to-define within simplification** (inline vocabulary tooltips)—enhances learning workflow
-- **Profession/interest-based analogies** ("explain like a sports fan" for finance text)—high value but post-MVP
-- **Vocabulary difficulty slider** (keep specialized terms user knows)—industry gap
-- **Readability metrics** (before/after reading level, time to read)
-- **Dark mode & accessibility** (table stakes for accessibility tools)
-- **PDF support** (high value if 15%+ of demand warrants it)
+**Should have (competitive differentiators):**
+- Distinctive zine/punk visual identity (Special Elite + Permanent Marker fonts, high-contrast colors)
+- Rate limit transparency ("47/100 simplifications used this hour")
+- Privacy badge in popup footer ("Your text stays private")
+- SSE streaming animation for word-by-word updates (already works; styling update only)
 
-**Defer to v2+ (Not MVP):**
-- Multiple simultaneous rewrite modes (choice paralysis, 3-4x QA burden)
-- Real-time on-hover simplification (massive API cost, privacy concern)
-- User accounts & cloud sync (contradicts "free beta, no login" goal)
-- Offline mode (impossible without 200MB+ local models)
-- Learning integration like Rewordify (Rewordify owns this; Twelveify differentiates on personalization)
-- Summarization mode (different product; defer)
-
-**MVP Feature Set:** Text selection + in-page replacement + progressive onboarding (1-2 preferences on first use) + one personalized rewrite mode + basic tone adjustment (casual/formal) + keyboard shortcut + privacy statement + free tier with 10-20 requests/day.
+**Defer to v1.3+ (anti-features):**
+- Dark mode for extension UI (landing page is light-only; not MVP priority)
+- Click-to-define tooltips (scope creep beyond redesign)
+- In-extension user accounts (keep local-first; revisit if monetization needed)
+- Summarization mode (separate product concern; stay focused)
+- Multilingual support (English-first; future enhancement)
 
 ### Architecture Approach
 
-Twelveify uses a **layered message-passing architecture** that isolates security boundaries between content script (webpage context), service worker (extension context), and backend API:
+**From ARCHITECTURE.md:** The v1.2 architecture maintains the existing Manifest V3 structure while adding production-ready deployment patterns. CSS is isolated across three boundaries: (1) content script floating button (inline styles, no Shadow DOM to preserve selection events), (2) popup UI (Tailwind or design tokens CSS-in-JS, full extension context isolation), and (3) backend health checks. Font loading strategy uses Google Fonts CDN (cached globally, already loaded for landing page) rather than bundled fonts to avoid bundle bloat. The backend uses environment variables for configuration (OPENAI_API_KEY, PORT, NODE_ENV) and implements `/health` endpoint with proper keep-alive timeouts for SSE streams.
 
-```
-Webpage DOM
-  ↓
-Content Script (text selection, floating UI)
-  ↓ chrome.runtime.sendMessage()
-Service Worker (message router, state manager, rate limiter)
-  ↓ HTTPS fetch
-Backend Proxy (Cloudflare Workers)
-  ↓
-OpenAI API
-```
-
-**Major Components:**
-
-1. **Content Script** — Detects text selection (window.getSelection), injects floating "Simplify" button, sends text + preferences to Service Worker via message passing, receives simplified text, replaces original in DOM, handles dynamic content via MutationObserver
-
-2. **Service Worker** — Message router (validates sender, routes by type), state manager (loads/saves preferences to chrome.storage.local, tracks rate limits), orchestrates backend API calls, applies soft rate limiting (50 requests/hour), handles retries with exponential backoff, manages onboarding state
-
-3. **Popup/Side Panel UI** — Preference form (tone, depth, background), progressive onboarding screens, settings, usage stats, reads/writes to chrome.storage.local/sync
-
-4. **Backend API Proxy** — Receives text + preferences, validates input, constructs AI prompt (system message includes tone/depth/background context), calls OpenAI/Anthropic API (API key stored server-side in environment), streams response via SSE, logs anonymous metrics (never content, only hashed userId + tone used + input length binned), enforces hard rate limit (100 requests/hour, returns HTTP 429)
-
-5. **chrome.storage.local** — Persists preferences, onboarding state, rate limit counters, usage metrics; survives extension reload and browser restart
-
-**Key Patterns:**
-- **Layered messaging** prevents direct backend calls from less-trustworthy content script
-- **SSE streaming** for real-time token-by-token AI responses
-- **Progressive onboarding** via gradual preference collection
-- **Two-layer rate limiting** (soft in extension, hard on backend)
-- **Stateless backend** (no user session storage, scales horizontally)
-- **Privacy-first logging** (never log content, only metadata)
+**Major components and responsibilities:**
+1. **Design Tokens** (`src/theme/tokens.ts`): Centralized color, font, spacing definitions for consistency across floating button, popup, and in-page styling
+2. **Content Script UI** (FloatingButton, OnboardingPrompt): Inline React components with custom fonts, brand colors, sharp borders; no Shadow DOM
+3. **Popup Panel** (App, SettingsPanel): Tailwind CSS or design tokens CSS-in-JS; brand fonts (Special Elite for headings, Permanent Marker for emphasis)
+4. **Backend Express Server** (Render deployment): Health endpoint, keep-alive configuration, CORS restricted to extension ID, graceful SIGTERM handling
+5. **Simplified Text Span** (content script): Applied to rewritten text with highlight color, left border accent, fade-in animation
 
 ### Critical Pitfalls
 
-Research identifies **10 critical pitfalls** specific to Chrome MV3 + AI integrations. The most dangerous ones (if not addressed early):
+**From PITFALLS.md:** Research identified 10 critical pitfalls, with 5 rated as high-impact. The most dangerous issues are CSS conflicts (custom fonts overridden by page styles, z-index wars), SSE timeout bugs (keep-alive not configured, connections drop mid-stream on large text), and submission rejections (missing privacy policy, localhost URLs in build, overly broad permissions).
 
-1. **Service Worker Lifetime Termination Eating Global State** — Service workers unload after ~30s inactivity. Global variables are lost on restart. **Fix:** All state must go to `chrome.storage.local` (the single source of truth), not memory. Load preferences at service worker startup.
+**Top preventable pitfalls with mitigation:**
 
-2. **Uncontrolled API Costs Spiraling** — No rate limiting + user loop or bug = 100K API calls in hours = months of budget consumed. **Fix:** Implement hard budget limit (HTTP 429 after threshold) before launch. Per-user rate limits (5 requests/min, 50/day free). Exponential backoff with max retry count.
+1. **CSS Isolation Failures (HIGH IMPACT):** Custom fonts fail to load or are overridden by host page styles. **Prevention:** Use Shadow DOM for content script UI (if needed), or highly namespace all CSS (`.twelvify-*` prefixes), verify fonts in `web_accessible_resources`, test on 10+ high-CSS sites (Gmail, Twitter, GitHub, Medium, LinkedIn, Google Docs). Use inline styles with `!important` only if page is known to have aggressive CSS.
 
-3. **Event Listener Registration Inside Async Code Never Fires** — Listeners registered inside `.then()` blocks don't exist after service worker restarts. Extension becomes unresponsive. **Fix:** Register ALL listeners at top level, before any async operations.
+2. **Render Free Tier Spin-Down (HIGH IMPACT):** Free tier auto-suspends after 15 min inactivity. SSE streams timeout mid-simplification. **Prevention:** Upgrade to Render Starter plan ($7/mo) for production (non-negotiable). If free tier must be used for testing, implement keep-alive comments every 20-30 seconds and use GitHub Actions cron to ping service every 5 minutes.
 
-4. **CSP Blocks Fetch to Backend** — Forgot to add backend domain to `content_security_policy.connect-src`. Every fetch fails silently (no console error). **Fix:** Explicitly list backend domain in manifest.json CSP. Never use `connect-src *` in production.
+3. **SSE Keep-Alive Timeout Kills Long Simplifications (HIGH IMPACT):** Large text selections (5KB+) timeout because Express default keep-alive is 5 seconds. **Prevention:** Configure `server.keepAliveTimeout = 120000` (2 minutes), `server.headersTimeout = 125000`, implement keep-alive comments in SSE stream every 20 seconds, test with realistic text sizes and latencies, set max text length (10K chars recommended).
 
-5. **Floating Icon UI Breaks Due to Z-Index Wars** — Icon appears behind page content on high z-index sites (Gmail, Figma). Manual z-index never wins. **Fix:** Use Popover API (Chrome 114+) or CSS Anchor Positioning (Chrome 125+), not manual positioning.
+4. **Localhost URLs in Production Build (HIGH IMPACT):** Manifest or code still references `localhost:3001` after production deploy. Web Store rejects; users get broken extension. **Prevention:** Build-time environment variable injection, grep build output for localhost verification before submission, add CI/CD check to fail build if localhost found.
 
-6. **Text Selection Edge Cases Break Content Script** — Form fields, shadow DOM, contenteditable areas, text spanning elements—all handled differently. Extension works on news articles but fails on LinkedIn/Twitter. **Fix:** Handle multiple element types; for shadow DOM, use injected script + postMessage workaround.
-
-7. **Backend Timeout or Failure With No Graceful Fallback** — API times out, no spinner shown, no error message, no retry button. User thinks extension is broken. **Fix:** Show spinner immediately, timeout after 10s, retry with exponential backoff, show error UI if all retries fail.
-
-8. **Privacy Violations — Content Logged on Backend** — Debug logs contain user text (medical notes, financial info). Logs stored insecurely. **Fix:** Never log content; only log hashed content or metadata. Encrypt logs at rest, auto-delete after 30 days, never commit logs to version control.
-
-9. **setTimeout/setInterval Silently Cancelled** — Timers used for debounce/retry are cancelled when service worker terminates. **Fix:** Use `chrome.alarms` API instead (persists across restarts).
-
-10. **MutationObserver Performance Degradation** — Observer watching entire document with all flags enabled → CPU drain, page jank. **Fix:** Observe only specific containers, disable unnecessary flags (skip `characterData`), throttle callback.
+5. **Missing/Incorrect Privacy Policy (MEDIUM IMPACT):** Web Store rejects for missing or boilerplate policy. **Prevention:** Write specific policy before submission (not generic), publish on public URL (twelvify.com/privacy), test URL loads, explicitly state: no content logging, anonymous analytics only, OpenAI API proxy, no user accounts.
 
 ---
 
 ## Implications for Roadmap
 
-Based on research, the product should be built in **3-4 phases**, with clear dependencies and architecture constraints that inform the order:
+Based on integrated research findings, the recommended phase structure respects architectural dependencies and mitigates critical pitfalls:
 
-### Phase 1: Core Extension Architecture & Text Selection (3-4 weeks)
-**Rationale:** Must establish correct storage architecture and event listener patterns before any feature work. Service worker state management and content script selection logic are foundational—errors here cause cascading failures in all subsequent features. Avoids pitfalls #1, #2 (rate limiting stub), #3.
-
-**Delivers:**
-- Extension scaffold with WXT, React, Tailwind
-- Service Worker with proper listener registration at top level
-- Content Script with text selection detection (plain text, form fields, contenteditable)
-- Floating "Simplify" button that appears on selection
-- chrome.storage.local state schema (preferences, rate limit counters, usage metrics)
-- Manifest V3 + CSP correctly configured for backend domain
-
-**Implements:**
-- Avoid: global state in service worker (all state → chrome.storage.local)
-- Avoid: listener registration in async code (all at top level)
-- Avoid: no rate limiting (stub implementation: soft limit in extension, hard limit on backend)
-- Test: Manually terminate service worker in DevTools, verify preferences restored on restart
-
-**Research Flags:**
-- None—standard MV3 patterns well-documented
-
-### Phase 2: Backend Integration & AI Simplification (3-4 weeks)
-**Rationale:** Once extension architecture is solid, integrate the backend proxy and AI model. This phase introduces the costliest pitfall (uncontrolled API spend), so rate limiting must be production-ready. SSE streaming and timeout handling are critical for user trust.
+### Phase 1: UI Redesign & Design System
+**Rationale:** Must establish design tokens and test CSS isolation on complex websites before any backend work. Floating button z-index issues and font loading failures are high-impact and must be solved early to avoid Web Store rejection. This phase is also mostly parallelizable (designer + frontend dev).
 
 **Delivers:**
-- Cloudflare Workers backend scaffold (simple POST /api/simplify handler)
-- Integration with OpenAI GPT-4o mini (or Claude Haiku if quality testing fails)
-- SSE streaming for token-by-token text display
-- Full rate limiting (soft: 50/hour in extension, hard: 100/hour + cost limit on backend)
-- Timeout handling (10s timeout, 2 retries with exponential backoff)
-- Error UI ("Service temporarily unavailable", "Try again" button)
-- Backend logging policy (never log content, only hashed userId + tone + input length)
+- Design tokens file with centralized colors, fonts, spacing
+- Redesigned floating button with Permanent Marker font, brand indigo + sharp borders
+- Redesigned popup panel with Special Elite headings, proper contrast ratios (WCAG AA 4.5:1 minimum)
+- Styled in-page simplified text with highlight and left border accent
+- Verified CSS isolation: tested on Gmail, Twitter, GitHub, Medium, LinkedIn, YouTube, Google Docs (10+ sites minimum)
+- Fonts loading correctly; no FOUC (flash of unstyled text)
 
-**Implements:**
-- Backend as thin, stateless proxy (no session storage)
-- Request validation middleware (CSP, rate limit, input length)
-- Privacy-first logging (no content in logs, ever)
-- Avoid: API keys in extension code (all in backend environment variables)
-- Avoid: hardcoded backend URL (configurable, injected at build time)
+**Addresses features:** Branded, cohesive popup panel (table stakes); persistent, reliable floating button (table stakes); styled in-page text (table stakes); distinctive zine/punk visual identity (differentiator)
 
-**Testing Checklist:**
-- Backend timeout: kill network, verify spinner shows, timeout after 10s, retry works
-- Rate limit hit: fill quota, verify HTTP 429 response, user sees "quota exceeded" message
-- API cost tracking: log daily cost, set alert if 10x expected daily cost
-- CSP enforcement: test fetch to unlisted domain fails with CSP error
+**Avoids pitfalls:** Content script CSS leaking/being overridden (Pitfall 1); custom fonts failing to load (Pitfall 2); floating button z-index conflicts (Pitfall 1)
 
-**Research Flags:**
-- OpenAI vs Claude quality comparison (if cost becomes issue, A/B test Claude Haiku vs GPT-4o mini on sample text)
-- Cloudflare Workers cold start performance in production (assumed <5ms, verify during Phase 1 backend setup)
+**Dependencies:** None (foundational)
 
-### Phase 3: Personalization & Differentiation (4-5 weeks)
-**Rationale:** Only after core simplification is rock-solid, add the features that differentiate Twelveify from competitors: progressive onboarding, tone customization, and preference management. This phase is where "personalized simplification" becomes real.
+**Research flags:** CSS isolation on complex sites (Shadow DOM vs. inline styles trade-offs). Test actual rendering on target sites, not just local dev environment.
 
-**Delivers:**
-- Progressive onboarding: Ask 1 preference question per use (tone on use 1, depth on use 2, background on use 3), not upfront wizard
-- Tone customization (casual vs. formal vs. supportive) with prompt injection for AI
-- Explanation depth control (light vs. detailed)
-- Side panel UI for preference management
-- Settings UI (tone, depth, background/profession dropdown)
-- Usage stats display (requests this week, quota remaining)
-- Keyboard shortcut customization (Alt+S or user-configured)
-- Dark mode support for extension UI
-
-**Implements:**
-- Avoid: "Auto-detect all settings" (users should choose)
-- Avoid: Multiple simultaneous modes (stick with one rewrite adjusted by preferences)
-- Test: Preferences persist across service worker restarts, across browser profiles, across extension disable/re-enable
-
-**No Research Flags:** Personalization patterns are standard UI work.
-
-### Phase 4: Accessibility & Polish (3-4 weeks)
-**Rationale:** After MVP is live and gathering usage metrics, refine UX and expand domain support. This phase addresses the "looks done but isn't" checklist: floating icon on high z-index sites, shadow DOM support, PDF simplification if demand warrants.
-
-**Delivers (Prioritized):**
-- **High:** Floating icon fixes (Popover API or CSS Anchor Positioning, works on Gmail/Figma/Slack)
-- **High:** Keyboard-only navigation (Tab + Enter to trigger)
-- **High:** Accessibility testing (WCAG 2.1 AA compliance)
-- **Medium:** Shadow DOM text extraction (for YouTube comments, etc.)
-- **Medium:** PDF text simplification (if >15% of requests are PDFs)
-- **Low:** Multiple language support (ESL/multilingual variants)
-- **Low:** Explain-via-analogy feature ("like I'm 5", profession-based)
-
-**No Research Flags:** Standard accessibility and feature expansion.
-
-### Phase 5+: Learning Integration & Monetization (Post-MVP)
-**Deferred to v2+ (post-PMF):**
-- User accounts & cloud sync (contradicts "free beta" goal)
-- Learning flashcards/quizzes (Rewordify owns this; high complexity)
-- Educator bulk licenses (B2B monetization channel)
-- Premium personalization tiers (explore after 10K+ active users)
+**Duration:** 2-3 weeks
 
 ---
 
-## Phase Dependencies & Ordering Rationale
+### Phase 2: Backend Production Deployment
+**Rationale:** Backend must be productionized and tested before updating manifest to point to production URLs. This phase ensures the extension won't break for all users post-launch. Depends on Phase 1 being complete (so testing can verify end-to-end flow with new UI).
 
-**Why this order:**
+**Delivers:**
+- `/health` endpoint returning 200 OK for Render health checks
+- SIGTERM graceful shutdown handler (safe rolling deploys)
+- Express keep-alive timeout configured: `server.keepAliveTimeout = 120000`
+- Keep-alive comments in SSE stream (every 20 seconds)
+- Environment variables set in Render dashboard (PORT, OPENAI_API_KEY, NODE_ENV, ALLOWED_ORIGIN)
+- Backend running on Render Starter plan ($7/mo) with health checks verified
+- Tested with realistic latencies (50ms, 200ms, 500ms, 1s)
+- Tested with large text (1KB, 5KB, 10KB selections)
+- Max text length enforced (10K chars)
+- CORS restricted to production extension ID (not wildcard)
 
-1. **Phase 1 must come first:** Service worker state architecture is foundational. Errors in listener registration or state management cascade through all subsequent work. MVP cannot work without this solid base.
+**Addresses features:** Production backend connectivity (table stakes); health checks for load balancer (table stakes); graceful shutdown handling (table stakes)
 
-2. **Phase 2 immediately after Phase 1:** Core AI integration unlocks the basic product value ("select text, get simplified version"). Cannot validate product-market fit without this.
+**Avoids pitfalls:** Render free tier spin-down mid-stream (Pitfall 3); SSE keep-alive timeout (Pitfall 4); CORS wildcard in production (architecture pattern)
 
-3. **Phase 3 after Phase 2 validation:** Only after core simplification is stable should you invest in personalization features. If core simplification doesn't work, personalization settings won't help.
+**Dependencies:** Phase 1 complete (so end-to-end testing can happen)
 
-4. **Phase 4 after gathering usage metrics:** Real user feedback informs which accessibility issues matter most (e.g., if 40% of users visit high z-index sites, prioritize floating icon fixes; if <5% use PDFs, defer).
+**Research flags:** Keep-alive timeout tuning and testing. Simulate realistic network conditions and large text selections. Verify Render health check behavior during deploy window.
 
-5. **Phase 5+ after product-market fit:** Monetization and learning integration are distractions before product-market fit. Focus on core value first.
-
-**Critical Path:**
-- Phase 1 & 2 are **blocking critical.** Cannot launch without both.
-- Phase 3 is **essential for differentiation.** MVP without personalization is "just another simplifier" (not competitive).
-- Phase 4 & 5 are **polish/expansion.** Launch without these, gather feedback, prioritize later.
-
-**Estimated Timeline:**
-- Phase 1: 3-4 weeks (extension architecture, service worker, content script)
-- Phase 2: 3-4 weeks (backend, AI, rate limiting, error handling)
-- Phase 3: 4-5 weeks (onboarding, tone/depth UX, side panel)
-- **MVP Launch:** ~10-13 weeks of focused development
-- Phase 4: 3-4 weeks post-launch (bug fixes, high z-index support, shadow DOM)
-- Phase 5+: Post-PMF (monetization, premium features)
-
-**Resource Assumption:** Assuming 1 full-stack engineer (can handle both extension + backend), the timeline is realistic. With 2 engineers (one frontend, one backend), Phases 1-3 could compress to 8-10 weeks.
+**Duration:** 2-3 weeks
 
 ---
 
-## Research Flags
+### Phase 3: Manifest Update & Testing
+**Rationale:** Update extension manifest to point to production backend domain, then test end-to-end. This is short but critical; must come after Phase 2 so backend is confirmed working.
 
-**Phases needing deeper research during planning:**
+**Delivers:**
+- Manifest.json updated with production Render domain in `host_permissions` and CSP `connect-src`
+- Content script API endpoints updated (no localhost references)
+- Extension version incremented in manifest (e.g., 1.2.0)
+- End-to-end tested: select text → floating button → simplify → result displays (on production backend)
+- No localhost references in production build (grep verification)
+- Build artifacts verified clean (no debug code, no dev URLs)
 
-- **Phase 2 (Backend):** OpenAI vs Claude cost/quality trade-off. RECOMMENDATION: Launch with GPT-4o mini, monitor quality metrics (user ratings, edit rate), A/B test Claude Haiku if complaints emerge. Budget ~$5-20/month for MVP (100-500 users).
+**Addresses features:** Production backend connectivity (table stakes); environment variable configuration (table stakes)
 
-- **Phase 2 (Backend):** Cloudflare Workers vs Vercel Functions vs AWS Lambda trade-offs. RECOMMENDATION: Go with Cloudflare Workers (confirmed <5ms latency, 70% cheaper). Detailed cost modeling during Phase 2 planning.
+**Avoids pitfalls:** Localhost URLs in production build (Pitfall 5); CSP mismatch with backend domain (Pitfall 9)
 
-- **Phase 4 (Accessibility):** Real-world testing on high z-index sites (Gmail, Figma, Slack). Popover API vs CSS Anchor Positioning compatibility. Plan 1 week for testing + iteration.
+**Dependencies:** Phase 2 complete (backend live on Render)
 
-**Phases with standard patterns (skip `/gsd:research-phase`):**
+**Research flags:** Build process verification. Ensure environment variable injection works correctly. Manual end-to-end test on production backend.
 
-- **Phase 1 (Extension Architecture):** Chrome MV3 messaging, service worker patterns, storage API—all documented in official Chrome docs. Reference [Chrome for Developers: Extensions / Manifest V3].
+**Duration:** 3-5 days
 
-- **Phase 3 (Personalization):** Progressive onboarding, preference form UI—standard React patterns. Reference shadcn/ui component library.
+---
 
-- **Phase 4 (Accessibility):** WCAG 2.1 compliance, keyboard navigation—standard web accessibility. Reference [WebAIM accessibility guidelines].
+### Phase 4: Web Store Assets & Metadata
+**Rationale:** Prepare store listing assets only after UI redesign complete (Phase 1) and backend tested (Phase 2). This ensures screenshots show production UI and point to working backend. Can happen in parallel with Phase 3, but submission must wait for Phase 3 completion.
+
+**Delivers:**
+- Icon assets (128x128, 96x96, 48x48, 16x16 PNG)—recognizable at all sizes
+- 5 screenshots (1280x800 PNG): floating button in context, popup panel, settings, before/after, optional feature showcase
+- Promotional image (440x280 PNG) with brand hero asset
+- Title (≤75 chars): "Twelvify — Plain Language for Complex Text"
+- Summary (≤132 chars): "Highlight confusing text, get clear rewrites personalized to your needs."
+- Description (500–1000 chars): clear feature list, privacy note, CTA
+- Privacy policy URL tested (must load, be public, be readable)
+- Privacy policy text published on twelvify.com/privacy
+
+**Addresses features:** Chrome Web Store listing assets (table stakes); privacy policy publication (table stakes)
+
+**Avoids pitfalls:** Missing/invalid metadata (Pitfall 8); missing privacy policy (Pitfall 6); screenshots showing localhost (Pitfall 8)
+
+**Dependencies:** Phase 1 complete (new UI to screenshot); Phase 2 complete (can confirm backend works)
+
+**Research flags:** Screenshot quality and messaging clarity. Get feedback from 5 users: "Would you install based on this listing?" Privacy policy legal accuracy. Web Store image size specifications are strict; verify dimensions exactly.
+
+**Duration:** 1-2 weeks (can run in parallel with Phase 3, but finish before Phase 5 submission)
+
+---
+
+### Phase 5: Chrome Web Store Submission & Approval
+**Rationale:** Final phase after all prior phases complete. Submission is gated by complete, verified assets and manifest. No technical work here; pure administrative and compliance review.
+
+**Delivers:**
+- Extension submitted to Chrome Web Store with complete metadata
+- 2-Step Verification enabled on developer account (required by Google)
+- Approval received (typically 1-3 business days)
+- Extension live on Chrome Web Store
+- Post-launch monitoring: crash logs, user feedback, install metrics
+
+**Addresses features:** Chrome Web Store publication (table stakes)
+
+**Avoids pitfalls:** Over-permissive permissions (Pitfall 7); remote code execution / eval (Pitfall 10); CSP issues (Pitfall 9)
+
+**Dependencies:** All prior phases complete
+
+**Research flags:** Chrome Web Store review process and typical approval timeline. Have legal review privacy policy (optional but recommended). Understand rejection reasons and appeal process.
+
+**Duration:** 1-3 business days for approval; ongoing monitoring post-launch
+
+---
+
+### Phase Ordering Rationale
+
+The five-phase approach ensures:
+
+1. **Dependency respect:** Phase 1 (UI) → Phase 2 (backend) → Phase 3 (manifest) → Phase 4 (assets) → Phase 5 (submission). Each phase builds on prior work.
+
+2. **Risk mitigation:** CSS isolation tested early (Phase 1) avoids discovering font/button issues at Web Store submission time. Backend keep-alive configured before production deploy (Phase 2) prevents user-facing SSE timeouts. Privacy policy drafted before submission (Phase 4) avoids rejection delays.
+
+3. **Testing cadence:** End-to-end testing happens in Phase 3 (manifest + production backend combined). Asset quality review happens in Phase 4 (before submission). Legal/compliance review happens in Phase 4 (privacy policy).
+
+4. **Parallelizable work:** Phase 1 can have designer + frontend dev working in parallel. Phase 4 (assets) can happen alongside Phase 3 (manifest), but submission must wait for Phase 3 completion.
+
+**Estimated Total Timeline:** 6-9 weeks (assuming 1 full-stack engineer; 5-7 weeks with 2 engineers split by discipline)
+
+---
+
+### Research Flags
+
+**Phases likely needing deeper research during planning:**
+
+- **Phase 1 (UI Redesign):** CSS isolation on complex websites (Shadow DOM vs. inline styles trade-offs, font loading via CDN vs. bundled). Test on actual target sites (Gmail, Twitter, GitHub, etc.), not just local dev. Document z-index stacking context findings and any site-specific workarounds.
+
+- **Phase 2 (Backend Deploy):** Keep-alive timeout tuning for SSE streams. Simulate realistic network latencies and large text selections (>5KB). Verify Render health check behavior during deploy storms (rolling deploys with health check probes). Test graceful shutdown completeness.
+
+- **Phase 4 (Web Store Assets):** Screenshot messaging clarity and user conversion psychology. Get feedback from 5+ external users on store listing (not team members). Privacy policy legal accuracy and compliance with Chrome Web Store policy checklist.
+
+**Phases with standard patterns (skip research-phase):**
+
+- **Phase 3 (Manifest Update):** Standard environment variable injection + build verification. Well-documented patterns exist; no special research needed. Use CI/CD to verify no localhost in build.
+
+- **Phase 5 (Web Store Submission):** Standard administrative process. Chrome Web Store docs are clear and complete. No hidden complexity; just follow the checklist.
 
 ---
 
@@ -291,54 +252,87 @@ Based on research, the product should be built in **3-4 phases**, with clear dep
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| **Stack** | **HIGH** | WXT, React, Tailwind, Zustand all verified with current sources. Plasmo maintenance mode status confirmed. Cloudflare Workers sub-5ms latency documented. OpenAI pricing current as of 2026-02. |
-| **Features** | **HIGH** | Verified against 6+ competitor products (Rewordify, Text Simplifier, Simplify, QuillBot, Bionic Reading, Reader View). Accessibility research shows gap in personalization. MVP feature set is achievable. |
-| **Architecture** | **HIGH** | All patterns from official Chrome documentation (MV3 messaging, service workers, storage API). SSE streaming for AI responses is proven pattern. Rate limiting strategy matches industry standard. |
-| **Pitfalls** | **HIGH** | 10 pitfalls cross-validated with Chrome extensions community (StackOverflow, Chrome DevTools forums), official Chrome docs, and verified through real-world extension examples. Recovery strategies documented. |
+| **Stack** | **HIGH** | WXT, React, Tailwind recommended by multiple authoritative sources. Render docs are comprehensive. Express.js patterns for SSE well-established. No ambiguity on tech choices. |
+| **Features** | **HIGH** | Table stakes features clearly defined by Chrome Web Store policy docs. Differentiators based on existing v1.0/v1.1 behavior (streaming already works, personalization exists). Anti-features explicitly stated in research. |
+| **Architecture** | **HIGH** | CSS isolation patterns documented across Chrome extension community (Shadow DOM, namespacing). Font loading via Google Fonts CDN is proven in landing page. Render deployment patterns are standard. Health check and keep-alive patterns are industry best practice. |
+| **Pitfalls** | **HIGH** | 10 pitfalls researched with recovery strategies. Most are documented in official Chrome Web Store rejection codes. SSE timeout issues well-researched in Express/Node.js community. Font loading and CSS conflicts verified against real-world extension experiences. |
 
-**Overall Confidence: HIGH**
+**Overall confidence: HIGH**
+
+Research used official Chrome Extension docs, Render platform docs, Express.js community patterns, and validated against production extension case studies. No major ambiguities remain; execution risks are mostly preventable with focused testing.
+
+---
 
 ### Gaps to Address
 
-1. **OpenAI vs Claude Haiku quality:** Research recommends GPT-4o mini for cost, but actual output quality on text simplification hasn't been compared. **Mitigation:** During Phase 2, run 20-sample comparison test (same text simplified with both models, team rates quality). If Claude wins significantly on quality, switch; if costs become prohibitive, switch to Groq Llama 3.1 for load testing.
+Minor areas where research was conclusive but need validation during execution:
 
-2. **Cloudflare Workers real-world performance:** Research assumes <5ms cold starts, but actual latency at scale (100-1000 concurrent requests) not verified. **Mitigation:** During Phase 2 backend setup, load test with synthetic traffic (1000 concurrent requests), measure P50/P95/P99 latency.
+1. **Font loading in production:** Google Fonts CDN approach is recommended, but actual loading behavior should be verified post-install on a sample of users' browsers (ClearType on Windows, Core Text on macOS, different network conditions).
 
-3. **Shadow DOM text extraction:** Research notes that content script cannot directly access text in shadow DOM (security boundary). Workaround is injected script + postMessage, but complexity not fully scoped. **Mitigation:** During Phase 4 accessibility planning, prototype shadow DOM extraction on YouTube comments; estimate effort, then decide if worth prioritizing.
+2. **Z-index conflicts on emerging sites:** Tested on 10+ major websites (Gmail, Twitter, etc.), but new sites or sites with unusual CSS architectures may have unique conflicts. Plan for issue reporting + hotfix cycle post-launch.
 
-4. **Monetization model validation:** Research defers monetization to Phase 5+, but business model (free tier limits, premium tier, B2B licenses) should be validated early. **Mitigation:** During Phase 3 (before MVP launch), survey 20-30 target users on willingness to pay for premium features (deeper explanations, profession-based analogies, offline mode).
+3. **Render cold start impact:** Free tier guaranteed to spin down; Starter plan should avoid it, but actual cold start timing during peak hours should be monitored post-launch. May need to upgrade to Standard plan if latency is problematic.
+
+4. **Privacy policy legal review:** Recommended but not mandatory for v1.2 MVP. Should be reviewed by legal counsel if monetization (paid tier) is planned in future.
+
+5. **Rate limit transparency UI (optional):** Flagged as lower priority. Should gather user feedback post-launch before implementing in v1.3.
 
 ---
 
 ## Sources
 
-### Primary Sources (HIGH Confidence)
+### Primary (HIGH confidence — Official Docs & Authoritative Community)
 
-- **[WXT Framework Documentation](https://wxt.dev/)** — v0.21+ as of Feb 2026, actively maintained, HMR patterns, extension scaffolding
-- **[Chrome for Developers: Extensions / Manifest V3](https://developer.chrome.com/docs/extensions/mv3/)** — Official reference, security best practices, service worker lifecycle
-- **[Chrome for Developers: Message passing](https://developer.chrome.com/docs/extensions/develop/concepts/messaging)** — Messaging APIs, request/response patterns, MV3-specific limitations
-- **[Chrome for Developers: Service Workers](https://developer.chrome.com/docs/extensions/get-started/tutorial/service-worker-events)** — Service worker responsibilities, lifecycle, event handling
-- **[Chrome for Developers: chrome.storage API](https://developer.chrome.com/docs/extensions/reference/api/storage)** — State persistence, sync across contexts
-- **[OpenAI API Documentation](https://platform.openai.com/docs/)** — GPT-4o mini pricing, streaming, rate limits
-- **[Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)** — Serverless edge compute, latency, pricing, environment variables
+**Chrome Extension + Manifest V3:**
+- [Chrome for Developers: Manifest V3](https://developer.chrome.com/docs/extensions/mv3/) — Official MV3 reference
+- [Chrome for Developers: Chrome Web Store Policies](https://developer.chrome.com/docs/webstore/) — Store submission requirements, rejection codes
+- [Chrome for Developers: Content Security Policy](https://developer.chrome.com/docs/extensions/develop/concepts/content-security-policy) — CSP patterns
+- [Chrome for Developers: Permissions List](https://developer.chrome.com/docs/extensions/reference/permissions-list/) — Permission scoping guidance
 
-### Secondary Sources (MEDIUM Confidence)
+**Extension Framework:**
+- [WXT Framework Docs](https://wxt.dev/) — Modern extension framework (actively maintained, recommended for 2026)
+- [Chrome Extension Messaging API](https://developer.chrome.com/docs/extensions/mv3/messaging/) — Message passing patterns
 
-- **[WXT vs Plasmo Comparison 2025](https://redreamality.com/blog/the-2025-state-of-browser-extension-frameworks-a-comparative-analysis-of-plasmo-wxt-and-crxjs/)** — Plasmo maintenance mode status, community adoption metrics
-- **[AI API Pricing Comparison 2026](https://intuitionlabs.ai/articles/ai-api-pricing-comparison-grok-gemini-openai-claude)** — Cost per token, provider comparison
-- **[Cloudflare Workers vs AWS Lambda Cost Analysis](https://www.vantage.sh/blog/cloudflare-workers-vs-aws-lambda-cost)** — Cost and latency comparison at scale
-- **[Chrome Extension API Key Security Practices](https://community.openai.com/t/chrome-extension-and-api-key-security/1047047)** — Backend proxy pattern validation
-- **Competitor product research:** Rewordify.com, Text Simplifier (Chrome Web Store), Simplify (Chrome Web Store), QuillBot, Bionic Reading—directly evaluated features and UX
-- **[WebAIM 2026 Accessibility Predictions](https://webaim.org/blog/2026-predictions/)** — Accessibility user needs, text simplification use cases
-- **[Text Simplification and ESL Learning Research](https://arxiv.org/abs/2502.11457)** — Academic paper on sentence simplification for language learners
+**Backend + Deployment:**
+- [Render: Deploy Node Express App](https://render.com/docs/deploy-node-express-app) — Render platform configuration
+- [Render: Web Services Docs](https://render.com/docs/web-services) — Health checks, environment variables, port binding
+- [Express.js: Health Checks & Graceful Shutdown](https://expressjs.com/en/advanced/healthcheck-graceful-shutdown.html) — Server-side patterns
 
-### Tertiary Sources (NOTED but not critical to core decisions)
+**Frontend Framework & Styling:**
+- [React 18 Docs](https://react.dev/) — UI library reference
+- [Tailwind CSS Docs](https://tailwindcss.com/) — Utility CSS framework
+- [Google Fonts](https://fonts.google.com/) — Font selection and CDN availability
 
-- **Chrome extension security forums and StackOverflow** — Real-world pitfall validation (service worker termination, state management, CSP issues)
-- **Medium articles on extension development** — Streaming patterns, rate limiting patterns, architecture examples
+### Secondary (MEDIUM confidence — Community Consensus & Multiple Sources)
+
+- [LogRocket: How to Implement a Health Check in Node.js](https://blog.logrocket.com/how-to-implement-a-health-check-in-node-js/) — Health endpoint patterns
+- [Medium: How to Add Style and Webfonts to a Chrome Extension Content Script](https://medium.com/@charlesdouglasosborn/how-to-add-style-and-webfonts-to-a-chrome-extension-content-script-css-47d354025980) — Font loading strategies
+- [Dev.to: Deploying Your React.js & Express.js Server to Render](https://dev.to/pixelrena/deploying-your-reactjs-expressjs-server-to-rendercom-4jbo) — Render + Express integration
+- [Blog: Why Chrome Extensions Get Rejected (15 Reasons)](https://www.extensionradar.com/blog/chrome-extension-rejected) — Common rejection patterns
+
+### Tertiary (Research Files)
+
+- **STACK.md** (2026-02-25) — Technology stack recommendations
+- **FEATURES.md** (2026-02-25) — Feature landscape for v1.2
+- **ARCHITECTURE.md** (2026-02-25) — System architecture patterns
+- **PITFALLS.md** (2026-02-25) — Critical pitfall mitigation strategies
 
 ---
 
-**Research completed:** 2026-02-20
-**Ready for roadmap:** YES — All 4 researcher outputs synthesized into cohesive findings.
-**Next step:** Proceed to roadmap creation with Phases 1-5 as suggested above.
+## Next Steps for Roadmap Creation
+
+The SUMMARY.md provides the following inputs for roadmap creation:
+
+1. **Phase suggestions:** Five phases recommended with explicit rationale and dependencies
+2. **Research flags:** Areas needing deeper research during planning (CSS isolation testing, keep-alive tuning)
+3. **Feature prioritization:** Table stakes, differentiators, and defer items clearly categorized
+4. **Risk landscape:** 10 critical pitfalls identified with prevention strategies
+5. **Confidence levels:** HIGH confidence across stack, features, architecture, pitfalls—execution risks are known and preventable
+
+The roadmapper can now proceed directly to requirements definition for Phase 1, using the phase structure and research findings as the baseline.
+
+---
+
+*Research completed: 2026-02-25*
+*Domain: Chrome Extension (Text Simplification) + Production Backend + Web Store Publication*
+*Status: Ready for roadmap creation*
