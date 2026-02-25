@@ -18,11 +18,12 @@ const SECTION_STYLE: React.CSSProperties = {
 };
 
 const LABEL_STYLE: React.CSSProperties = {
-  fontSize: '11px',
+  fontSize: '12px',
+  fontFamily: "'Special Elite', monospace",
   fontWeight: '600',
   textTransform: 'uppercase' as const,
   letterSpacing: '0.08em',
-  color: '#6b7280',
+  color: '#4b5563',
   margin: '0',
 };
 
@@ -35,9 +36,9 @@ const BUTTON_GROUP_STYLE: React.CSSProperties = {
 const buttonStyle = (active: boolean): React.CSSProperties => ({
   padding: '6px 12px',
   border: '1px solid',
-  borderColor: active ? '#6366f1' : '#e5e7eb',
-  borderRadius: '6px',
-  background: active ? '#6366f1' : '#f9fafb',
+  borderColor: active ? '#f56060' : '#d1d5db',
+  borderRadius: '0px',
+  background: active ? '#f56060' : '#f9fafb',
   color: active ? '#ffffff' : '#374151',
   cursor: 'pointer',
   fontSize: '13px',
@@ -57,8 +58,8 @@ const INPUT_STYLE: React.CSSProperties = {
   width: '100%',
   boxSizing: 'border-box' as const,
   padding: '8px 10px',
-  border: '1px solid #e5e7eb',
-  borderRadius: '6px',
+  border: '1px solid #d1d5db',
+  borderRadius: '0px',
   fontSize: '13px',
   fontFamily: 'system-ui, -apple-system, sans-serif',
   color: '#374151',
