@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A Chrome extension that rewrites complex or technical text into clear, plain language tailored to each user's preferences. Users highlight text on any webpage, click a floating icon, and the selected text is replaced with a simplified version — personalized by tone, depth, and the user's background so explanations feel natural and relatable. Shipped as v1.0 MVP with streaming AI backend, progressive onboarding, and full user controls.
+A Chrome extension that rewrites complex or technical text into clear, plain language tailored to each user's preferences. Users highlight text on any webpage, click a floating icon, and the selected text is replaced with a simplified version — personalized by tone, depth, and the user's background so explanations feel natural and relatable. Shipped as v1.0 MVP with streaming AI backend, progressive onboarding, and full user controls. Landing page live at twelvify.com with interactive AI playground demo.
 
 ## Core Value
 
@@ -25,16 +25,13 @@ When a user highlights confusing text and clicks the icon, they get back a clear
 - ✓ Loading indicator during AI processing — v1.0
 - ✓ Error handling for offline, rate limit, timeout, text too long — v1.0
 - ✓ MV3 with proper CSP, service worker state management, Chrome Web Store ready — v1.0
+- ✓ Landing page: React app with zine/punk aesthetic design system — v1.1
+- ✓ Landing page: deployed to Vercel with custom domain (twelvify.com) — v1.1
+- ✓ Landing page: responsive layout with all sections (nav, hero, how-it-works, features, CTA, footer) — v1.1
+- ✓ Landing page: interactive playground demo with live AI streaming — v1.1
+- ✓ Landing page: Chrome Web Store install CTA links — v1.1
 
 ### Active
-
-- [ ] Landing page: implement existing Figma/HTML design as React app
-- [ ] Landing page: deploy to Netlify/Vercel with custom domain support
-- [ ] Landing page: responsive design matching zine/punk aesthetic from design
-- [ ] Landing page: interactive playground demo section
-- [ ] Landing page: Chrome Web Store install CTA links
-
-### Deferred (from v1.0)
 
 - [ ] Click-to-define difficult words with inline tooltip (WORD-01, WORD-02)
 - [ ] Chrome side panel display mode (DISP-04)
@@ -55,23 +52,18 @@ When a user highlights confusing text and clicks the icon, they get back a clear
 - Browser support beyond Chrome — Chrome-first; Firefox only if demand exists
 - Real-time on-hover simplification — massive API cost spike
 - Always-on background simplification — privacy nightmare + cost explosion
-
-## Current Milestone: v1.1 Landing Page
-
-**Goal:** Implement the existing Figma/HTML landing page design as a React app and deploy to Netlify/Vercel to drive Chrome Web Store installs.
-
-**Target features:**
-- React implementation of zine/punk aesthetic landing page design
-- Responsive layout: nav, hero, how-it-works, playground, features, CTA, footer
-- Interactive playground demo section with live AI backend
-- Deploy to Netlify/Vercel with custom domain
+- Multi-page landing site — single-page landing is sufficient
+- Landing page dark mode — light-only simplifies implementation
+- Landing page CMS — static content is fine
 
 ## Context
 
 Shipped v1.0 MVP with 2,190 LOC TypeScript/TSX/CSS across 75 files.
+Shipped v1.1 Landing Page with 758 LOC TSX/TS/CSS. Live at twelvify.com (Lighthouse 96).
 Tech stack: WXT (Chrome extension framework), React 18, Express.js, OpenAI gpt-4o-mini, SSE streaming.
+Landing page: Vite + React + Tailwind CSS, deployed on Vercel with Plausible analytics.
 Extension architecture: MV3 service worker with chrome.storage-driven reactive UI, Popover API for floating button.
-Backend: Express proxy with SHA-256 fingerprint rate limiting (100/hr hard, 50/hr soft client-side), Winston privacy logger.
+Backend: Express proxy with SHA-256 fingerprint rate limiting (100/hr hard, 50/hr soft client-side), Winston privacy logger. Dedicated `/api/playground` endpoint with 60 req/min rate limit.
 Personalization: 5 tone levels (baby → big_boy), 3 depth levels, profession-based analogies, progressive onboarding over first 3 uses.
 
 **Known tech debt:**
@@ -101,6 +93,11 @@ Personalization: 5 tone levels (baby → big_boy), 3 depth levels, profession-ba
 | Storage-driven UI | FloatingButton reads chrome.storage, not direct messages | ✓ Good — eliminates race conditions, survives service worker restarts |
 | Popover API for floating button | Top-layer rendering, no z-index management | ⚠️ Revisit — fell back to z-index for stacking reliability |
 | WXT framework | Convention-based Chrome extension dev with HMR | ✓ Good — fast dev cycle, proper MV3 output |
+| Plausible over Google Analytics | Privacy-first, no cookie consent needed, ~1KB CDN script | ✓ Good — zero bundle overhead, GDPR-friendly |
+| Inline SVGs over icon font | Material Symbols was 3.8MB; SVGs are <1KB total | ✓ Good — FCP dropped from 22.4s to 1.4-3.2s |
+| Vercel over Netlify | Better Vite integration, automatic preview deploys | ✓ Good — deploy-on-tag via Ignored Build Step |
+| One-shot playground demo | Prevent API abuse; single "Fix This Mess" click | ✓ Good — clear demo experience, cost-controlled |
+| React.lazy for Playground | Below-the-fold SSE component deferred to separate chunk | ✓ Good — reduced initial JS parse time |
 
 ---
-*Last updated: 2026-02-24 after v1.1 milestone started*
+*Last updated: 2026-02-25 after v1.1 milestone completed*
