@@ -52,7 +52,7 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 
 ### Performance
 
-- [ ] **PERF-01**: Lighthouse performance score 90+ (image optimization, lazy loading, efficient asset delivery)
+- [x] **PERF-01**: Lighthouse performance score 90+ (image optimization, lazy loading, efficient asset delivery)
 - [x] **PERF-02**: Font loading optimized (preconnect, font-display: swap)
 
 ### Backend
@@ -64,7 +64,7 @@ Requirements for the landing page milestone. Each maps to roadmap phases.
 
 - [x] **DEPLOY-01**: Production build optimized (minified, tree-shaken, assets hashed)
 - [x] **DEPLOY-02**: Deploy to Netlify or Vercel with CI from git push
-- [ ] **DEPLOY-03**: Custom domain configured on hosting platform
+- [x] **DEPLOY-03**: Custom domain configured on hosting platform
 
 ## Future Requirements
 
@@ -121,10 +121,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-01 | Phase 6 | Complete |
 | API-02 | Phase 6 | Complete |
 | ANALYTICS-01 | Phase 7 | Complete |
-| PERF-01 | Phase 7 | Pending |
+| PERF-01 | Phase 7 | Complete |
 | DEPLOY-01 | Phase 7 | Complete |
 | DEPLOY-02 | Phase 7 | Complete |
-| DEPLOY-03 | Phase 7 | Pending |
+| DEPLOY-03 | Phase 7 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 26 total

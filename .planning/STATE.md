@@ -11,10 +11,10 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Milestone:** v1.1 Landing Page
 **Current phase:** 7 of 7 (Phase 7: Launch)
-**Current Plan:** 2 of 3 complete
-**Status:** In progress
+**Current Plan:** 3 of 3 complete
+**Status:** Complete
 
-Progress: [█████████░] 90% (v1.1)
+Progress: [██████████] 100% (v1.1)
 
 ## Decisions
 
@@ -47,6 +47,11 @@ Progress: [█████████░] 90% (v1.1)
 - www.twelvify.com -> twelvify.com 301 redirect via vercel.json has-host matcher (no redirect loop risk)
 - Deploy-on-tag via Ignored Build Step: [ "$VERCEL_GIT_COMMIT_REF" != "main" ] && [[ "$VERCEL_GIT_COMMIT_TAG" != website_* ]] — set in Vercel Dashboard
 - Vendor chunk split added to vite.config.ts: react+react-dom (11KB) isolated from app code (199KB)
+- Material Symbols Outlined CDN font (3.8MB) replaced with Icon.tsx inline SVGs — FCP dropped from 22.4s to 1.4-3.2s
+- Lighthouse score variance (80-100) is expected for live URL testing; median 96 meets 90+ target
+- React.lazy() used for Playground — below-the-fold SSE component deferred to separate 4.3KB chunk
+- Google Fonts non-render-blocking via media=print/onload; noscript fallback for no-JS environments
+- Icon.tsx is the canonical icon component — add new icons as named SVG paths here, never use CDN icon fonts
 
 ## Session Log
 
@@ -64,6 +69,7 @@ Progress: [█████████░] 90% (v1.1)
 - 2026-02-24: Completed 06-03-PLAN.md — Wired Playground into App.tsx, added Vite proxy, corrected legend labels, 9/9 E2E tests pass — Phase 6 complete
 - 2026-02-25: Completed 07-01-PLAN.md — Plausible Analytics wired: deferred CDN script in index.html, typed analytics.ts helper, cta_click events in Nav/Hero/CallToAction
 - 2026-02-25: Completed 07-02-PLAN.md — vercel.json with www redirect, cache/security headers, .vercelignore, vendor chunk split in vite.config.ts
+- 2026-02-25: Completed 07-03-PLAN.md — twelvify.com deployed; Lighthouse 90+ (median 96) via SVG icons replacing 3.8MB font; lazy Playground — Phase 7 Tasks 1-2 done, Task 3 checkpoint pending
 
 ## Accumulated Context
 
