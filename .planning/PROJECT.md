@@ -33,13 +33,19 @@ When a user highlights confusing text and clicks the icon, they get back a clear
 
 ### Active
 
-- [ ] Click-to-define difficult words with inline tooltip (WORD-01, WORD-02)
-- [ ] Chrome side panel display mode (DISP-04)
-- [ ] Dark mode matching system preference (DISP-05)
-- [ ] In-extension privacy messaging (PRIV-01)
-- [ ] Readability metrics showing before/after reading level (PRIV-02)
+- [ ] Redesign popup panel with toned-down zine/punk aesthetic (fonts, colors, clean layout)
+- [ ] Redesign floating button with branded appearance
+- [ ] Update in-page simplified text styling to match new design language
 - [ ] Deploy backend to production (Render) and update extension URLs
 - [ ] Chrome Web Store submission
+
+### Future
+
+- Click-to-define difficult words with inline tooltip
+- Chrome side panel display mode
+- Dark mode matching system preference
+- In-extension privacy messaging
+- Readability metrics showing before/after reading level
 
 ### Out of Scope
 
@@ -55,6 +61,17 @@ When a user highlights confusing text and clicks the icon, they get back a clear
 - Multi-page landing site — single-page landing is sufficient
 - Landing page dark mode — light-only simplifies implementation
 - Landing page CMS — static content is fine
+
+## Current Milestone: v1.2 Extension Redesign + Ship
+
+**Goal:** Redesign the extension's user-facing UI with toned-down zine/punk aesthetic from the landing page, deploy backend to production, and submit to Chrome Web Store.
+
+**Target features:**
+- Popup panel redesign (Permanent Marker / Special Elite fonts, brand colors, clean layout)
+- Branded floating button
+- In-page simplified text styling updated to match design language
+- Backend production deploy (Render)
+- Chrome Web Store submission with production URLs
 
 ## Context
 
@@ -100,4 +117,4 @@ Personalization: 5 tone levels (baby → big_boy), 3 depth levels, profession-ba
 | React.lazy for Playground | Below-the-fold SSE component deferred to separate chunk | ✓ Good — reduced initial JS parse time |
 
 ---
-*Last updated: 2026-02-25 after v1.1 milestone completed*
+*Last updated: 2026-02-25 after v1.2 milestone started*
