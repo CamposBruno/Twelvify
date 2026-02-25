@@ -122,8 +122,9 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonPr
       {/* Undo button — separate, appears left of simplify when undo stack has entries */}
       {showUndo && (
         <button
+          className="twelvify-simplify-btn"
           onClick={onUndo}
-          aria-label="Revert to original text"
+          aria-label="Revert to original text (Esc)"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -131,21 +132,21 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonPr
             padding: '10px 14px',
             backgroundColor: '#10b981',
             color: '#ffffff',
-            border: '1px solid #059669',   // Sharp 1px border
-            borderRadius: '0px',           // Sharp rectangle
+            border: '2px solid #1e293b',
+            borderRadius: '0px',
             fontSize: '14px',
             fontWeight: '600',
             cursor: 'pointer',
-            boxShadow: '0 2px 3px rgba(0, 0, 0, 0.1)',  // Small shadow
-            fontFamily: 'system-ui, -apple-system, sans-serif',
+            fontFamily: "'Permanent Marker', cursive",
           }}
         >
-          &#x21A9; Undo
+          Esc to Undo
         </button>
       )}
       {/* Simplify button — always rendered, hidden via parent opacity when no selection */}
       {hasSelection && (
         <button
+          className="twelvify-simplify-btn"
           onClick={isLoading ? undefined : onSimplify}
           disabled={isLoading}
           aria-label="Simplify selected text"
@@ -157,13 +158,12 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonPr
             padding: '10px 16px',
             backgroundColor: simplifyBgColor,
             color: '#ffffff',
-            border: '1px solid rgba(0,0,0,0.12)',   // Thin sharp border
-            borderRadius: '0px',                    // Sharp rectangle
+            border: '2px solid #1e293b',
+            borderRadius: '0px',
             fontSize: '14px',
             fontWeight: '600',
             cursor: isLoading ? 'not-allowed' : 'pointer',
-            boxShadow: '0 2px 3px rgba(0, 0, 0, 0.1)',  // Small 2-3px shadow
-            fontFamily: 'system-ui, -apple-system, sans-serif',
+            fontFamily: "'Permanent Marker', cursive",
             opacity: isLoading ? 0.8 : 1,
             animation: isShaking ? 'twelvify-shake 0.6s ease' : undefined,
           }}
@@ -191,19 +191,10 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonPr
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                fill="currentColor"
                 aria-hidden="true"
               >
-                <line x1="3" y1="21" x2="21" y2="3" />
-                <path d="M21 3l-2.5 1M21 3l-1 2.5" />
-                <path d="M3 21l2.5-1M3 21l1-2.5" />
-                <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none" />
-                <circle cx="7" cy="7" r="0.8" fill="currentColor" stroke="none" />
-                <circle cx="17" cy="17" r="0.8" fill="currentColor" stroke="none" />
+                <path d="M7.5 5.6 10 7l-1.4-2.5L10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8-2.5-1.4 1.4 2.5-1.4 2.5 2.5-1.4L22 19l-1.4-2.5zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29a1 1 0 0 0-1.41 0L1.29 18.96a1 1 0 0 0 0 1.41l2.34 2.34a1 1 0 0 0 1.41 0L16.7 11.05a.996.996 0 0 0 0-1.41zm-1.03 7.41-1.42-1.42 1.42-1.42 1.41 1.42z" />
               </svg>
               {simplifyLabel}
             </>
@@ -211,6 +202,15 @@ export function FloatingButton({ onSimplify, onUndo, hasUndo }: FloatingButtonPr
         </button>
       )}
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+        .twelvify-simplify-btn {
+          box-shadow: 4px 4px 0px 0px #1e293b;
+          transition: all 0.15s ease;
+        }
+        .twelvify-simplify-btn:hover {
+          transform: translate(2px, 2px);
+          box-shadow: none;
+        }
         @keyframes twelvify-spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }

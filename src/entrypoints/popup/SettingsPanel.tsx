@@ -35,14 +35,13 @@ const BUTTON_GROUP_STYLE: React.CSSProperties = {
 
 const buttonStyle = (active: boolean): React.CSSProperties => ({
   padding: '6px 12px',
-  border: '1px solid',
-  borderColor: active ? '#f56060' : '#d1d5db',
+  border: active ? '2px solid #111827' : '1px solid #d1d5db',
   borderRadius: '0px',
   background: active ? '#f56060' : '#f9fafb',
   color: active ? '#ffffff' : '#374151',
   cursor: 'pointer',
   fontSize: '13px',
-  fontFamily: 'system-ui, -apple-system, sans-serif',
+  fontFamily: "'Special Elite', monospace",
   fontWeight: active ? '600' : '400',
   transition: 'all 0.15s ease',
 });
@@ -77,6 +76,7 @@ const RADIO_LABEL_STYLE: React.CSSProperties = {
   alignItems: 'center',
   gap: '8px',
   fontSize: '13px',
+  fontFamily: "'Special Elite', monospace",
   color: '#374151',
   cursor: 'pointer',
 };
@@ -177,7 +177,7 @@ export function SettingsPanel(): React.ReactElement {
           ))}
         </div>
         <p style={HELPER_TEXT_STYLE}>
-          Sets how simply I explain things. 12 = default Twelveify level.
+          Sets how simply I explain things. 12 = default Twelvify level.
         </p>
       </div>
 
@@ -197,45 +197,32 @@ export function SettingsPanel(): React.ReactElement {
         </div>
       </div>
 
-      {/* ── Background / Profession ── */}
-      <div style={SECTION_STYLE}>
-        <p style={LABEL_STYLE}>Your Background (optional)</p>
-        <input
-          type="text"
-          style={INPUT_STYLE}
-          placeholder="e.g. I'm a nurse, I do marketing"
-          value={professionDraft}
-          onChange={(e) => setProfessionDraft(e.target.value)}
-          onBlur={handleProfessionBlur}
-          onKeyDown={handleProfessionKeyDown}
-        />
-        <p style={HELPER_TEXT_STYLE}>
-          I'll use relatable analogies when explaining concepts.
-        </p>
-      </div>
-
       {/* ── Display Mode ── */}
       <div style={SECTION_STYLE}>
         <p style={LABEL_STYLE}>Display Mode</p>
         <div style={RADIO_GROUP_STYLE}>
-          <label style={RADIO_LABEL_STYLE}>
-            <input
-              type="radio"
-              name="displayMode"
-              value="replace"
-              checked={displayMode === 'replace'}
-              onChange={() => setDisplayMode('replace')}
-            />
+          <label style={RADIO_LABEL_STYLE} onClick={() => setDisplayMode('replace')}>
+            <span style={{
+              width: '14px',
+              height: '14px',
+              border: displayMode === 'replace' ? '2px solid #111827' : '1px solid #d1d5db',
+              borderRadius: '0px',
+              background: displayMode === 'replace' ? '#fde047' : '#ffffff',
+              display: 'inline-block',
+              flexShrink: 0,
+            }} />
             Replace in-page
           </label>
-          <label style={RADIO_LABEL_STYLE}>
-            <input
-              type="radio"
-              name="displayMode"
-              value="popup"
-              checked={displayMode === 'popup'}
-              onChange={() => setDisplayMode('popup')}
-            />
+          <label style={RADIO_LABEL_STYLE} onClick={() => setDisplayMode('popup')}>
+            <span style={{
+              width: '14px',
+              height: '14px',
+              border: displayMode === 'popup' ? '2px solid #111827' : '1px solid #d1d5db',
+              borderRadius: '0px',
+              background: displayMode === 'popup' ? '#fde047' : '#ffffff',
+              display: 'inline-block',
+              flexShrink: 0,
+            }} />
             Show in popup
           </label>
         </div>
@@ -244,16 +231,11 @@ export function SettingsPanel(): React.ReactElement {
       {/* ── Keyboard Shortcut ── */}
       <div style={SECTION_STYLE}>
         <p style={LABEL_STYLE}>Keyboard Shortcut</p>
-        <input
-          type="text"
-          style={INPUT_STYLE}
-          value={shortcutDraft}
-          onChange={(e) => setShortcutDraft(e.target.value)}
-          onBlur={handleShortcutBlur}
-          onKeyDown={handleShortcutKeyDown}
-        />
+        <p style={{ margin: 0, fontSize: '13px', fontFamily: "'Special Elite', monospace", color: '#374151' }}>
+          {keyboardShortcut}
+        </p>
         <p style={NOTE_STYLE}>
-          Chrome manages the actual key binding. Update in chrome://extensions/shortcuts if needed.
+          Update in chrome://extensions/shortcuts
         </p>
       </div>
 
