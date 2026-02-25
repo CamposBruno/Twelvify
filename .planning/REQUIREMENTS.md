@@ -9,12 +9,12 @@ Requirements for Extension Redesign + Ship milestone. Each maps to roadmap phase
 
 ### UI Redesign
 
-- [ ] **UIRD-01**: Popup panel displays with Permanent Marker and Special Elite fonts matching the landing page typography
-- [ ] **UIRD-02**: Popup panel uses the landing page brand color palette (indigo accent, bold contrasts, sharp borders)
-- [ ] **UIRD-03**: Popup panel layout is clean and usable with toned-down zine/punk aesthetic (no heavy rotations/textures)
+- [x] **UIRD-01**: Popup panel displays with Permanent Marker and Special Elite fonts matching the landing page typography
+- [x] **UIRD-02**: Popup panel uses the landing page brand color palette (indigo accent, bold contrasts, sharp borders)
+- [x] **UIRD-03**: Popup panel layout is clean and usable with toned-down zine/punk aesthetic (no heavy rotations/textures)
 - [ ] **UIRD-04**: Floating button displays with branded icon and styled appearance
 - [ ] **UIRD-05**: Floating button remains visible and clickable on high-complexity websites (Gmail, YouTube, GitHub, Reddit, Medium)
-- [ ] **UIRD-06**: Popup and floating button gracefully fall back to system fonts if custom fonts fail to load
+- [x] **UIRD-06**: Popup and floating button gracefully fall back to system fonts if custom fonts fail to load
 
 ### Backend Deploy
 
@@ -71,12 +71,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| UIRD-01 | Phase 8 | Pending |
-| UIRD-02 | Phase 8 | Pending |
-| UIRD-03 | Phase 8 | Pending |
+| UIRD-01 | Phase 8 | Complete |
+| UIRD-02 | Phase 8 | Complete |
+| UIRD-03 | Phase 8 | Complete |
 | UIRD-04 | Phase 8 | Pending |
 | UIRD-05 | Phase 8 | Pending |
-| UIRD-06 | Phase 8 | Pending |
+| UIRD-06 | Phase 8 | Complete |
 | DEPL-01 | Phase 9 | Pending |
 | DEPL-02 | Phase 9 | Pending |
 | DEPL-03 | Phase 9 | Pending |

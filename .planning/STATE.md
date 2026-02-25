@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 8 of 10 (UI Redesign)
-Plan: — of ? in current phase
-Status: Ready to plan
-Last activity: 2026-02-25 — v1.2 roadmap created (Phases 8-10)
+Plan: 1 of 3 complete in current phase
+Status: In Progress
+Last activity: 2026-02-25 — Phase 8 Plan 01 complete (popup brand aesthetic)
 
 Progress: [███████░░░] 70% (7/10 phases complete across all milestones)
 
@@ -33,6 +33,7 @@ Progress: [███████░░░] 70% (7/10 phases complete across all 
 **Recent Trend:**
 - v1.1 faster than v1.0 (familiar codebase, simpler domain)
 - Trend: Improving
+| Phase 08-ui-redesign P01 | 15 | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -43,6 +44,7 @@ Progress: [███████░░░] 70% (7/10 phases complete across all 
 - [v1.1]: Inline SVGs over icon font — FCP dropped from 22.4s to 1.4-3.2s
 - [v1.1]: React.lazy for Playground — reduced initial JS parse time
 - [v1.2 start]: In-page text styling redesign deferred to future milestone (UIPOL-01)
+- [Phase 08-ui-redesign]: Popup brand uses #f56060 red as primary active color (replaces indigo #6366f1), 0px border-radius on all interactive elements, Special Elite for labels, Permanent Marker for display title
 
 ### Pending Todos
 
@@ -57,5 +59,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: Roadmap created for v1.2 (Phases 8-10). Ready to plan Phase 8.
+Stopped at: Completed Phase 8 Plan 01 — popup brand aesthetic (Google Fonts, App.tsx header, SettingsPanel)
 Resume file: None
