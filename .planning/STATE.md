@@ -5,17 +5,57 @@
 See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** When a user highlights confusing text and clicks the icon, they get back a clear, personalized rewrite that makes sense to them — every time.
-**Current focus:** Milestone v1.2 — Extension Redesign + Ship
+**Current focus:** v1.2 Phase 8 — UI Redesign
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-02-25 — Milestone v1.2 started
+Phase: 8 of 10 (UI Redesign)
+Plan: — of ? in current phase
+Status: Ready to plan
+Last activity: 2026-02-25 — v1.2 roadmap created (Phases 8-10)
+
+Progress: [███████░░░] 70% (7/10 phases complete across all milestones)
+
+## Performance Metrics
+
+**Velocity:**
+- Total plans completed: 22 (v1.0: 14, v1.1: 12 — note: some overlap in tracking)
+- Average duration: ~30 min/plan (estimated from v1.0/v1.1 execution)
+- Total execution time: ~11 hours across v1.0 + v1.1
+
+**By Phase:**
+
+| Phase | Plans | Total | Avg/Plan |
+|-------|-------|-------|----------|
+| v1.0 (Phases 1-3) | 14 | ~7h | ~30 min |
+| v1.1 (Phases 4-7) | 12 | ~4h | ~20 min |
+
+**Recent Trend:**
+- v1.1 faster than v1.0 (familiar codebase, simpler domain)
+- Trend: Improving
 
 ## Accumulated Context
 
-- v1.0 MVP shipped 2026-02-24: Chrome extension with AI text simplification
-- v1.1 Landing Page shipped 2026-02-25: twelvify.com live with Lighthouse 96
-- v1.2 milestone started: redesign extension UI to match landing page aesthetic, deploy to production, submit to Chrome Web Store
+### Decisions
+
+- [v1.0]: Backend proxy (not BYOK) — simpler UX, broader audience
+- [v1.0]: Storage-driven UI — eliminates race conditions, survives service worker restarts
+- [v1.1]: Inline SVGs over icon font — FCP dropped from 22.4s to 1.4-3.2s
+- [v1.1]: React.lazy for Playground — reduced initial JS parse time
+- [v1.2 start]: In-page text styling redesign deferred to future milestone (UIPOL-01)
+
+### Pending Todos
+
+None.
+
+### Blockers/Concerns
+
+- Backend URL is hardcoded to localhost:3001 — must be updated in Phase 9 before production build
+- Host permissions include both localhost and production domain — remove localhost before Web Store submission
+- CORS origin is wildcard (*) in current backend — must be scoped to production extension ID in Phase 9
+
+## Session Continuity
+
+Last session: 2026-02-25
+Stopped at: Roadmap created for v1.2 (Phases 8-10). Ready to plan Phase 8.
+Resume file: None

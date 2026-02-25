@@ -71,29 +71,29 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| UIRD-01 | — | Pending |
-| UIRD-02 | — | Pending |
-| UIRD-03 | — | Pending |
-| UIRD-04 | — | Pending |
-| UIRD-05 | — | Pending |
-| UIRD-06 | — | Pending |
-| DEPL-01 | — | Pending |
-| DEPL-02 | — | Pending |
-| DEPL-03 | — | Pending |
-| DEPL-04 | — | Pending |
-| DEPL-05 | — | Pending |
-| DEPL-06 | — | Pending |
-| STOR-01 | — | Pending |
-| STOR-02 | — | Pending |
-| STOR-03 | — | Pending |
-| STOR-04 | — | Pending |
-| STOR-05 | — | Pending |
+| UIRD-01 | Phase 8 | Pending |
+| UIRD-02 | Phase 8 | Pending |
+| UIRD-03 | Phase 8 | Pending |
+| UIRD-04 | Phase 8 | Pending |
+| UIRD-05 | Phase 8 | Pending |
+| UIRD-06 | Phase 8 | Pending |
+| DEPL-01 | Phase 9 | Pending |
+| DEPL-02 | Phase 9 | Pending |
+| DEPL-03 | Phase 9 | Pending |
+| DEPL-04 | Phase 9 | Pending |
+| DEPL-05 | Phase 9 | Pending |
+| DEPL-06 | Phase 9 | Pending |
+| STOR-01 | Phase 10 | Pending |
+| STOR-02 | Phase 10 | Pending |
+| STOR-03 | Phase 10 | Pending |
+| STOR-04 | Phase 10 | Pending |
+| STOR-05 | Phase 10 | Pending |
 
 **Coverage:**
 - v1.2 requirements: 17 total
-- Mapped to phases: 0
-- Unmapped: 17 ⚠️
+- Mapped to phases: 17
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-02-25*
-*Last updated: 2026-02-25 after initial definition*
+*Last updated: 2026-02-25 — traceability complete after roadmap creation*
