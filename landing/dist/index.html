@@ -13,16 +13,19 @@
     <script defer data-domain="twelvify.com" src="https://plausible.io/js/script.js"></script>
 
     <!-- Google Fonts: Permanent Marker (display), Special Elite (punk), Inter (body) -->
+    <!-- Non-render-blocking: load as print then swap to all to avoid FCP penalty -->
     <link
       href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&family=Inter:wght@400;700&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
-
-    <!-- Material Symbols Outlined icon font -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
-      rel="stylesheet"
-    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&family=Inter:wght@400;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
 
     <title>Twelvify | Understand anything, anywhere.</title>
 
@@ -43,9 +46,9 @@
     <meta name="twitter:title" content="Twelvify | Understand anything, anywhere." />
     <meta name="twitter:description" content="The browser extension that translates high-brow nonsense into plain English. Highlight any confusing text, click the wand, and read the simplification instantly." />
     <meta name="twitter:image" content="https://twelvify.com/og-image.png" />
-    <script type="module" crossorigin src="/assets/index-BvpGBx0S.js"></script>
+    <script type="module" crossorigin src="/assets/index-BAWGIG1O.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/vendor-C2d6kFfn.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-BoGUImQG.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-xXVvF2oU.css">
   </head>
   <body class="bg-background-light dark:bg-background-dark font-body text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden selection:bg-primary selection:text-white">
     <div id="root"></div>
