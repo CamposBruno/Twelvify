@@ -39,6 +39,10 @@
   - [ ] 08-02-PLAN.md — Floating button brand styling (red, wand icon, sharp corners) + FloatingPopup + ErrorTooltip
   - [ ] 08-03-PLAN.md — Build + human visual verification on 5 complex sites
 - [ ] **Phase 9: Backend Production Deploy** - Deploy Express backend to Render with health checks, graceful shutdown, and production CORS configuration
+  Plans:
+  - [ ] 09-01-PLAN.md — Backend hardening (SIGTERM shutdown, deep health check, multi-origin CORS, rate limit 30/min)
+  - [ ] 09-02-PLAN.md — Infrastructure & client (render.yaml, extension URL → production Render URL)
+  - [ ] 09-03-PLAN.md — Deploy to Render + human verification (end-to-end simplification on production)
 - [ ] **Phase 10: Chrome Web Store Submission** - Publish privacy policy, prepare store assets, and submit extension
 
 ## Phase Details
@@ -63,7 +67,7 @@
   2. Extension manifest references the production Render URL with no localhost references in the production build (verified by grep of build output)
   3. A text simplification works end-to-end: highlight text → click floating button → streamed result appears in page (using production backend)
   4. CORS allows requests from the Chrome extension and from twelvify.com; requests from other origins are rejected
-**Plans**: TBD
+**Plans**: 3 plans
 
 ### Phase 10: Chrome Web Store Submission
 **Goal**: Extension is submitted to the Chrome Web Store with complete, accurate store listing assets and an accurate published privacy policy
