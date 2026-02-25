@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 8 of 10 (UI Redesign)
-Plan: 1 of 3 complete in current phase
+Plan: 2 of 3 complete in current phase
 Status: In Progress
-Last activity: 2026-02-25 — Phase 8 Plan 01 complete (popup brand aesthetic)
+Last activity: 2026-02-25 — Phase 8 Plan 02 complete (floating button brand, FloatingPopup + ErrorTooltip)
 
 Progress: [███████░░░] 70% (7/10 phases complete across all milestones)
 
@@ -34,6 +34,7 @@ Progress: [███████░░░] 70% (7/10 phases complete across all 
 - v1.1 faster than v1.0 (familiar codebase, simpler domain)
 - Trend: Improving
 | Phase 08-ui-redesign P01 | 15 | 3 tasks | 3 files |
+| Phase 08-ui-redesign P02 | 2 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -45,6 +46,8 @@ Progress: [███████░░░] 70% (7/10 phases complete across all 
 - [v1.1]: React.lazy for Playground — reduced initial JS parse time
 - [v1.2 start]: In-page text styling redesign deferred to future milestone (UIPOL-01)
 - [Phase 08-ui-redesign]: Popup brand uses #f56060 red as primary active color (replaces indigo #6366f1), 0px border-radius on all interactive elements, Special Elite for labels, Permanent Marker for display title
+- [Phase 08-ui-redesign]: Red (#f56060) replaces indigo as primary button color — toned-down zine/punk brand aesthetic applied to floating UI
+- [Phase 08-ui-redesign]: Wand SVG replaces 4-point star in floating button — diagonal wand with sparkle circles using currentColor
 
 ### Pending Todos
 
@@ -59,5 +62,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: Completed Phase 8 Plan 01 — popup brand aesthetic (Google Fonts, App.tsx header, SettingsPanel)
+Stopped at: Completed Phase 8 Plan 02 — floating button red brand, FloatingPopup off-white, ErrorTooltip sharp borders
 Resume file: None
