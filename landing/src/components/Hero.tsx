@@ -15,11 +15,10 @@ export default function Hero() {
 
           {/* Headline */}
           <h1 className="text-6xl lg:text-8xl font-display leading-[0.9] text-slate-900 -rotate-2">
-            Stop pretending you{' '}
+            Big words,{' '}
             <span className="bg-primary text-white px-4 inline-block transform rotate-3">
-              understand
-            </span>{' '}
-            jargon.
+              simplified
+            </span>.
           </h1>
 
           {/* Description */}
