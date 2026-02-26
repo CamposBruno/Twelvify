@@ -1,6 +1,6 @@
 export const RATE_LIMIT = {
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 100,                  // Hard limit: 100 req/hr (backend enforced)
+  windowMs: 60 * 1000,  // 1 minute window (changed from 1 hour)
+  max: 30,              // 30 requests per minute per IP (conservative for API costs)
 };
 
 export const OPENAI_TIMEOUT_MS = 10000;  // 10 seconds

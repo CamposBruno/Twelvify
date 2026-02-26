@@ -6,7 +6,9 @@ dotenv.config({ path: '.env.local' });
 const envSchema = z.object({
   OPENAI_API_KEY: z.string().min(1, 'OPENAI_API_KEY is required — set it in backend/.env.local'),
   PORT: z.string().default('3001'),
-  ALLOWED_ORIGIN: z.string().default('*'),
+  ALLOWED_ORIGINS: z.string().default(''),
+  GIT_SHA: z.string().default('unknown'),
+  BUILD_TIMESTAMP: z.string().default('unknown'),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 });
 

@@ -21,4 +21,5 @@ export const rateLimiter = rateLimit({
       retryAfterSeconds,
     });
   },
+  skip: (req) => req.path === '/health',
 });
