@@ -36,6 +36,7 @@ Progress: [████████░░] 75% (7.5/10 phases — Phase 9 in pro
 | Phase 08-ui-redesign P01 | 15 | 3 tasks | 3 files |
 | Phase 08-ui-redesign P02 | 2 | 2 tasks | 3 files |
 | Phase 08-ui-redesign P03 | 30 | 2 tasks | 9 files |
+| Phase 09-backend-production-deploy P01 | 2 | 2 tasks | 5 files |
 | Phase 09-backend-production-deploy P02 | 1 | 2 tasks | 3 files |
 
 ## Accumulated Context
@@ -50,6 +51,9 @@ Progress: [████████░░] 75% (7.5/10 phases — Phase 9 in pro
 - [Phase 08-ui-redesign]: Popup brand uses #f56060 red as primary active color (replaces indigo #6366f1), 0px border-radius on all interactive elements, Special Elite for labels, Permanent Marker for display title
 - [Phase 08-ui-redesign]: Red (#f56060) replaces indigo as primary button color — toned-down zine/punk brand aesthetic applied to floating UI
 - [Phase 08-ui-redesign]: Wand SVG replaces 4-point star in floating button — diagonal wand with sparkle circles using currentColor
+- [Phase 09-01]: CORS uses callback-based multi-origin allow-list from ALLOWED_ORIGINS env var — protects Anthropic API quota from unauthorized origins
+- [Phase 09-01]: Rate limit reduced from 100/hr to 30/min — more conservative for production API cost control
+- [Phase 09-01]: /health excluded from rate limiting — Render health checks must never be throttled
 - [Phase 09-backend-production-deploy]: ALLOWED_ORIGINS set to https://twelvify.com only — chrome-extension:// ID deferred until Web Store approval
 
 ### Pending Todos
