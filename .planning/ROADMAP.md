@@ -38,11 +38,11 @@
   - [ ] 08-01-PLAN.md — Popup brand styling (fonts, colors, grid background, App.tsx + SettingsPanel.tsx)
   - [ ] 08-02-PLAN.md — Floating button brand styling (red, wand icon, sharp corners) + FloatingPopup + ErrorTooltip
   - [ ] 08-03-PLAN.md — Build + human visual verification on 5 complex sites
-- [ ] **Phase 9: Backend Production Deploy** - Deploy Express backend to Render with health checks, graceful shutdown, and production CORS configuration
+- [x] **Phase 9: Backend Production Deploy** - Deploy Express backend to Render with health checks, graceful shutdown, and production CORS configuration (completed 2026-02-25) (3/3 plans)
   Plans:
-  - [ ] 09-01-PLAN.md — Backend hardening (SIGTERM shutdown, deep health check, multi-origin CORS, rate limit 30/min)
-  - [ ] 09-02-PLAN.md — Infrastructure & client (render.yaml, extension URL → production Render URL)
-  - [ ] 09-03-PLAN.md — Deploy to Render + human verification (end-to-end simplification on production)
+  - [x] 09-01-PLAN.md — Backend hardening (SIGTERM shutdown, deep health check, multi-origin CORS, rate limit 30/min)
+  - [x] 09-02-PLAN.md — Infrastructure & client (render.yaml, extension URL → production Render URL)
+  - [x] 09-03-PLAN.md — Deploy to Render + human verification (end-to-end simplification on production)
 - [ ] **Phase 10: Chrome Web Store Submission** - Publish privacy policy, prepare store assets, and submit extension
 
 ## Phase Details
@@ -92,7 +92,7 @@
 | 6. Playground & Interactivity | v1.1 | 3/3 | Complete | 2026-02-24 |
 | 7. Launch | v1.1 | 3/3 | Complete | 2026-02-25 |
 | 8. UI Redesign | 2/3 | In Progress|  | - |
-| 9. Backend Production Deploy | 2/3 | In Progress|  | - |
+| 9. Backend Production Deploy | 3/3 | Complete   | 2026-02-26 | - |
 | 10. Chrome Web Store Submission | v1.2 | 0/? | Not started | - |
 
 ---
