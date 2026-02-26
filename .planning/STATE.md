@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 10 of 10 (Chrome Web Store Submission)
-Plan: 2 of ? complete in current phase
+Plan: 3 of ? complete in current phase
 Status: In Progress
-Last activity: 2026-02-26 — Phase 10 Plan 02 complete (brand icons created, WXT manifest updated, extension build includes icons)
+Last activity: 2026-02-26 — Phase 10 Plan 03 complete (store listing copy + 5 screenshot HTML mockups + Playwright PNGs at 1280x800px)
 
 Progress: [█████████░] 90% (9/10 phases complete — Phase 10 in progress)
 
@@ -41,6 +41,7 @@ Progress: [█████████░] 90% (9/10 phases complete — Phase 1
 | Phase 09-backend-production-deploy P03 | ~60 | 3 tasks | 2 files |
 | Phase 10-chrome-web-store-submission P01 | 2 | 2 tasks | 7 files |
 | Phase 10-chrome-web-store-submission P02 | 2 | 2 tasks | 10 files |
+| Phase 10-chrome-web-store-submission P03 | 4 | 2 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -63,6 +64,8 @@ Progress: [█████████░] 90% (9/10 phases complete — Phase 1
 - [Phase 10-01]: Vite MPA approach (rollupOptions.input) for landing privacy page — no react-router needed for single static page, keeps pages independent
 - [Phase 10-01]: Vercel rewrite (not redirect) used for /privacy — serves privacy.html at clean URL without 301 bounce
 - [Phase 10-chrome-web-store-submission]: WXT static assets for manifest paths must be in public/ directory — src/assets/ is Vite-processed, not copied to build root
+- [Phase 10]: HTML mockups used instead of live browser captures — allows fully autonomous screenshot production without running extension
+- [Phase 10]: Playwright capture.mjs renders HTML to PNG at 1280x800 via file:// URL with networkidle wait for Google Fonts
 
 ### Pending Todos
 
@@ -75,5 +78,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-26
-Stopped at: Completed 10-02-PLAN.md
+Stopped at: Completed 10-03-PLAN.md
 Resume file: None
