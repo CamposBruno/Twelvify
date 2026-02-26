@@ -1,8 +1,32 @@
+import { useState, useRef } from 'react';
 import { CHROME_STORE_URL } from '../constants';
 import { trackEvent } from '../analytics';
 import Icon from './Icon';
 
 export default function Hero() {
+  const ORIGINAL_TEXT = 'The wave function is a mathematical description of the quantum state of an isolated quantum system.';
+  const SIMPLIFIED_TEXT = 'A wave function is just math that describes how tiny particles behave when left alone.';
+
+  const [displayText, setDisplayText] = useState(ORIGINAL_TEXT);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const handleSimplify = () => {
+    if (isAnimating) return;
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setIsAnimating(true);
+    setDisplayText('');
+    let i = 0;
+    intervalRef.current = setInterval(() => {
+      i += 1;
+      setDisplayText(SIMPLIFIED_TEXT.slice(0, i));
+      if (i >= SIMPLIFIED_TEXT.length) {
+        clearInterval(intervalRef.current!);
+        setIsAnimating(false);
+      }
+    }, 30);
+  };
+
   return (
     <header className="relative pt-12 pb-32 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
@@ -74,9 +98,11 @@ export default function Hero() {
                 <div className="h-4 w-full bg-slate-100" />
                 <div className="h-4 w-full bg-slate-100" />
                 <div className="relative bg-primary text-white p-4 font-punk rotate-[-1deg] border-2 border-slate-900">
-                  The wave function is a mathematical description of the quantum state of an
-                  isolated quantum system.
-                  <div className="absolute -bottom-8 -right-4 bg-yellow-300 text-slate-900 p-2 border-2 border-slate-900 flex items-center gap-2 rotate-6">
+                  {displayText}
+                  <div
+                    className="absolute -bottom-8 -right-4 bg-yellow-300 text-slate-900 p-2 border-2 border-slate-900 flex items-center gap-2 rotate-6 cursor-pointer select-none"
+                    onClick={handleSimplify}
+                  >
                     <Icon name="auto_fix_high" className="w-5 h-5" />
                     <span className="text-xs font-black">SIMPLIFY THIS MESS</span>
                   </div>
