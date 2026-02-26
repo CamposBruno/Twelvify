@@ -48,7 +48,7 @@ function Footer() {
             <div className="space-y-6">
               <h5 className="text-primary text-lg font-display">Legal</h5>
               <ul className="space-y-4">
-                <li><a className="hover:text-primary transition-colors hover:underline" href="#">Privacy</a></li>
+                <li><a className="hover:text-primary transition-colors hover:underline" href="/privacy">Privacy</a></li>
                 <li><a className="hover:text-primary transition-colors hover:underline" href="#">Terms</a></li>
                 <li><a className="hover:text-primary transition-colors hover:underline" href="#">Security</a></li>
               </ul>
