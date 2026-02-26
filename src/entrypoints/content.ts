@@ -13,8 +13,7 @@ import type { ExtensionMessage } from '../messaging/messages';
 import type { ToneLevel } from '../storage/types';
 import { DEFAULT_SETTINGS } from '../storage/types';
 
-// TODO: Update to production URL before Chrome Web Store submission
-const BACKEND_URL = 'http://localhost:3001/api/simplify';
+const BACKEND_URL = 'https://twelvify-backend.onrender.com/api/simplify';
 const SOFT_RATE_LIMIT = 50;       // requests per hour
 const HOUR_MS = 3600000;           // 1 hour in milliseconds
 const MAX_TEXT_LENGTH = 5000;      // characters

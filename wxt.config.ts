@@ -7,11 +7,9 @@ export default defineConfig({
     description: 'Simplify any text on the web with AI',
     version: '0.1.0',
     permissions: ['storage'],
-    // NOTE: Update this URL to the actual deployed backend domain before Chrome Web Store submission.
-    // Current URL points to the Render.com deployment used for development/testing.
+    // Production backend URL on Render. Update ALLOWED_ORIGINS on Render dashboard after Web Store approval.
     host_permissions: [
       'https://twelvify-backend.onrender.com/*',
-      'http://localhost:3001/*'
     ],
     content_security_policy: {
       // Extension pages (popup, options) CSP — content script fetch() is governed by host_permissions
