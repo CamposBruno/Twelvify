@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 10 of 10 (Chrome Web Store Submission)
-Plan: 3 of ? complete in current phase
-Status: In Progress
-Last activity: 2026-02-26 — Phase 10 Plan 03 complete (store listing copy + 5 screenshot HTML mockups + Playwright PNGs at 1280x800px)
+Plan: 4 of 4 complete in current phase (Phase 10 complete — pending Chrome review)
+Status: Awaiting Human Action
+Last activity: 2026-02-26 — Phase 10 Plan 04 complete (extension ZIP built, submission checklist created, awaiting user to submit to Chrome Web Store)
 
 Progress: [█████████░] 90% (9/10 phases complete — Phase 10 in progress)
 
@@ -42,6 +42,7 @@ Progress: [█████████░] 90% (9/10 phases complete — Phase 1
 | Phase 10-chrome-web-store-submission P01 | 2 | 2 tasks | 7 files |
 | Phase 10-chrome-web-store-submission P02 | 2 | 2 tasks | 10 files |
 | Phase 10-chrome-web-store-submission P03 | 4 | 2 tasks | 13 files |
+| Phase 10-chrome-web-store-submission P04 | 5 | 1 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -66,6 +67,8 @@ Progress: [█████████░] 90% (9/10 phases complete — Phase 1
 - [Phase 10-chrome-web-store-submission]: WXT static assets for manifest paths must be in public/ directory — src/assets/ is Vite-processed, not copied to build root
 - [Phase 10]: HTML mockups used instead of live browser captures — allows fully autonomous screenshot production without running extension
 - [Phase 10]: Playwright capture.mjs renders HTML to PNG at 1280x800 via file:// URL with networkidle wait for Google Fonts
+- [Phase 10-chrome-web-store-submission]: Checklist version uses 0.1.0 (manifest version) not v1.2.0 — prevents confusion at upload time where Chrome reads manifest version
+- [Phase 10-chrome-web-store-submission]: Privacy policy 404 documented in checklist as prerequisite — landing must be deployed before Chrome Web Store submission
 
 ### Pending Todos
 
@@ -74,9 +77,11 @@ None.
 ### Blockers/Concerns
 
 - After Web Store approval: add chrome-extension://[assigned-ID] to ALLOWED_ORIGINS in Render env vars (currently wildcard *)
+- After Web Store approval: update CHROME_STORE_URL constant in landing/src/constants.ts with actual store URL
+- PREREQUISITE before submission: deploy landing site (git push origin main) — twelvify.com/privacy currently returns HTTP 404
 
 ## Session Continuity
 
 Last session: 2026-02-26
-Stopped at: Completed 10-03-PLAN.md
+Stopped at: Checkpoint 10-04 Task 2 — Submit extension to Chrome Web Store (human-action required: browser UI with Google account)
 Resume file: None

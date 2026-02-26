@@ -31,7 +31,7 @@ Requirements for Extension Redesign + Ship milestone. Each maps to roadmap phase
 - [x] **STOR-02**: Extension icon exists at 16, 32, 48, and 128px PNG sizes
 - [x] **STOR-03**: At least 5 screenshots at 1280x800px showing the redesigned extension UI
 - [x] **STOR-04**: Store listing has title (≤75 chars), summary (≤132 chars), and description
-- [ ] **STOR-05**: Extension is submitted to Chrome Web Store with minimal required permissions
+- [x] **STOR-05**: Extension is submitted to Chrome Web Store with minimal required permissions
 
 ## Future Requirements
 
@@ -87,7 +87,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | STOR-02 | Phase 10 | Complete |
 | STOR-03 | Phase 10 | Complete |
 | STOR-04 | Phase 10 | Complete |
-| STOR-05 | Phase 10 | Pending |
+| STOR-05 | Phase 10 | Complete |
 
 **Coverage:**
 - v1.2 requirements: 17 total

@@ -43,7 +43,7 @@
   - [x] 09-01-PLAN.md — Backend hardening (SIGTERM shutdown, deep health check, multi-origin CORS, rate limit 30/min)
   - [x] 09-02-PLAN.md — Infrastructure & client (render.yaml, extension URL → production Render URL)
   - [x] 09-03-PLAN.md — Deploy to Render + human verification (end-to-end simplification on production)
-- [ ] **Phase 10: Chrome Web Store Submission** - Publish privacy policy, prepare store assets, and submit extension
+- [x] **Phase 10: Chrome Web Store Submission** - Publish privacy policy, prepare store assets, and submit extension (completed 2026-02-26)
   **Plans:** 4 plans
   Plans:
   - [ ] 10-01-PLAN.md — Privacy policy page at twelvify.com/privacy (Vite MPA route + Vercel rewrite)
@@ -99,7 +99,7 @@
 | 7. Launch | v1.1 | 3/3 | Complete | 2026-02-25 |
 | 8. UI Redesign | 2/3 | In Progress|  | - |
 | 9. Backend Production Deploy | 3/3 | Complete   | 2026-02-26 | - |
-| 10. Chrome Web Store Submission | 3/4 | In Progress|  | - |
+| 10. Chrome Web Store Submission | 4/4 | Complete   | 2026-02-26 | - |
 
 ---
 
