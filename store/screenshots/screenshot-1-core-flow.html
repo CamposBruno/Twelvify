@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 1280px; height: 800px; overflow: hidden; font-family: Inter, sans-serif; background: #f8f6f6; }
+    .browser-chrome { background: #e5e7eb; border-bottom: 2px solid #d1d5db; padding: 8px 16px; display: flex; align-items: center; gap: 12px; height: 40px; }
+    .traffic-light { width: 12px; height: 12px; border-radius: 50%; }
+    .url-bar { flex: 1; background: white; border: 1px solid #d1d5db; padding: 4px 12px; font-size: 13px; color: #374151; border-radius: 4px; max-width: 500px; margin: 0 auto; }
+    .ext-icon { margin-left: auto; background: #f56060; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .page-content { padding: 40px 120px; background: white; height: 760px; position: relative; overflow: hidden; }
+    .wiki-header { border-bottom: 1px solid #a2a9b1; margin-bottom: 20px; padding-bottom: 10px; }
+    .wiki-title { font-size: 28px; font-family: 'Linux Libertine', Georgia, serif; font-weight: normal; color: #202122; margin-bottom: 6px; }
+    .wiki-subtitle { font-size: 14px; color: #555; font-style: italic; }
+    .wiki-text { font-size: 15px; line-height: 1.7; color: #202122; max-width: 760px; margin-bottom: 14px; }
+    .selected-text { background: #fde68a; }
+    .floating-btn { position: absolute; background: #f56060; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: 3px solid #1e293b; box-shadow: 4px 4px 0 #1e293b; cursor: pointer; z-index: 100; top: 198px; left: 530px; }
+    .popup-panel { position: absolute; top: 230px; left: 580px; width: 360px; background: white; border: 3px solid #1e293b; box-shadow: 8px 8px 0 #1e293b; z-index: 200; padding: 16px; }
+    .popup-title { font-family: 'Permanent Marker', cursive; font-size: 18px; color: #f56060; margin-bottom: 12px; }
+    .popup-label { font-family: 'Special Elite', cursive; font-size: 13px; color: #475569; margin-bottom: 8px; font-style: italic; }
+    .popup-original { font-family: 'Special Elite', cursive; font-size: 11px; color: #94a3b8; background: #f1f5f9; padding: 8px; border-left: 3px solid #f56060; margin-bottom: 12px; line-height: 1.5; }
+    .popup-simplified { font-family: 'Special Elite', cursive; font-size: 13px; color: #1e293b; line-height: 1.6; }
+    .callout { position: absolute; background: #fef08a; border: 2px solid #1e293b; padding: 6px 10px; font-family: 'Special Elite', cursive; font-size: 14px; font-weight: bold; color: #1e293b; box-shadow: 2px 2px 0 #1e293b; z-index: 300; white-space: nowrap; }
+    .arrow-line { position: absolute; background: #1e293b; z-index: 299; }
+  </style>
+</head>
+<body>
+  <!-- Browser chrome bar -->
+  <div class="browser-chrome">
+    <div class="traffic-light" style="background:#ef4444;"></div>
+    <div class="traffic-light" style="background:#f59e0b;"></div>
+    <div class="traffic-light" style="background:#22c55e;"></div>
+    <div class="url-bar">en.wikipedia.org/wiki/Photosynthesis</div>
+    <div class="ext-icon">
+      <span style="color:white;font-family:'Permanent Marker',cursive;font-size:14px;font-weight:bold;">T</span>
+    </div>
+  </div>
+
+  <!-- Wikipedia page content -->
+  <div class="page-content">
+    <div class="wiki-header">
+      <div class="wiki-title">Photosynthesis</div>
+      <div class="wiki-subtitle">From Wikipedia, the free encyclopedia</div>
+    </div>
+
+    <div class="wiki-text">
+      <span class="selected-text">Photosynthesis is a biological process used by photoautotrophs to convert light energy, normally from the sun, into chemical energy that can be stored and later released to fuel the organism's activities.</span> It is one of the most important biological processes on Earth, producing the oxygen that most organisms require to survive.
+    </div>
+
+    <div class="wiki-text">
+      The overall equation for photosynthesis is deceptively simple, but the underlying biochemical pathways are remarkably complex. The light-dependent reactions occur in the thylakoid membranes, while the light-independent Calvin cycle reactions take place in the stroma of the chloroplast.
+    </div>
+
+    <!-- Floating wand button -->
+    <div class="floating-btn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+        <line x1="5" y1="19" x2="19" y2="5"/>
+        <circle cx="19" cy="5" r="2" fill="white"/>
+        <circle cx="7" cy="17" r="1" fill="white"/>
+        <circle cx="12" cy="8" r="1" fill="white"/>
+      </svg>
+    </div>
+
+    <!-- Popup panel -->
+    <div class="popup-panel">
+      <div class="popup-title">Twelvify</div>
+      <div class="popup-label">Original:</div>
+      <div class="popup-original">"Photosynthesis is a biological process used by photoautotrophs to convert light energy, normally from the sun, into chemical energy..."</div>
+      <div class="popup-label">Simplified:</div>
+      <div class="popup-simplified">Photosynthesis is how plants use sunlight to make their own food. They turn light into energy they can store and use later.</div>
+    </div>
+
+    <!-- Annotation 1: Highlight text -->
+    <div class="callout" style="top: 158px; left: 55px;">① Highlight confusing text</div>
+    <!-- Arrow from callout 1 to selected text -->
+    <div class="arrow-line" style="width: 2px; height: 30px; top: 183px; left: 195px; transform: rotate(15deg);"></div>
+
+    <!-- Annotation 2: Click the wand -->
+    <div class="callout" style="top: 168px; left: 340px;">② Click the wand</div>
+    <!-- Arrow from callout 2 to button -->
+    <div class="arrow-line" style="width: 2px; height: 28px; top: 193px; left: 435px; transform: rotate(-20deg);"></div>
+
+    <!-- Annotation 3: Get plain English -->
+    <div class="callout" style="top: 490px; left: 585px;">③ Get a plain-English version instantly</div>
+    <!-- Arrow from callout 3 to popup -->
+    <div class="arrow-line" style="width: 2px; height: 35px; top: 455px; left: 720px;"></div>
+  </div>
+</body>
+</html>

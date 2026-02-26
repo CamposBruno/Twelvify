@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 1280px; height: 800px; overflow: hidden; font-family: Inter, sans-serif; background: #f8f6f6; }
+    .browser-chrome { background: #e5e7eb; border-bottom: 2px solid #d1d5db; padding: 8px 16px; display: flex; align-items: center; gap: 12px; height: 40px; }
+    .traffic-light { width: 12px; height: 12px; border-radius: 50%; }
+    .url-bar { flex: 1; background: white; border: 1px solid #d1d5db; padding: 4px 12px; font-size: 13px; color: #374151; border-radius: 4px; max-width: 500px; margin: 0 auto; }
+    .ext-icon { margin-left: auto; background: #f56060; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .main-area { height: 760px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; position: relative; }
+    .popup-window { width: 380px; background: white; border: 3px solid #1e293b; box-shadow: 10px 10px 0 #1e293b; padding: 0; }
+    .popup-header { background: #f56060; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .popup-brand { font-family: 'Permanent Marker', cursive; font-size: 22px; color: white; }
+    .popup-close { color: white; font-size: 18px; cursor: pointer; opacity: 0.8; }
+    .popup-body { padding: 24px 20px; }
+    .section-title { font-family: 'Special Elite', cursive; font-size: 15px; color: #374151; margin-bottom: 6px; font-weight: bold; }
+    .section-subtitle { font-size: 12px; color: #94a3b8; margin-bottom: 18px; font-family: Inter, sans-serif; }
+    .level-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .level-btn { padding: 12px 16px; border: 2px solid #e2e8f0; background: white; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-family: 'Special Elite', cursive; font-size: 14px; color: #374151; }
+    .level-btn.active { border-color: #f56060; background: #fff1f1; }
+    .level-btn.active .level-name { color: #f56060; font-weight: bold; }
+    .level-desc { font-size: 11px; color: #94a3b8; font-family: Inter, sans-serif; margin-top: 2px; }
+    .level-check { color: #f56060; font-size: 18px; }
+    .popup-footer { border-top: 2px solid #e2e8f0; padding: 14px 20px; }
+    .footer-text { font-size: 11px; color: #94a3b8; font-family: Inter, sans-serif; display: flex; align-items: center; gap: 6px; }
+    .lock-icon { font-size: 13px; }
+    .callout { position: absolute; background: #fef08a; border: 2px solid #1e293b; padding: 8px 12px; font-family: 'Special Elite', cursive; font-size: 13px; font-weight: bold; color: #1e293b; box-shadow: 2px 2px 0 #1e293b; z-index: 300; max-width: 260px; line-height: 1.4; }
+    .arrow-line { position: absolute; background: #1e293b; z-index: 299; }
+  </style>
+</head>
+<body>
+  <!-- Browser chrome bar -->
+  <div class="browser-chrome">
+    <div class="traffic-light" style="background:#ef4444;"></div>
+    <div class="traffic-light" style="background:#f59e0b;"></div>
+    <div class="traffic-light" style="background:#22c55e;"></div>
+    <div class="url-bar">Twelvify Settings</div>
+    <div class="ext-icon">
+      <span style="color:white;font-family:'Permanent Marker',cursive;font-size:14px;font-weight:bold;">T</span>
+    </div>
+  </div>
+
+  <!-- Main area with popup -->
+  <div class="main-area">
+    <div class="popup-window">
+      <div class="popup-header">
+        <div class="popup-brand">Twelvify</div>
+        <div class="popup-close">✕</div>
+      </div>
+      <div class="popup-body">
+        <div class="section-title">Reading Level</div>
+        <div class="section-subtitle">Twelvify adjusts how much it simplifies based on your level</div>
+        <div class="level-options">
+          <div class="level-btn">
+            <div>
+              <div class="level-name" style="font-family:'Special Elite',cursive;font-size:14px;color:#374151;">Beginner</div>
+              <div class="level-desc">Very simple words, short sentences</div>
+            </div>
+          </div>
+          <div class="level-btn active">
+            <div>
+              <div class="level-name">Standard</div>
+              <div class="level-desc">Clear and easy to read, everyday English</div>
+            </div>
+            <div class="level-check">✓</div>
+          </div>
+          <div class="level-btn">
+            <div>
+              <div class="level-name" style="font-family:'Special Elite',cursive;font-size:14px;color:#374151;">Advanced</div>
+              <div class="level-desc">Keeps some complexity, more accurate tone</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="popup-footer">
+        <div class="footer-text">
+          <span class="lock-icon">🔒</span>
+          <span>Your preference is saved locally — no account, no cloud sync</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Annotation 1: reading level -->
+    <div class="callout" style="top: 220px; right: 200px;">
+      ① Set your reading level — Twelvify adjusts simplification to match
+    </div>
+    <!-- Arrow from annotation 1 to level options -->
+    <div class="arrow-line" style="width: 60px; height: 2px; top: 355px; right: 397px;"></div>
+
+    <!-- Annotation 2: saved locally -->
+    <div class="callout" style="bottom: 195px; right: 200px;">
+      ② Your preference is saved locally, no account needed
+    </div>
+    <!-- Arrow from annotation 2 to footer -->
+    <div class="arrow-line" style="width: 2px; height: 30px; bottom: 190px; right: 482px;"></div>
+  </div>
+</body>
+</html>

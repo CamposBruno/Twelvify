@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 1280px; height: 800px; overflow: hidden; font-family: Inter, sans-serif; background: #f8f6f6; }
+    .browser-chrome { background: #e5e7eb; border-bottom: 2px solid #d1d5db; padding: 8px 16px; display: flex; align-items: center; gap: 12px; height: 40px; }
+    .traffic-light { width: 12px; height: 12px; border-radius: 50%; }
+    .url-bar { flex: 1; background: white; border: 1px solid #d1d5db; padding: 4px 12px; font-size: 13px; color: #374151; border-radius: 4px; max-width: 500px; margin: 0 auto; }
+    .ext-icon { margin-left: auto; background: #f56060; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .page-content { height: 760px; background: white; display: flex; position: relative; overflow: hidden; }
+    .arxiv-main { flex: 1; padding: 36px 60px; }
+    .arxiv-sidebar { width: 260px; background: #f5f5f0; border-left: 1px solid #ddd; padding: 20px; flex-shrink: 0; }
+    .arxiv-logo-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #b31b1b; }
+    .arxiv-logo { font-size: 28px; font-weight: 900; color: #b31b1b; letter-spacing: -1px; }
+    .arxiv-tagline { font-size: 13px; color: #666; font-style: italic; }
+    .paper-meta { margin-bottom: 20px; }
+    .paper-id { font-size: 13px; color: #b31b1b; font-family: monospace; margin-bottom: 8px; }
+    .paper-title { font-size: 20px; font-weight: 700; color: #1a1a1a; line-height: 1.3; margin-bottom: 10px; }
+    .paper-authors { font-size: 13px; color: #444; margin-bottom: 6px; }
+    .paper-date { font-size: 12px; color: #888; }
+    .section-label { font-size: 13px; font-weight: 700; color: #b31b1b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; margin-top: 20px; }
+    .abstract-text { font-size: 14px; line-height: 1.75; color: #333; max-width: 700px; }
+    .selected-text { background: #fde68a; }
+    .floating-btn { position: absolute; background: #f56060; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: 3px solid #1e293b; box-shadow: 4px 4px 0 #1e293b; cursor: pointer; z-index: 100; top: 278px; left: 560px; }
+    .popup-panel { position: absolute; top: 315px; left: 610px; width: 360px; background: white; border: 3px solid #1e293b; box-shadow: 8px 8px 0 #1e293b; z-index: 200; padding: 16px; }
+    .popup-title { font-family: 'Permanent Marker', cursive; font-size: 18px; color: #f56060; margin-bottom: 12px; }
+    .popup-label { font-family: 'Special Elite', cursive; font-size: 13px; color: #475569; margin-bottom: 8px; font-style: italic; }
+    .popup-original { font-family: 'Special Elite', cursive; font-size: 11px; color: #94a3b8; background: #f1f5f9; padding: 8px; border-left: 3px solid #f56060; margin-bottom: 12px; line-height: 1.5; }
+    .popup-simplified { font-family: 'Special Elite', cursive; font-size: 13px; color: #1e293b; line-height: 1.6; }
+    .callout { position: absolute; background: #fef08a; border: 2px solid #1e293b; padding: 7px 11px; font-family: 'Special Elite', cursive; font-size: 13px; font-weight: bold; color: #1e293b; box-shadow: 2px 2px 0 #1e293b; z-index: 300; max-width: 300px; line-height: 1.4; }
+    .sidebar-section { margin-bottom: 18px; }
+    .sidebar-label { font-size: 11px; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 6px; }
+    .sidebar-link { font-size: 12px; color: #b31b1b; display: block; margin-bottom: 4px; text-decoration: underline; cursor: pointer; }
+    .sidebar-text { font-size: 12px; color: #444; }
+  </style>
+</head>
+<body>
+  <!-- Browser chrome bar -->
+  <div class="browser-chrome">
+    <div class="traffic-light" style="background:#ef4444;"></div>
+    <div class="traffic-light" style="background:#f59e0b;"></div>
+    <div class="traffic-light" style="background:#22c55e;"></div>
+    <div class="url-bar">arxiv.org/abs/2026.14892</div>
+    <div class="ext-icon">
+      <span style="color:white;font-family:'Permanent Marker',cursive;font-size:14px;font-weight:bold;">T</span>
+    </div>
+  </div>
+
+  <!-- arXiv page -->
+  <div class="page-content">
+    <div class="arxiv-main">
+      <div class="arxiv-logo-bar">
+        <div class="arxiv-logo">arXiv</div>
+        <div class="arxiv-tagline">Open access to 2+ million scholarly articles</div>
+      </div>
+
+      <div class="paper-meta">
+        <div class="paper-id">arXiv:2026.14892 [cs.CL]</div>
+        <div class="paper-title">Scaling Transformer Architectures for Multilingual Language Understanding Tasks</div>
+        <div class="paper-authors">K. Yamamoto, R. Patel, L. Okonkwo, M. Schneider</div>
+        <div class="paper-date">Submitted 22 February 2026</div>
+      </div>
+
+      <div class="section-label">Abstract</div>
+      <div class="abstract-text">
+        <span class="selected-text">Recent advancements in transformer-based architectures have demonstrated remarkable efficacy in natural language processing tasks, achieving state-of-the-art performance across multiple benchmark evaluations.</span> Our approach leverages a hierarchical attention mechanism combined with adaptive tokenization to address cross-lingual transfer limitations observed in prior work. Experimental results on GLUE, SuperGLUE, and XQuAD datasets indicate significant improvements over baseline models.
+      </div>
+    </div>
+
+    <div class="arxiv-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Download</div>
+        <div class="sidebar-link">PDF</div>
+        <div class="sidebar-link">Other formats</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Current version</div>
+        <div class="sidebar-text">v1, submitted Feb 22, 2026</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Related subjects</div>
+        <div class="sidebar-text">Computation and Language (cs.CL); Artificial Intelligence (cs.AI)</div>
+      </div>
+    </div>
+
+    <!-- Floating wand button -->
+    <div class="floating-btn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+        <line x1="5" y1="19" x2="19" y2="5"/>
+        <circle cx="19" cy="5" r="2" fill="white"/>
+        <circle cx="7" cy="17" r="1" fill="white"/>
+        <circle cx="12" cy="8" r="1" fill="white"/>
+      </svg>
+    </div>
+
+    <!-- Popup panel -->
+    <div class="popup-panel">
+      <div class="popup-title">Twelvify</div>
+      <div class="popup-label">Original:</div>
+      <div class="popup-original">"Recent advancements in transformer-based architectures have demonstrated remarkable efficacy in natural language processing tasks..."</div>
+      <div class="popup-label">Simplified:</div>
+      <div class="popup-simplified">New AI models based on a design called transformers have gotten really good at understanding and working with text, beating previous records on many tests.</div>
+    </div>
+
+    <!-- Annotation 1: research papers -->
+    <div class="callout" style="top: 215px; left: 50px;">
+      ① Research papers, legal docs, technical manuals — all fair game
+    </div>
+
+    <!-- Annotation 2: AI-powered -->
+    <div class="callout" style="bottom: 110px; left: 620px;">
+      ② AI-powered simplification, no copy-pasting required
+    </div>
+  </div>
+</body>
+</html>
