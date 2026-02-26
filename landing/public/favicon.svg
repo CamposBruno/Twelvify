@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Sharp square background: #f56060 brand color, no rounded corners -->
+  <rect width="128" height="128" fill="#f56060"/>
+
+  <!-- Bold T lettermark: two rectangles (horizontal top bar + vertical stem) -->
+  <!-- Horizontal bar: full width minus margins, positioned at top 1/4 -->
+  <rect x="20" y="22" width="88" height="22" fill="white"/>
+  <!-- Vertical stem: centered, from top bar down to bottom margin -->
+  <rect x="53" y="44" width="22" height="62" fill="white"/>
+</svg>
