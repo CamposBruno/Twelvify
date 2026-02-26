@@ -1,5 +1,5 @@
 import express from 'express';
-import cors, { type CorsOptions } from 'cors';
+import cors from 'cors';
 import { env } from './config/env';
 import { logger } from './services/logger';
 import { requestLogger } from './middleware/logging';
@@ -13,27 +13,10 @@ const app = express();
 // Trust proxy (for correct IP behind Vercel/Render/nginx)
 app.set('trust proxy', 1);
 
-const allowedOrigins = (env.ALLOWED_ORIGINS || '')
-  .split(',')
-  .map((o) => o.trim())
-  .filter(Boolean);
-
-const corsOptions: CorsOptions = {
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      logger.warn('cors_blocked', { origin });
-      callback(new Error(`Origin ${origin} not allowed by CORS`));
-    }
-  },
-  methods: ['GET', 'POST', 'HEAD', 'OPTIONS'],
-  credentials: false,
-  maxAge: 3600,
-};
-
-app.use(cors(corsOptions));
+// Allow all origins — content scripts run in the webpage's origin context,
+// so every site the user visits would need to be allowed. The API key is
+// server-side and rate limiting (30 req/min) prevents abuse.
+app.use(cors());
 
 let isShuttingDown = false;
 
