@@ -3,6 +3,7 @@ import type { Config } from 'tailwindcss'
 const config: Config = {
   content: [
     './index.html',
+    './privacy.html',
     './src/**/*.{ts,tsx}',
   ],
   darkMode: 'class',

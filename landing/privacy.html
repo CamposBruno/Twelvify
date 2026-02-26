@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Font performance: preconnect to Google Fonts domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Plausible Analytics — privacy-first, no cookie consent required -->
+    <script defer data-domain="twelvify.com" src="https://plausible.io/js/script.js"></script>
+
+    <!-- Google Fonts: Permanent Marker (display), Special Elite (punk), Inter (body) -->
+    <!-- Non-render-blocking: load as print then swap to all to avoid FCP penalty -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&family=Inter:wght@400;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
+    <title>Twelvify | Privacy Policy</title>
+
+    <!-- SEO: description + canonical -->
+    <meta name="description" content="Twelvify's privacy policy — how we handle your data." />
+    <link rel="canonical" href="https://twelvify.com/privacy" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://twelvify.com/privacy" />
+    <meta property="og:title" content="Twelvify | Privacy Policy" />
+    <meta property="og:description" content="Twelvify's privacy policy — how we handle your data." />
+  </head>
+  <body class="bg-background-light dark:bg-background-dark font-body text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden selection:bg-primary selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/privacy-main.tsx"></script>
+  </body>
+</html>
