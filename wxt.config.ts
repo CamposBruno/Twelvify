@@ -15,8 +15,20 @@ export default defineConfig({
       // Extension pages (popup, options) CSP — content script fetch() is governed by host_permissions
       extension_pages: "script-src 'self'; object-src 'self';"
     },
+    icons: {
+      '16': 'assets/icons/icon16.png',
+      '32': 'assets/icons/icon32.png',
+      '48': 'assets/icons/icon48.png',
+      '128': 'assets/icons/icon128.png',
+    },
     action: {
-      default_title: 'Twelveify'
+      default_title: 'Twelveify',
+      default_icon: {
+        '16': 'assets/icons/icon16.png',
+        '32': 'assets/icons/icon32.png',
+        '48': 'assets/icons/icon48.png',
+        '128': 'assets/icons/icon128.png',
+      },
     },
     commands: {
       'simplify-hotkey': {
