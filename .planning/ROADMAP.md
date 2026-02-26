@@ -92,7 +92,7 @@
 | 6. Playground & Interactivity | v1.1 | 3/3 | Complete | 2026-02-24 |
 | 7. Launch | v1.1 | 3/3 | Complete | 2026-02-25 |
 | 8. UI Redesign | 2/3 | In Progress|  | - |
-| 9. Backend Production Deploy | v1.2 | 0/? | Not started | - |
+| 9. Backend Production Deploy | 1/3 | In Progress|  | - |
 | 10. Chrome Web Store Submission | v1.2 | 0/? | Not started | - |
 
 ---

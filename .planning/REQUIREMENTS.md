@@ -18,10 +18,10 @@ Requirements for Extension Redesign + Ship milestone. Each maps to roadmap phase
 
 ### Backend Deploy
 
-- [ ] **DEPL-01**: Express backend is deployed and running on Render with production environment variables
+- [x] **DEPL-01**: Express backend is deployed and running on Render with production environment variables
 - [ ] **DEPL-02**: Backend exposes `/health` endpoint returning 200 OK for Render health checks
 - [ ] **DEPL-03**: Backend handles SIGTERM gracefully for zero-downtime deploys
-- [ ] **DEPL-04**: Extension manifest points to production Render URL (no localhost references in production build)
+- [x] **DEPL-04**: Extension manifest points to production Render URL (no localhost references in production build)
 - [ ] **DEPL-05**: CORS configuration allows requests from the Chrome extension in production
 - [ ] **DEPL-06**: CORS configuration allows requests from twelvify.com landing page (playground demo)
 
@@ -77,10 +77,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UIRD-04 | Phase 8 | Complete |
 | UIRD-05 | Phase 8 | Complete |
 | UIRD-06 | Phase 8 | Complete |
-| DEPL-01 | Phase 9 | Pending |
+| DEPL-01 | Phase 9 | Complete |
 | DEPL-02 | Phase 9 | Pending |
 | DEPL-03 | Phase 9 | Pending |
-| DEPL-04 | Phase 9 | Pending |
+| DEPL-04 | Phase 9 | Complete |
 | DEPL-05 | Phase 9 | Pending |
 | DEPL-06 | Phase 9 | Pending |
 | STOR-01 | Phase 10 | Pending |

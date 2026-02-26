@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** When a user highlights confusing text and clicks the icon, they get back a clear, personalized rewrite that makes sense to them — every time.
-**Current focus:** v1.2 Phase 8 — UI Redesign
+**Current focus:** v1.2 Phase 9 — Backend Production Deploy
 
 ## Current Position
 
-Phase: 8 of 10 (UI Redesign)
-Plan: 3 of 3 complete in current phase
-Status: Awaiting Verification
-Last activity: 2026-02-25 — Phase 8 Plan 03 complete (human visual verification approved with refinements)
+Phase: 9 of 10 (Backend Production Deploy)
+Plan: 2 of 3 complete in current phase
+Status: In Progress
+Last activity: 2026-02-26 — Phase 9 Plan 02 complete (render.yaml created, extension URLs updated to production)
 
-Progress: [███████░░░] 70% (7/10 phases complete across all milestones)
+Progress: [████████░░] 75% (7.5/10 phases — Phase 9 in progress)
 
 ## Performance Metrics
 
@@ -36,6 +36,7 @@ Progress: [███████░░░] 70% (7/10 phases complete across all 
 | Phase 08-ui-redesign P01 | 15 | 3 tasks | 3 files |
 | Phase 08-ui-redesign P02 | 2 | 2 tasks | 3 files |
 | Phase 08-ui-redesign P03 | 30 | 2 tasks | 9 files |
+| Phase 09-backend-production-deploy P02 | 1 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -49,6 +50,7 @@ Progress: [███████░░░] 70% (7/10 phases complete across all 
 - [Phase 08-ui-redesign]: Popup brand uses #f56060 red as primary active color (replaces indigo #6366f1), 0px border-radius on all interactive elements, Special Elite for labels, Permanent Marker for display title
 - [Phase 08-ui-redesign]: Red (#f56060) replaces indigo as primary button color — toned-down zine/punk brand aesthetic applied to floating UI
 - [Phase 08-ui-redesign]: Wand SVG replaces 4-point star in floating button — diagonal wand with sparkle circles using currentColor
+- [Phase 09-backend-production-deploy]: ALLOWED_ORIGINS set to https://twelvify.com only — chrome-extension:// ID deferred until Web Store approval
 
 ### Pending Todos
 
@@ -56,12 +58,10 @@ None.
 
 ### Blockers/Concerns
 
-- Backend URL is hardcoded to localhost:3001 — must be updated in Phase 9 before production build
-- Host permissions include both localhost and production domain — remove localhost before Web Store submission
-- CORS origin is wildcard (*) in current backend — must be scoped to production extension ID in Phase 9
+- CORS ALLOWED_ORIGINS set to https://twelvify.com only — chrome-extension:// ID must be added to Render env var after Web Store approval (Phase 10 follow-up)
 
 ## Session Continuity
 
-Last session: 2026-02-25
-Stopped at: Phase 8 all plans complete — awaiting verification
+Last session: 2026-02-26
+Stopped at: Completed 09-02-PLAN.md
 Resume file: None
