@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 Phase: 10 of 10 (Chrome Web Store Submission)
 Plan: 4 of 4 complete in current phase (Phase 10 complete — extension submitted, pending Chrome review)
 Status: Complete (pending external review)
-Last activity: 2026-02-26 — Phase 10 Plan 04 complete (extension ZIP built, submission checklist created, extension submitted to Chrome Web Store by user)
+Last activity: 2026-02-26 - Completed quick task 1: Make Hero SIMPLIFY THIS MESS button clickable with typing animation mock simplification
 
 Progress: [█████████░] 90% (9/10 phases complete — Phase 10 in progress)
 
@@ -80,6 +80,12 @@ None.
 
 - After Web Store approval: add chrome-extension://[assigned-ID] to ALLOWED_ORIGINS in Render env vars (currently wildcard *)
 - After Web Store approval: update CHROME_STORE_URL constant in landing/src/constants.ts with actual store URL
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 1 | Make Hero SIMPLIFY THIS MESS button clickable with typing animation mock simplification | 2026-02-26 | 8a5f043 | [1-make-hero-simplify-this-mess-button-clic](./quick/1-make-hero-simplify-this-mess-button-clic/) |
 
 ## Session Continuity
 
