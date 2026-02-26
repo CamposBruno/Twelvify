@@ -1,0 +1,29 @@
+# render.yaml — Render Blueprint (Infrastructure as Code)
+# Docs: https://render.com/docs/blueprint-spec
+# Deploy: Push to main branch triggers auto-deploy
+
+services:
+  - type: web
+    name: twelvify-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3001"
+      - key: ALLOWED_ORIGINS
+        # NOTE: After Chrome Web Store submission, add the extension ID:
+        # value: "chrome-extension://YOUR_EXTENSION_ID_HERE,https://twelvify.com"
+        value: "https://twelvify.com"
+      - key: LOG_LEVEL
+        value: info
+      # These vars must be set manually in the Render dashboard (secrets):
+      # - OPENAI_API_KEY  : Anthropic/OpenAI API key
+      # - GIT_SHA         : Set in Render dashboard or injected by build hook
+      # - BUILD_TIMESTAMP : Set in Render dashboard or injected by build hook
+    healthCheckPath: /health
+    autoDeploy: true
+    plan: free
