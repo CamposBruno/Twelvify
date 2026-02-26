@@ -4,21 +4,21 @@ import Icon from './Icon';
 
 export default function Hero() {
   return (
-    <header className="relative pt-24 pb-32 overflow-hidden">
+    <header className="relative pt-12 pb-32 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
         {/* LEFT COLUMN — text content */}
-        <div className="space-y-10 relative z-10">
+        <div className="space-y-6 relative z-10">
           {/* Badge */}
-          <div className="inline-block px-4 py-2 bg-yellow-300 text-slate-900 border-2 border-slate-900 font-punk font-bold rotate-[-2deg] mb-4">
+          <div className="inline-block px-4 py-2 bg-yellow-300 text-slate-900 border-2 border-slate-900 font-punk font-bold rotate-[-2deg] mb-0">
             NOW IN THE WEB STORE (DUH)
           </div>
 
           {/* Headline */}
-          <h1 className="text-6xl lg:text-8xl font-display leading-[0.9] text-slate-900 -rotate-2">
+          <h1 className="text-6xl lg:text-8xl font-display leading-[0.85] text-slate-900 -rotate-2">
             Big words,{' '}
             <span className="bg-primary text-white px-4 inline-block transform rotate-3">
               simplified
-            </span>.
+            </span>
           </h1>
 
           {/* Description */}
