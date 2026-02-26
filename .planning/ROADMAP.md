@@ -44,6 +44,12 @@
   - [x] 09-02-PLAN.md — Infrastructure & client (render.yaml, extension URL → production Render URL)
   - [x] 09-03-PLAN.md — Deploy to Render + human verification (end-to-end simplification on production)
 - [ ] **Phase 10: Chrome Web Store Submission** - Publish privacy policy, prepare store assets, and submit extension
+  **Plans:** 4 plans
+  Plans:
+  - [ ] 10-01-PLAN.md — Privacy policy page at twelvify.com/privacy (Vite MPA route + Vercel rewrite)
+  - [ ] 10-02-PLAN.md — Extension icon SVG + PNG exports (16, 32, 48, 128px) + manifest declaration
+  - [ ] 10-03-PLAN.md — Store listing copy (title/summary/description) + 5 screenshot HTML mockups + Playwright capture
+  - [ ] 10-04-PLAN.md — Pre-submission validation, ZIP build, and Web Store submission checkpoint
 
 ## Phase Details
 
