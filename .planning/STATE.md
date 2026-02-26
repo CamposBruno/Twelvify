@@ -60,6 +60,8 @@ Progress: [█████████░] 90% (9/10 phases complete — Phase 1
 - [Phase 09-backend-production-deploy]: ALLOWED_ORIGINS set to https://twelvify.com only — chrome-extension:// ID deferred until Web Store approval
 - [Phase 09-03]: Wildcard CORS adopted — content scripts execute in webpage origin context, strict allow list impractical without known chrome-extension ID
 - [Phase 09-03]: Build-time TypeScript deps moved to dependencies for Render production build compatibility
+- [Phase 10-01]: Vite MPA approach (rollupOptions.input) for landing privacy page — no react-router needed for single static page, keeps pages independent
+- [Phase 10-01]: Vercel rewrite (not redirect) used for /privacy — serves privacy.html at clean URL without 301 bounce
 - [Phase 10-chrome-web-store-submission]: WXT static assets for manifest paths must be in public/ directory — src/assets/ is Vite-processed, not copied to build root
 
 ### Pending Todos

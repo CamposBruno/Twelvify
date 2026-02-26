@@ -27,7 +27,7 @@ Requirements for Extension Redesign + Ship milestone. Each maps to roadmap phase
 
 ### Chrome Web Store
 
-- [ ] **STOR-01**: Privacy policy is published at twelvify.com/privacy with accurate data practices
+- [x] **STOR-01**: Privacy policy is published at twelvify.com/privacy with accurate data practices
 - [x] **STOR-02**: Extension icon exists at 16, 32, 48, and 128px PNG sizes
 - [ ] **STOR-03**: At least 5 screenshots at 1280x800px showing the redesigned extension UI
 - [ ] **STOR-04**: Store listing has title (≤75 chars), summary (≤132 chars), and description
@@ -83,7 +83,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DEPL-04 | Phase 9 | Complete |
 | DEPL-05 | Phase 9 | Complete |
 | DEPL-06 | Phase 9 | Complete |
-| STOR-01 | Phase 10 | Pending |
+| STOR-01 | Phase 10 | Complete |
 | STOR-02 | Phase 10 | Complete |
 | STOR-03 | Phase 10 | Pending |
 | STOR-04 | Phase 10 | Pending |
