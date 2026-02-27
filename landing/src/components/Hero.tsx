@@ -39,8 +39,8 @@ export default function Hero() {
 
           {/* Headline */}
           <h1 className="text-6xl lg:text-8xl font-display leading-[0.85] text-slate-900 -rotate-2">
-            Big words,{' '}
-            <span className="bg-primary text-white px-4 inline-block transform rotate-3">
+            <span className="relative z-10">Big words,</span>{' '}
+            <span className="relative z-0 bg-primary text-white px-4 inline-block transform rotate-3">
               simplified
             </span>
           </h1>
