@@ -9,7 +9,7 @@ function CallToAction() {
 
           <div className="relative z-10 space-y-12">
             <h2 className="text-5xl lg:text-7xl text-white max-w-3xl mx-auto leading-[0.9] -rotate-1">
-              Ready to stop feeling like a toddler? Join the waitlist.
+              Ready to stop feeling like a toddler?
             </h2>
 
             <div className="font-punk bg-white text-slate-900 px-6 py-2 inline-block font-black text-lg rotate-2 uppercase tracking-widest border-2 border-slate-900">
