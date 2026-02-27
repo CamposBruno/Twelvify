@@ -64,9 +64,11 @@ function Features() {
               SHH!
             </div>
             <div className="zine-box p-2 bg-white rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
-              <div className="w-full h-64 bg-slate-100 border-2 border-slate-900 flex items-center justify-center">
-                <Icon name="image" className="w-24 h-24 text-slate-300" />
-              </div>
+              <img
+                src="/images/features-plant.png"
+                alt="Twelvify features illustration"
+                className="w-full h-64 object-cover border-2 border-slate-900"
+              />
             </div>
             <div className="absolute -bottom-10 -right-6 bg-yellow-300 border-2 border-slate-900 p-4 font-display text-2xl rotate-6 shadow-xl">
               CLEAN AS HELL
