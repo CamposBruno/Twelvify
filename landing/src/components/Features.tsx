@@ -63,11 +63,11 @@ function Features() {
             <div className="absolute -top-12 -left-12 text-9xl font-display opacity-10 pointer-events-none select-none -rotate-12">
               SHH!
             </div>
-            <div className="zine-box p-2 bg-white rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
+            <div className="zine-box p-2 bg-white rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500 overflow-hidden">
               <img
                 src="/images/features-plant.png"
                 alt="Twelvify features illustration"
-                className="w-full h-64 object-cover border-2 border-slate-900"
+                className="block w-full rotate-[3deg] scale-110"
               />
             </div>
             <div className="absolute -bottom-10 -right-6 bg-yellow-300 border-2 border-slate-900 p-4 font-display text-2xl rotate-6 shadow-xl">
