@@ -86,9 +86,10 @@ None.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 1 | Make Hero SIMPLIFY THIS MESS button clickable with typing animation mock simplification | 2026-02-26 | 8a5f043 | [1-make-hero-simplify-this-mess-button-clic](./quick/1-make-hero-simplify-this-mess-button-clic/) |
+| 2 | Replace Features section placeholder with features-plant.png image | 2026-02-26 | cb6b4c0 | [2-use-provided-image-for-the-features-sect](./quick/2-use-provided-image-for-the-features-sect/) |
 
 ## Session Continuity
 
 Last session: 2026-02-26
-Stopped at: Completed 10-04-PLAN.md — Extension submitted to Chrome Web Store, all Phase 10 plans complete
+Stopped at: Completed quick task 2 — Features section now shows plant image instead of grey placeholder
 Resume file: None
