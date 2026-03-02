@@ -79,7 +79,7 @@ None.
 ### Blockers/Concerns
 
 - After Web Store approval: add chrome-extension://[assigned-ID] to ALLOWED_ORIGINS in Render env vars (currently wildcard *)
-- After Web Store approval: update CHROME_STORE_URL constant in landing/src/constants.ts with actual store URL
+- ~~After Web Store approval: update CHROME_STORE_URL constant in landing/src/constants.ts with actual store URL~~ (completed quick-3)
 
 ### Quick Tasks Completed
 
@@ -87,9 +87,10 @@ None.
 |---|-------------|------|--------|-----------|
 | 1 | Make Hero SIMPLIFY THIS MESS button clickable with typing animation mock simplification | 2026-02-26 | 8a5f043 | [1-make-hero-simplify-this-mess-button-clic](./quick/1-make-hero-simplify-this-mess-button-clic/) |
 | 2 | Replace Features section placeholder with features-plant.png image | 2026-02-26 | cb6b4c0 | [2-use-provided-image-for-the-features-sect](./quick/2-use-provided-image-for-the-features-sect/) |
+| 3 | Update landing page CTA buttons with real Chrome Web Store listing URL | 2026-03-02 | ca94562 | [3-update-landing-page-with-chrome-web-stor](./quick/3-update-landing-page-with-chrome-web-stor/) |
 
 ## Session Continuity
 
-Last session: 2026-02-26
-Stopped at: Completed quick task 2 — Features section now shows plant image instead of grey placeholder
+Last session: 2026-03-02
+Stopped at: Completed quick task 3 — CHROME_STORE_URL now points to real Chrome Web Store listing
 Resume file: None
