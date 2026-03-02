@@ -1,1 +1,1 @@
-export const CHROME_STORE_URL = 'https://chrome.google.com/webstore';
+export const CHROME_STORE_URL = 'https://chromewebstore.google.com/detail/twelveify/afgdlnnljnnjdkjbfbdlfgpkadifkcig';
